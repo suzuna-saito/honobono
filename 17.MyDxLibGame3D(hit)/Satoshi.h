@@ -2,33 +2,79 @@
 #define _SATOSHI_H_
 
 #include"DxLib.h"
+#include "UIBase.h"
 
 class SceneBase;
 class UIGoal;
 
-class Satoshi
+/// <summary>
+/// ゴール地点にサトシを描画するクラス
+/// </summary>
+class Satoshi : UIBase
 {
+
 public:
-	// コンストラクタ
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	Satoshi();
-	// デストラクタ
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Satoshi();
 	
-	// 更新
-	void Update(SceneBase& scene, UIGoal& uiGoal);
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="scene"> ゲームシーンに入ってから描画するため </param>
+    /// <param name="uiGoal"> プレイヤーとの距離を測るため </param>
+	void Update(SceneBase& _scene, UIGoal& _uiGoal);
+
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw();
 
-	float GetPosY() { return PosY; }
+	/// <summary>
+	/// サトシの座標Yを取得 
+	/// </summary>
+	/// <returns>サトシの座標を返す</returns>
+	float GetPosY() { return posY; }
 
 private:
-	VECTOR pos;             // 描画座標
-	VECTOR velocity;        // 移動速度ベクトル
-	int satoshiGraphHandle; // 画像ハンドル
-	float size;               // 画像サイズ
-	float angle;            // 画像の回転角度
-	float centerX, centerY; // 描画する画像の中心座標
-	float hitRadius;
-	float PosY;             // Y座標
+	// 描画座標
+	VECTOR pos;
+	// 移動速度ベクトル
+	VECTOR velocity;
+	// 座標X
+	float x;
+	// 座標Y
+	float y;
+	// 座標Z
+	float z;        
+	// 移動するときの座標X
+	float veloX;            
+	// 移動するときの座標Y
+	float veloY;
+	// 移動するときの座標Z
+	float veloZ;
+	// 画像ハンドル
+	int satoshiImg;
+	// 画像サイズ
+	float size;
+	// 画像の回転角度
+	float angle; 
+	// 画像の中心座標X
+	float centerX;
+	// 画像の中心座標Y
+	float centerY;
+	//float hitRadius;
+	// Y座標
+	float posY;
+	// Y座標のMax値
+	float posMax;
+
 };
 
 #endif // !_SATOSHI_H_

@@ -1,11 +1,12 @@
-#pragma once
 #include <DxLib.h>
 
-// シーン別BGM切り替えに使用
-class SceneBase;
-// プレイヤーの動き確認に使用
-class Hitchecker;
-class Player;
+class SceneBase;    // シーン別BGM切り替えに使用
+class Hitchecker;   // プレイヤーの動き確認に使用
+class Player;       // プレイヤーの動き確認に使用
+
+/// <summary>
+/// ゲーム内音楽のクラス
+/// </summary>
 
 class Sound
 {
@@ -14,11 +15,26 @@ public:
 	Sound();
 	// デストラクタ
 	~Sound();
-	// 音楽を再生
+
+	/// <summary>
+	/// シーンごとで音楽を再生する
+	/// </summary>
+	/// < param name = "_scene"> シーンベースからシーンを拝借 </param>
+	/// <return> 読み込んでいる音楽を再生 </return> 
 	void PlayBGM(SceneBase& _scene);
-	// 効果音を再生
+
+	/// <summary>
+	/// 効果音を再生する
+	/// </summary>
+	/// < param name = "_moveCheck"> プレイヤーが動いていることを確認 </param>
+	/// < param name = "_hitCheck">  プレイヤーがボールにぶつかったことを確認 </param>
+	/// < param name = "_movecheck"> プレイヤーがゴールしたことを確認 </param>
 	void PlaySE(bool _movecheck, bool _hitCheck, bool _goalCheck);
-	// 音楽を止める
+	
+	/// <summary>
+	/// 再生している音楽を止める
+	/// </summary>
+	/// < param name = "_scene"> シーンベースからシーンを拝借 </param>
 	void StopMusic(SceneBase& _scene);
 
 private:
@@ -42,6 +58,6 @@ private:
 	int clearSound;
 	// ゲームオーバー時の効果音
 	int overSound;
-	// 一回きりの音
+	// 音楽を再生するかを管理するフラグ
 	bool SoundFlag;
 };

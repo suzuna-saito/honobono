@@ -2,7 +2,7 @@
 #include "DxLib.h"
 
 // コンストラクタ
-UIBase::UIBase(int _chara)
+UIBase::UIBase(int _object)
 {
 
 }

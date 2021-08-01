@@ -4,8 +4,15 @@
 class UIBase
 {
 public:
-	UIBase(int _chara);				// コンスタンス
-	~UIBase();				// デストラクタ
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="_object"> オブジェクト </param>
+	UIBase(int _object);
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~UIBase();
 
 	virtual void Update();
 	virtual void Draw();

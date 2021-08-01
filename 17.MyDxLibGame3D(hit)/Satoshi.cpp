@@ -3,46 +3,70 @@
 #include"DxLib.h"
 #include"SceneBase.h"
 #include "UIGoal.h"
+#include "UIBase.h"
 
-// コンストラクタ
+/// <summary>
+/// コンストラクタ 
+/// </summary>
 Satoshi::Satoshi()
-	:satoshiGraphHandle(-1)
+	:UIBase(satoshiImg)
+	, satoshiImg(-1)
 	, angle(0.0f)
-	, centerX(0.5f), centerY(0.5f)
+	, centerX(0.5f)
+	, centerY(0.5f)
+	, x(-10.0f)
+	, y(0.0f)
+	, z(810.0f)
+	, veloX(0.0f)
+	, veloY(0.0f)
+	, veloZ(0.0f)
+	, size(300.0f)
+	, posY(1800.0f)
+	, posMax(140)
 {
-	if (satoshiGraphHandle == -1)
+	if (satoshiImg == -1)
 	{
-		satoshiGraphHandle = LoadGraph("data/Asset/SatoshiDot.png");
+		satoshiImg = LoadGraph("data/Asset/SatoshiDot.png");
 	}
 
-	pos = VGet(-10, 0, 810);  // 元は340,0,500
-	PosY = 1800.0f; // Y座標取得
-	size = 300;    // 元は300
-	hitRadius = 0;
+	// サトシ(ゴール)のポジション設定
+	pos = VGet(x, y, z);
 
 	// 背景のスクロールと同じ速さで移動
-	velocity = VGet(0.0f, 0.0f, 0.0f);
+	velocity = VGet(veloX, veloY, veloZ);
 }
 
-// デストラクタ
+/// <summary>
+/// デストラクタ 
+/// </summary>
 Satoshi::~Satoshi()
 {
+	// サトシの画像削除
+	DeleteGraph(satoshiImg);
 }
 
-// 更新
-void Satoshi::Update(SceneBase& scene, UIGoal& uiGoal)
+/// <summary>
+/// 更新
+/// </summary>
+/// <param name="scene"> ゲームシーンに入ってから描画するため </param>
+/// <param name="uiGoal"> プレイヤーとの距離を測るため </param>
+void Satoshi::Update(SceneBase& _scene, UIGoal& _uiGoal)
 {
 	// サトシ移動開始位置
-	if (uiGoal.GetUIPosY() <= 140)
+	if (_uiGoal.GetUIPosY() <= posMax)
 	{
 		// 背景のスクロールと同じ速さで移動
-		velocity = VGet(0.0f, -SCROLL_SPEED * 2, -EXPANSION_SPEED);
+		velocity = VGet(veloX, -SCROLL_SPEED * 2, -EXPANSION_SPEED);
 	}
-
+	// サトシのポジションに速度追加
 	pos = VAdd(pos, velocity);
 }
 
+/// <summary>
+/// 描画
+/// </summary>
 void Satoshi::Draw()
 {
-	DrawBillboard3D(pos, centerX, centerY, size, angle, satoshiGraphHandle, true);
+	// サトシの描画
+	DrawBillboard3D(pos, centerX, centerY, size, angle, satoshiImg, true);
 }

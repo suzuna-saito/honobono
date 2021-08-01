@@ -27,6 +27,7 @@ HitChecker::~HitChecker()
 }
 
 // エフェクトを描画
+
 void HitChecker::Draw(Player& player)
 {
 	// 当たって無敵状態中

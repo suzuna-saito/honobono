@@ -3,76 +3,86 @@
 #include "Player.h"
 #include "Satoshi.h"
 
-// コンストラクタ
+/// <summary>
+/// コンストラクタ 
+/// </summary>
 UIGoal::UIGoal()
 	:UIBase(goalImg)
+	, goalX(560)
+	, goalY(90)
+	, baseX(550)
+	, baseY(50)
+	, playerX(560)
+	, playerY(340)
+	, PosY1(0.0f)
+	, PosY2(0.0f)
+	, distanceRatio(0.0f)
+	, MainPosY(0.0f)
+	, GoalFlag(FALSE)
+	, playerMaxY(120)
+	, ratio(0.255f)
 {
+	// 画像読み込み
 	goalImg = LoadGraph("data/Asset/satoshi.png");
 	baseImg = LoadGraph("data/Asset/base.png");
 	playerImg = LoadGraph("data/Asset/pikachu.png");
-
-	PosY1 = 0;
-	PosY2 = 0;
-
-	Dy = 0;
-
-	MainPosY = 0;
-	UIPosY = 340;
-	GoalFlag = FALSE;
 }
 
-// デストラクタ
+/// <summary>
+/// デストラクタ 
+/// </summary>
 UIGoal::~UIGoal()
 {
-
+	// 画像を消す
+	DeleteGraph(goalImg);
+	DeleteGraph(baseImg);
+	DeleteGraph(playerImg);
 }
 
-// 距離の比率を出す
+/// <summary>
+/// 距離の比率を出す 
+/// </summary>
+/// <param name="player"> プレイヤーの座標取得のため使用 </param>
+/// <param name="satoshi"> サトシの座標取得のため使用 </param>
 void UIGoal::GetDy(Player& player, Satoshi& satoshi)
 {
-	// この流れでUIとGAMEの距離の比率が出ます
-	// 一応どこでも呼び出せるようにするため関数を作りました
-	// PlayerにPosYとGetPosY関数の追加
 	// SatoshiにPosYとGetPosY関数の追加
-	// mainのほうのSceneBase生成の後に呼び出しています
-
 	PosY1 = satoshi.GetPosY();
+	// PlayerにPosYとGetPosY関数の追加
 	PosY2 = player.GetPosY();
 
+	// ゲーム内の距離 = サトシZ座標(PosY1) - ピカチュウのY座標(PosY2)
 	MainPosY = PosY1 - PosY2;
-	Dy = (UIPosY - 90) / MainPosY;
-
-	// 画像がサトシが2D、ピカチュウが3Dでの表示
-	// ゲームのほうの位置表示が変わっているので、下記の計算で速度調整をかけてます
-	// 距離が変わったら変えてください
-	Dy *= 0.255f;
-
-	// サトシはZ座標で計算を行っています(距離差を出すため元の500で計算してます)
-	// 	 ゲームの距離 = サトシZ座標(PosY1) - ピカチュウのY座標(PosY2)
-	//   距離の比率 = UIのピカチュウのY - UIのサトシのY / ゲームの距離
-	// 上下移動は考えていない計算です
-	// 時間がないので、ここまでですみません
+	// 距離の比率
+	distanceRatio = (playerY - goalY) / MainPosY;	
+	// ゲームのほうの位置表示が変わっているので、速度調整
+	distanceRatio *= ratio;
 }
 
-// 更新内容
+/// <summary>
+/// 更新
+/// </summary>
 void UIGoal::Update()
 {
 	// UIの位置から距離の比率を引く
-	UIPosY -= Dy;
+	playerY -= distanceRatio;
 
-	// UIの距離でゴール計算してます
-	// SceneBaseのほうでクリア画面に遷移するようにしました
-	if (UIPosY <= 120)
+	// UIの距離でゴール計算
+	// SceneBaseのほうでクリア画面に遷移
+	if (playerY <= playerMaxY)
 	{
+		// ゴールフラグを「真」にする
 		GoalFlag = TRUE;
 	}
 }
 
-// 描画内容
+/// <summary>
+/// 描画
+/// </summary>
 void UIGoal::Draw()
 {
-	DrawGraph(550, 50, baseImg, FALSE);
-	DrawGraph(560, 90, goalImg, TRUE);
-	DrawGraph(560, (int)UIPosY, playerImg, TRUE);
+	DrawGraph(baseX, baseY, baseImg, FALSE);
+	DrawGraph(goalX, goalY, goalImg, TRUE);
+	DrawGraph(playerX, playerY, playerImg, TRUE);
 
 }
