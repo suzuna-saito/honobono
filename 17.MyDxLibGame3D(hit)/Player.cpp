@@ -7,38 +7,60 @@
 #include "SceneBase.h"
 #include "Hitchecker.h"
 
-// 静的定数.
-const float Player::COLIDE_DECEL_FAC	= 0.4f;			// 障害物にぶつかったときの減速率.
+
+// -----------------------------------------------------------
+//  @brief 定数
+//------------------------------------------------------------
+const float HIT_RADIUS = 3.0f;                     // 当たり判定の半径
+const VECTOR EXPANDING = VGet(1.7f, 1.7f, 1.7f);   // プレイヤーを描画するときの拡大値
+
+const float X_VELOCITY = 0.5f;                     // x方向の移動力
+const int POS_MAX = 25;                            // ポジションの移動制限（最大）
+const int POS_MIN = -40;                            // ポジションの移動制限（最小）
+const float PUSH_BACK = 0.025f;                    // 押し戻しの値
+
+const int MAX_HP = 3;                              // HPの初期値
+const int HP_SIZE = 40;                            // HPの描画サイズの初期値
+const int MAX_SIZE = 45;                           // HPの描画サイズの最大値
+const int MIN_SIZE = 35;                           // HPの描画サイズの最小値
+const float SIZE_POINT = 0.1f;                     // HPの描画サイズの大きさを変える値
+const int HP_MOVE = 50;                            // HPの描画させる座標の変更値
+
+const int R_POS[] = { 125,405 };                   // 右の矢印の座標
+const int L_POS[] = { 0,405 };                     // 左の矢印の座標
+
+const int DRAW_HP[] = { 3,3,1,80,80 };             // Hp画像の、分割総数、横向きに対する分割数と縦に対する分割数、分割された画像一つの大きさ
+const int DRAW_VEL[] = { 2,2,1,75,75 };            // 矢印画像の、分割総数、横向きに対する分割数と縦に対する分割数、分割された画像一つの大きさ
 
 //-----------------------------------------------------------------------------
 // @brief  コンストラクタ.
 //-----------------------------------------------------------------------------
 Player::Player()
-	: modelHandle(-1)
-	 , hitRadius(3.0f)  // もとは5.0
-	 , Hp(3)            // 残機
-	 , HitFlag(TRUE)
-	 , DrawFlag(true)
-	 , MoveFlag(FALSE)
-	 , FadeCount(0)
+	: mHitRadius(HIT_RADIUS)
+	, mModelHandle(-1)
+	, mPos(VGet(0,0,0))
+	, mPosY(0.0f)
+	, mVelocity(VGet(0, 0, 0))
+	, mDir(VGet(0, 0, 1))
+	, mHp(MAX_HP)
+	, mHpSize(HP_SIZE)
+	, mSizePoint(SIZE_POINT)
+	, mDrawFlag(true)
+	, mMoveFlag(false)
+	, mRMoveFlag(false)
+	, mLMoveFlag(false)
 {
-	// ３Ｄモデルの読み込み
-
-	modelHandle = MV1LoadModel("data/model/player/pika/pikapika.pmx");
-	MV1SetScale(modelHandle, VGet(1.7f,1.7f,1.7f));   // モデルが少し小さかったので大きくした
-
-	LoadDivGraph("data/Asset/HP.png", 3, 3, 1, 80, 80, HpImg, TRUE);        // HP画像の読み込み
-	LoadDivGraph("data/Asset/RightVector2.png", 2, 2, 1, 75, 75, RightVectorGraph, TRUE);
-	LoadDivGraph("data/Asset/LeftVector2.png", 2, 2, 1, 75, 75, LeftVectorGraph, TRUE);
-
-	pos = VGet(0, 0, 0);
-	velocity = VGet(0, 0, 0);
-	dir = VGet(0, 0, 1); 
-	PosY = 0.0f;   // Y座標取得
-	HpSize = 40;
-	SizePoint = 0.1f;
-	RMoveFlag = 0;
-	LMoveFlag = 0;
+	// プレイヤー３Ｄモデルの読み込み
+	mModelHandle = MV1LoadModel("data/model/player/pika/pikapika.pmx");
+	// モデルの拡大描画
+	MV1SetScale(mModelHandle, EXPANDING);  
+	
+	// HP画像の読み込み
+	LoadDivGraph("data/Asset/HP.png", DRAW_HP[0], DRAW_HP[1], DRAW_HP[2], DRAW_HP[3], DRAW_HP[4], mHpImg, TRUE);
+	// 左矢印の読み込み
+	LoadDivGraph("data/Asset/RightVector2.png", DRAW_VEL[0], DRAW_VEL[1], DRAW_VEL[2], DRAW_VEL[3], DRAW_VEL[4], mRightVectorGraph, TRUE);
+	// 右矢印の読み込み
+	LoadDivGraph("data/Asset/LeftVector2.png", DRAW_VEL[0], DRAW_VEL[1], DRAW_VEL[2], DRAW_VEL[3], DRAW_VEL[4], mLeftVectorGraph, TRUE);
 }
 
 //-----------------------------------------------------------------------------
@@ -47,10 +69,10 @@ Player::Player()
 Player::~Player()
 {
 	// モデルのアンロード.
-	MV1DeleteModel(modelHandle);
-	DeleteGraph(*HpImg);
-	DeleteGraph(*RightVectorGraph);
-	DeleteGraph(*LeftVectorGraph);
+	MV1DeleteModel(mModelHandle);
+	DeleteGraph(*mHpImg);
+	DeleteGraph(*mRightVectorGraph);
+	DeleteGraph(*mLeftVectorGraph);
 }
 
 //-----------------------------------------------------------------------------
@@ -64,83 +86,80 @@ void Player::Update()
 	// 右を押したら右に移動.
 	if (Key & PAD_INPUT_RIGHT)
 	{
-		velocity = VGet(0.5,0,0);
+		mVelocity.x = X_VELOCITY;
 		// 右の矢印を光らせる
-		RMoveFlag = 1;
-		MoveFlag = TRUE;
+		mRMoveFlag = true;
+		mMoveFlag = true;
 	}
 	// 左を押したら左に移動.
 	else if (Key & PAD_INPUT_LEFT)
 	{
-		velocity = VGet(-0.5,0,0);
+		mVelocity.x = -X_VELOCITY;
 		// 左の矢印を光らせる
-		LMoveFlag = 1;
-		MoveFlag = TRUE;
+		mLMoveFlag = true;
+		mMoveFlag = true;
 	}
 	// 何も押していない場合は止まる
 	else if (Key == 0 || !(Key & PAD_INPUT_RIGHT && Key & PAD_INPUT_LEFT))
 	{
-		velocity = VGet(0, 0, 0);
-		dir = VGet(0, 0, 1);
-		// どちらも光らせない
-		RMoveFlag = 0;
-		LMoveFlag = 0;
-		MoveFlag = FALSE;
+		mVelocity = VGet(0, 0, 0);
+		mDir = VGet(0, 0, 1);
+		// 矢印をどちらも光らせない
+		mRMoveFlag = false;
+		mLMoveFlag = false;
+		mMoveFlag = false;
 	}
 
 
-	// 移動制限(もっといい方法がある気がする) てか当たり判定使ってやればいい
-	if (pos.x > 25)
+	// 移動制限
+	if (mPos.x > POS_MAX)
 	{
-		velocity = VGet(0, 0, 0);
-		pos.x = pos.x - 0.025f;
+		mVelocity = VGet(0, 0, 0);
+		mPos.x = mPos.x - PUSH_BACK;
 	}
-	if (pos.x < -40)
+	if (mPos.x < POS_MIN)
 	{
-		velocity = VGet(0, 0, 0);
-		pos.x = pos.x + 0.025f;
+		mVelocity = VGet(0, 0, 0);
+		mPos.x = mPos.x + PUSH_BACK;
 	}
 
 	
 	// 上下方向にいかないようにベロシティを整える.
-	velocity = VGet(velocity.x, 0, velocity.z);
+	mVelocity = VGet(mVelocity.x, 0, mVelocity.z);
 
 	// ポジションを更新.
-	pos = VAdd(pos, velocity);
+	mPos = VAdd(mPos, mVelocity);
 
 	// 力をかけ終わったベロシティの方向にディレクションを調整.
-	if (VSize(velocity) != 0)
+	if (VSize(mVelocity) != 0)
 	{
-		dir = VNorm(velocity);
+		mDir = VNorm(mVelocity);
 	}
 
 	// ３Dモデルのポジション設定
-	MV1SetPosition(modelHandle, pos);
+	MV1SetPosition(mModelHandle, mPos);
 
 	// 向きに合わせて回転.
-	MV1SetRotationZYAxis(modelHandle, dir, VGet(0.0f, 1.0f, 0.0f), 0.0f);
+	MV1SetRotationZYAxis(mModelHandle, mDir, VGet(0.0f, 1.0f, 0.0f), 0.0f);
 	
 	// モデルに向いてほしい方向に回転.
-	MATRIX tmpMat = MV1GetMatrix(modelHandle);
+	MATRIX tmpMat = MV1GetMatrix(mModelHandle);
 	MATRIX rotYMat = MGetRotY(180.0f * (float)(DX_PI / 180.0f));
 	tmpMat = MMult(tmpMat, rotYMat);
-	MV1SetRotationMatrix(modelHandle, tmpMat);
+	MV1SetRotationMatrix(mModelHandle, tmpMat);
 
 	// Hpの大きさを拡大、縮小
-	HpSize += SizePoint;
-
-	if (HpSize > 45)
+	mHpSize += mSizePoint;
+	
+	// 一定数大きくなったら小さくする
+	if (mHpSize > MAX_SIZE)
 	{
-		SizePoint *= -1;
+		mSizePoint *= -1;
 	}
-	else if (HpSize < 35)
+	// 一定数小さくなったら大きくする
+	else if (mHpSize < MIN_SIZE)
 	{
-		SizePoint *= -1;
-	}
-
-	if (Hp == 0)
-	{
-		FadeCount++;
+		mSizePoint *= -1;
 	}
 }
 
@@ -151,33 +170,33 @@ void Player::Draw()
 {
 	// ３Ｄモデルの描画
 	// ダメージを受けたら点滅させる
-	if (DrawFlag)
+	if (mDrawFlag)
 	{
-		MV1DrawModel(modelHandle);
+		MV1DrawModel(mModelHandle);
 	}
 
 	// 矢印描画
-	DrawGraph(0, 405, LeftVectorGraph[LMoveFlag], TRUE);
-	DrawGraph(125, 405, RightVectorGraph[RMoveFlag], TRUE);
+	DrawGraph(L_POS[0], L_POS[1], mLeftVectorGraph[mLMoveFlag], TRUE);
+	DrawGraph(R_POS[0], R_POS[1], mRightVectorGraph[mRMoveFlag], TRUE);
 
 	// HPの描画
-	if (Hp != 0)
+	if (mHp != 0)
 	{
-		for (int i = 0; i < Hp; i++)   // HPが減ったら表示数を減らす
+		for (int i = 0; i < mHp; i++)   // HPが減ったら表示数を減らす
 		{
-			int x = i * 50;
+			int x = i * HP_MOVE;
 			// DrawExtendGraph _HP描画(サイズを小さくしました)
-			if (Hp == 1)
+			if (mHp == 1)
 			{
-				DrawExtendGraph(x, 0, x + (int)HpSize, (int)HpSize, HpImg[2], TRUE);
+				DrawExtendGraph(x, 0, x + (int)mHpSize, (int)mHpSize, mHpImg[2], TRUE);
 			}
-			else if (Hp == 2)
+			else if (mHp == 2)
 			{
-				DrawExtendGraph(x, 0, x + (int)HpSize, (int)HpSize, HpImg[1], TRUE);
+				DrawExtendGraph(x, 0, x + (int)mHpSize, (int)mHpSize, mHpImg[1], TRUE);
 			}
 			else
 			{
-				DrawExtendGraph(x, 0, x + (int)HpSize, (int)HpSize, HpImg[0], TRUE);
+				DrawExtendGraph(x, 0, x + (int)mHpSize, (int)mHpSize, mHpImg[0], TRUE);
 			}
 
 		}

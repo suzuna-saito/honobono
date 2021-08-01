@@ -7,74 +7,75 @@
 
 #include "DxLib.h"
 
+
+// クラスの参照
 class ObstructBase;
 class SceneBase;
 class HitChecker;
 
+/// <summary>
+/// プレイヤーの更新、描画
+/// </summary>
 class Player final
 {
 public:
-	Player();				// コンストラクタ.
-	~Player();				// デストラクタ.
+	Player();               // コンストラクタ.
+	~Player();              // デストラクタ.
 
-	void Update();			// 更新.
-	void Draw();			// 描画.
-
-	// モデルハンドルの取得.
-	int GetModelHandle(){ return modelHandle; }
-
-	// ポジションのgetter/setter.
-	const VECTOR& GetPos() const { return pos; }
-	void SetPos(const VECTOR set) { pos = set; }
-
-	float GetPosY() { return PosY; }
-
-	// ディレクションのgetter/setter.
-	const VECTOR& GetDir() const { return dir; }
-	void SetDir(const VECTOR set) { dir = set; }
-
-	// あたり判定半径の取得.
-	float GetHitRadius() { return hitRadius; }
-
-	// 値を渡す
-	int GetHp() { return Hp; }
-	float GetSizePoint() { return SizePoint; }
-	bool GetMoveFlag() { return MoveFlag; }
-	int GetFadeCount() { return FadeCount; }
-
-	// 値を受け取る
-	void SetHp(int hp) { Hp = hp; }
-	void SetSizePoint(float SP) { SizePoint = SP; }
-	void SetDrawFlag(bool DF) { DrawFlag = DF; }
+	void Update();          // 更新.
+	void Draw();            // 描画.
 
 private:
-	int		modelHandle;	         // モデルハンドル.
-	int     HpImg[3];                // HPの画像読み込み
-	int     RightVectorGraph[2];     // 右矢印画像
-	int     LeftVectorGraph[2];      // 左矢印画像
+	int	mModelHandle;	         // モデルハンドル.
+	int mHpImg[3];               // HPの画像読み込み
+	int mRightVectorGraph[2];    // 右矢印画像
+	int mLeftVectorGraph[2];     // 左矢印画像
 
-	VECTOR	pos;			// ポジション.
-
-	VECTOR	velocity;		// 移動力.
-
-	VECTOR	dir;			// 回転方向.
+	VECTOR  mPos;			// ポジション.
+	VECTOR  mVelocity;		// 移動力.
+	VECTOR  mDir;			// 回転方向.
 	
-	float	hitRadius;		// あたり判定の半径.
+	const float mHitRadius;	 // あたり判定の半径.
+	float mPosY;             // プレイヤーY座標
+	int  mHp;                // 残機
+	float mHpSize;           // Hp画像の大きさ
+	float mSizePoint;        // Hp画像の大きさを変える値
+	bool mMoveFlag;          // プレイヤーが動いたか
+	bool mDrawFlag;          // 描画するか
+	bool mRMoveFlag;         // 右矢印を光らせるか
+	bool mLMoveFlag;         // 左矢印を光らせるか
+	
 
-	float PosY;             // Y座標
-	int  Hp;                // 残機
-	bool HitFlag;
-	bool MoveFlag;          // プレイヤーが動いたかを管理
-	float HpSize;           // Hp画像の大きさ
-	float SizePoint;        // Hp画像の大きさを変える値
-	bool DrawFlag;          // 描画するか
-	int RMoveFlag;          // 右矢印を光らせるか
-	int LMoveFlag;          // 左矢印を光らせるか
+public: // ゲッター、セッター
+	// ポジションのgetter
+	// <return>今のプレイヤーのポジションを返す</return>
+	const VECTOR& GetPos() const { return mPos; }
+	// Y座標のポジションのgetter
+	// <return>今のプレイヤーのY座標のポジションを返す</return>
+	float GetPosY() { return mPosY; }
+	// あたり判定半径のgetter.
+	// <return>プレイヤーの当たり判定の半径を返す</return>
+	float GetHitRadius() { return mHitRadius; }
+	// HPのgetter.
+	// <return>プレイヤーの残機を返す</return>
+	int GetHp() { return mHp; }
+	// HP画像の大きさのgetter.
+	// <return>HP画像の大きさを変える値を返す</return>
+	float GetSizePoint() { return mSizePoint; }
+	// プレイヤーが移動しているかのフラグのgetter.
+	// <return>プレイヤーが動いていたらtrue,動いていなかったらfalseを返す</return>
+	bool GetMoveFlag() { return mMoveFlag; }
 
-	int FadeCount;
 
-	// 静的定数.
-	static const float COLIDE_DECEL_FAC;
+	// HPのsetter.
+	/// <param name="hp">プレイヤーの残機を渡す</param>
+	void SetHp(int hp) { mHp = hp; }
+	// HP画像の大きさのsetter.
+	/// <param name="sp">HP画像の大きさを渡す</param>
+	void SetSizePoint(float sp) { mSizePoint = sp; }
+	// プレイヤー描画フラグのsetter.
+	/// <param name="df">プレイヤーが描画されている = true,プレイヤーが描画されていない = false</param>
+	void SetDrawFlag(bool df) { mDrawFlag = df; }
 };
 
 #endif // _PLAYER_H_
