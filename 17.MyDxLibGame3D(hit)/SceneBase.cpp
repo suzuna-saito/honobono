@@ -4,36 +4,46 @@
 #include "Player.h"
 #include "Fade.h"
 
-// コンストラクタ
+/// <summary>
+/// コンストラクタ
+/// </summary>
 SceneBase::SceneBase()
         :mIsScene(title)
-	    ,Move(0.0f)
-	    ,Size(1.0f)
-	    ,SizePoint(0.0002f)
-	    ,PointPosition(1)
-	    ,Return(0)
-	    ,Start(0)
-	    ,End(0)
-	    ,FadeFlag(false)
+	    , mUp(1)
+	    , mDown(2)
+	    ,mMove(0.0f)
+	    ,mSize(1.0f)
+	    ,mSizePoint(0.0002f)
+	    ,mPointPosition(1)
+	    ,mReturn(0)
+	    ,mStart(0)
+	    ,mEnd(0)
+	    ,mFadeFlag(false)
 		,mChangeFlag(false)
         ,mShutDownFlag(false)
 {
 }
 
-// デストラクタ
+/// <summary>
+/// デストラクタ
+/// </summary>
 SceneBase::~SceneBase()
 {
 }
 
-// シーン変更
-void SceneBase::ChangeScene(UIGoal& uiGoal, Player& player)
+/// <summary>
+/// シーンを変える
+/// </summary>
+/// <param name="_uiGoal">UIGoalクラスのポインタ</param>
+/// <param name="_player">Playerクラスのポインタ</param>
+void SceneBase::ChangeScene(UIGoal& _uiGoal, Player& _player)
 {
 	Camera* camera = new Camera;
 
 	// ゲームスタートを選択でゲーム開始
-	if (mIsScene == title && PointPosition == 1 && CheckHitKey(KEY_INPUT_RETURN))
+	if (mIsScene == title && mPointPosition == mUp && CheckHitKey(KEY_INPUT_RETURN))
 	{
-		Start = 1;
+		mStart = 1;
 		// ゲームの状態を設定
 		//mIsScene = play;
 		mChangeFlag = true;
@@ -42,23 +52,23 @@ void SceneBase::ChangeScene(UIGoal& uiGoal, Player& player)
 	if (mIsScene == play)
 	{
 		// クリア画面へ
-		if (uiGoal.GetGoalFlag() == true)
+		if (_uiGoal.GetGoalFlag() == true)
 		{
 			mIsScene = gameClear;
 		}
-		if (player.GetHp() == 0)
+		if (_player.GetHp() == 0)
 		{
 			mIsScene = gameOver;
 		}
 	}
 
 	// ゲーム終了を選択で終了
-	if (PointPosition == 2 &&
+	if (mPointPosition == mDown &&
 		(mIsScene == title && CheckHitKey(KEY_INPUT_RETURN) ||
 		mIsScene == gameOver && CheckHitKey(KEY_INPUT_RETURN) ||
 		mIsScene == gameClear && CheckHitKey(KEY_INPUT_RETURN)))
 	{
-		End = 1;
+		mEnd = 1;
 		// ゲーム終了へ
 		//mIsScene = gameEnd;
 		mChangeFlag = true;
@@ -66,12 +76,12 @@ void SceneBase::ChangeScene(UIGoal& uiGoal, Player& player)
 	}
 
 	// タイトルへを選択でタイトルへ
-	if (PointPosition == 1 &&
+	if (mPointPosition == mUp &&
 		(mIsScene == gameOver && CheckHitKey(KEY_INPUT_RETURN) ||
 		mIsScene == gameClear && CheckHitKey(KEY_INPUT_RETURN)))
 	{
 		// タイトルへ
-		Return = 1;
+		mReturn = 1;
 		//mIsScene = title;
 		mChangeFlag = true;
 
@@ -79,18 +89,20 @@ void SceneBase::ChangeScene(UIGoal& uiGoal, Player& player)
 
 }
 
-// カーソルの位置更新
+/// <summary>
+/// カーソル位置更新
+/// </summary>
 void SceneBase::PointUpdate()
 {
 	// カーソルの位置を変える
 	if (CheckHitKey(KEY_INPUT_DOWN))
 	{
-		PointPosition = 2;
+		mPointPosition = mDown;
 		mShutDownFlag = true;
 	}
 	if (CheckHitKey(KEY_INPUT_UP))
 	{
-		PointPosition = 1;
+		mPointPosition = mUp;
 		mShutDownFlag = false;
 	}
 }

@@ -2,18 +2,22 @@
 #include "DxLib.h"
 #include "SceneBase.h"
 
+/// <summary>
+/// ゲームオーバーシーンのクラス
+/// </summary>
 class GameOver : public SceneBase
 {
 private:
-	int Model;         // モデル
-	int BallModel;     // サブモデル
-	int OverText;      // ゲームオーバーテキスト
-	int BackGround;    // 3D背景
-	int KeyText1[2];   // キー指示１
-	int KeyText2[2];   // キー指示２
-	int PointGraph;    // カーソル
-	int Count;	       // 濃度カウント
-	int ColorAlpha;    // 追加する濃さの値
+	int mModel;               // モデル
+	int mBallModel;           // サブモデル
+	int mOverText;            // ゲームオーバーテキスト
+	int mBackGround;          // 3D背景
+	int mKeyText1[2];         // キー指示１
+	int mKeyText2[2];         // キー指示２
+	int mPointGraph;          // カーソル
+	int mCount;	              // 濃度カウント
+	int mColorAlpha;          // 追加する濃さの値
+	const int mFontSize;      // 文字の大きさ
 
 public:
 	// コンストラクタ
@@ -21,7 +25,7 @@ public:
 	// デストラクタ
 	~GameOver();
 	// 描画
-	void Draw(SceneBase& scene);
+	void Draw(SceneBase& _scene);
 	// 更新
 	void Update();
 };

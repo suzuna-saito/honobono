@@ -1,12 +1,16 @@
 #pragma once
 struct Color;
+
+/// <summary>
+/// フェードのクラス
+/// </summary>
 class Fade
 {
 public:
 	Fade();			// コンストラクタ
 	~Fade();		// デストラクタ
 
-	void Update(bool _InOut,Color _color);
+	void Update(bool _InOut,Color _color);   // 更新
 
 	void OutProcess(Color _color);	// フェードアウト更新
 	void InProcess(Color _color);	// フェードイン更新
@@ -15,15 +19,15 @@ public:
 
 	/*int GetFadeCount() { return mFadeCount; }*/
 
-	int fadeTime;				// フェードインさせる時間(クリア時)
-	int fadeTime2;				// 
+	int mfadeTime;				// フェードインさせる時間(クリア時)
+	int mfadeTime2;				// 
 
 	int mFadeCount;				// カウント
 
 	bool GetEndFlag() { return mEndFlag; }
 
 private:
-	bool mEndFlag;
+	bool mEndFlag;              // フェード終わり
 	int mAlphaMax;				// アルファ値の加算
 	int mAlphaMin;				// アルファ値の減算
 	const int mAlphaVal;		// アルファ変化値
