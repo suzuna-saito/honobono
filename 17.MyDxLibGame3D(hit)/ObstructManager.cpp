@@ -8,24 +8,27 @@
 #include "Player.h"
 #include "UIGoal.h"
 
+const float HALF = 0.5f;
+const float BALL_DELETE_POS_Y = 130.0f;
+const float BALL_DELETE_POS_Z = 200.0f;
 //-----------------------------------------------------------------------------
 // @brief  コンストラクタ.
 //-----------------------------------------------------------------------------
 ObstructManager::ObstructManager()
-	: floatModelSourceHandle(-1)
+	: mFloatModelSourceHandle(-1)
 {
 	for (int i = 0; i < LINE_OBSTRUCT_RAW; i++)
 	{
 		for (int j = 0; j < LINE_OBSTRUCT_COL; j++)
 		{
-			obstructs[i][j] = NULL;
+			mObstructs[i][j] = NULL;
 		}
 	}
-	BallHandle = NULL;
-	BallPos = VGet(0.0f, 0.0f, 0.0f);
-	BallFlag = false;
-	Velocity = VGet(0.0f, 0.0f, BALL_Z_SPEED * 3);
-	rotationX = 0.0f;
+	mBallHandle = NULL;
+	mBallPos = VGet(0.0f, 0.0f, 0.0f);
+	mBallFlag = false;
+	mVelocity = VGet(0.0f, 0.0f, BALL_Z_SPEED * 3);
+	mRotationX = 0.0f;
 }
 
 //-----------------------------------------------------------------------------
@@ -41,7 +44,7 @@ ObstructManager::~ObstructManager()
 //-----------------------------------------------------------------------------
 void ObstructManager::CreateObstructs()
 {
-	floatModelSourceHandle = MV1LoadModel("data/model/ball/monsterBall.pmx");
+	mFloatModelSourceHandle = MV1LoadModel("data/model/ball/monsterBall.pmx");
 
 	// 障害物の配置図データとしてのlinemapを用意する.
 	// 1のところに障害物を表示
@@ -140,21 +143,21 @@ void ObstructManager::CreateObstructs()
 		//VECTOR temVelo;
 		for (int j = 0; j < LINE_OBSTRUCT_COL; j++)
 		{
-			if(nowLine[j] == 1)
+			if(nowLine[j])
 			{
-				obstructs[i][j] = new ObstructFloat(floatModelSourceHandle);
+				mObstructs[i][j] = new ObstructFloat(mFloatModelSourceHandle);
 			}
 			else
 			{
-				obstructs[i][j] = NULL;
+				mObstructs[i][j] = NULL;
 			}
 
 			// 位置の初期化.
-			if (obstructs[i][j] != NULL)
+			if (mObstructs[i][j] != NULL)
 			{
-				obstructs[i][j]->SetPos(
+				mObstructs[i][j]->SetPos(
 					VGet(
-						(OBSTRUCT_SPACE_W * j) - (OBSTRUCT_SPACE_W * LINE_OBSTRUCT_COL * 0.5f),
+						(OBSTRUCT_SPACE_W * j) - (OBSTRUCT_SPACE_W * LINE_OBSTRUCT_COL * HALF),
 						0.0f,
 						150.0f + (OBSTRUCT_SPACE_D * LINE_OBSTRUCT_RAW) - (OBSTRUCT_SPACE_D * i)
 						)
@@ -163,7 +166,7 @@ void ObstructManager::CreateObstructs()
 		}
 	}
 
-	BallHandle = MV1LoadModel("data/model/ball/monsterBall.pmx");
+	mBallHandle = MV1LoadModel("data/model/ball/monsterBall.pmx");
 }
 
 //-----------------------------------------------------------------------------
@@ -176,57 +179,57 @@ void ObstructManager::DestroyObstructs()
 	{
 		for (int j = 0; j < LINE_OBSTRUCT_COL; j++)
 		{
-			if (obstructs[i][j] != NULL)
+			if (mObstructs[i][j] != NULL)
 			{
-				delete(obstructs[i][j]);
-				obstructs[i][j] = NULL;
+				delete(mObstructs[i][j]);
+				mObstructs[i][j] = NULL;
 			}
 		}
 	}
-	MV1DeleteModel(BallHandle);
-	MV1DeleteModel(floatModelSourceHandle);
+	MV1DeleteModel(mBallHandle);
+	MV1DeleteModel(mFloatModelSourceHandle);
 }
 
 //-----------------------------------------------------------------------------
 // @brief  更新.
 //-----------------------------------------------------------------------------
-void ObstructManager::Update(Player& player, UIGoal& uiGoal)
+void ObstructManager::Update(Player& _player, UIGoal& _uiGoal)
 {
 	for (int i = 0; i < LINE_OBSTRUCT_RAW; i++)
 	{
 		for (int j = 0; j < LINE_OBSTRUCT_COL; j++)
 		{
-			if (obstructs[i][j] != NULL)
+			if (mObstructs[i][j] != NULL)
 			{
-				obstructs[i][j]->Update(uiGoal);
+				mObstructs[i][j]->Update(_uiGoal);
 			}
 		}
 	}
 
 	// プレイヤー位置用ボールの移動
-	if (BallFlag)
+	if (mBallFlag)
 	{
-		BallPos = VAdd(BallPos, Velocity);
-		MV1SetPosition(BallHandle, BallPos);
+		mBallPos = VAdd(mBallPos, mVelocity);
+		MV1SetPosition(mBallHandle, mBallPos);
 	}
 	else           // プレイヤーのx座標にセット
 	{
-		BallPos = VGet(player.GetPos().x, 0.0f, 300.0f);
-		MV1SetPosition(BallHandle, BallPos);
-		BallFlag = true;
+		mBallPos = VGet(_player.GetPos().x, 0.0f, 300.0f);
+		MV1SetPosition(mBallHandle, mBallPos);
+		mBallFlag = true;
 	}
 
 	// 画面外またはプレイヤーが所定の位置まで来たらボールを消す
-	if (BallPos.z < -200.0f || uiGoal.GetUIPosY() <= 130)
+	if (mBallPos.z < -BALL_DELETE_POS_Z || _uiGoal.GetUIPosY() <= BALL_DELETE_POS_Y)
 	{
-		BallFlag = false;
+		mBallFlag = false;
 	}
 
 	//回転の値の増加
-	rotationX -= BALL_ROTATION_X;
+	mRotationX -= BALL_ROTATION_X;
 
 	//モデルの回転関数
-	MV1SetRotationXYZ(BallHandle, VGet(rotationX, 0.0f, 0.0f));
+	MV1SetRotationXYZ(mBallHandle, VGet(mRotationX, 0.0f, 0.0f));
 }
 
 //-----------------------------------------------------------------------------
@@ -238,25 +241,25 @@ void ObstructManager::Draw()
 	{
 		for (int j = 0; j < LINE_OBSTRUCT_COL; j++)
 		{
-			if (obstructs[i][j] != NULL)
+			if (mObstructs[i][j] != NULL)
 			{
-				obstructs[i][j]->Draw();
+				mObstructs[i][j]->Draw();
 			}
 		}
 	}
 
 	// ボール出現可能なら描画
-	if (BallFlag)
+	if (mBallFlag)
 	{
-		MV1DrawModel(BallHandle);
-		MV1SetScale(BallHandle, VGet(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE));
+		MV1DrawModel(mBallHandle);
+		MV1SetScale(mBallHandle, VGet(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE));
 	}
 }
 
 //-----------------------------------------------------------------------------
 // @brief  指定番号の障害物を取得.
 //-----------------------------------------------------------------------------
-ObstructBase* ObstructManager::GetObstruct(int raw, int col)
+ObstructBase* ObstructManager::GetObstruct(int _raw, int _col)
 {
-	return obstructs[raw][col];
+	return mObstructs[_raw][_col];
 }

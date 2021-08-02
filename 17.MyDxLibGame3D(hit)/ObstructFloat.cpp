@@ -3,18 +3,16 @@
 // 2016 Takeru Yui All Rights Reserved.
 //-----------------------------------------------------------------------------
 #include "ObstructFloat.h"
-
-#define _USE_MATH_DEFINES
 #include <math.h>
 
 //-----------------------------------------------------------------------------
 // @brief  コンストラクタ.
 //-----------------------------------------------------------------------------
-ObstructFloat::ObstructFloat(int sourceModelHandle)
-	: ObstructBase(sourceModelHandle)
+ObstructFloat::ObstructFloat(int _sourceModelHandle)
+	: ObstructBase(_sourceModelHandle)
 {
-	pos = VGet(0, 0, 0);
-	velocity = (VGet(0.0f, 0.0f, BALL_Z_SPEED));
+	mPos = VGet(0, 0, 0);
+	mVelocity = (VGet(0.0f, 0.0f, BALL_Z_SPEED));
 }
 
 //-----------------------------------------------------------------------------
