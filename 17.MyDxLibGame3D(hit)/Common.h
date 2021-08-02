@@ -7,60 +7,60 @@
 */
 
 //ミリセカンド
-#define M_S			1000.0f
+const float M_S = 1000.0f;
 
 //スクリーンの大きさ
-#define SCREEN_W	640
-#define SCREEN_H	480
+const int  SCREEN_W = 640;
+const int SCREEN_H	=480;
 
 //ボールのY軸移動スピード
-#define BALL_Y_SPEED		-0.05f
-#define BALL_Z_SPEED         -0.3f
+const float BALL_Y_SPEED = -0.05f;
+const float  BALL_Z_SPEED = -0.3f;
 
 //ボールのZ軸移動スピード(早いほう)
-#define BALL_Z_SPEED_FIRST		2
+const int BALL_Z_SPEED_FIRST = 2;
 
 //ボールのZ軸移動スピード(遅いほう)
-#define BALL_Z_SPEED_SLOW		1
+const int  BALL_Z_SPEED_SLOW = 1;
 
 //ボールのモデルの大きさ
-#define MODEL_SCALE		10.0f
+const float  MODEL_SCALE = 10.0f;
 
 //ボールの出現範囲の左端と右端の値(変更ok)
-#define LEFT_EDGE	-25
-#define RIGHT_EDGE	100
+const int  LEFT_EDGE = -25;
+const int  RIGHT_EDGE = 100;
 
 //ボールの出現範囲の上端と下端の値(変更ok)
-#define TOP_EDGE		1000
-#define LOWER_EDGE		250
+const int  TOP_EDGE = 1000;
+const int  LOWER_EDGE = 250;
 
 //ボールの回転数の値
-#define BALL_ROTATION_X		0.05f
+const float BALL_ROTATION_X = 0.05f;
 
 //ボールの当たり判定の半径
-#define BALL_COLLISION		5.0f
+const float BALL_COLLISION = 5.0f;
 
 //ボールの出現する範囲の広さ
-#define BALL_APPEARANCE_AREA_W		4
-#define BALL_APPEARANCE_AREA_H		136
+const int  BALL_APPEARANCE_AREA_W = 4;
+const int  BALL_APPEARANCE_AREA_H = 136;
 
 //ボールの数
-#define BALL_NUM			50
+const int  BALL_NUM = 50;
 
 //サトシのX軸ポジション
-#define SATOSHI_POS_X		-10
+const int  SATOSHI_POS_X = -10;
 
 //サトシのZ軸ポジション
-#define SATOSHI_POS_Z		3750
+const int  SATOSHI_POS_Z = 3750;
 
 //サトシの大きさ
-#define SATOSHI_SIZE		150
+const int SATOSHI_SIZE = 150;
 
 //サトシのZ軸スピード
-#define SATOSHI_Z_SPEED		-2.75f
+const float  SATOSHI_Z_SPEED = -2.75f;
 
 //ラジアン
-#define PI	3.1415926535897932384626433832795
+const double PI = 3.1415926535897932384626433832795;
 
 struct Color
 {
@@ -69,5 +69,7 @@ struct Color
 	int b;
 };
 
+//RGBを使った白色の定義
 const Color WHITE = { 255,255,255 };
+//RGBを使った黒色の定義
 const Color BLACK = { 0,0,0 };

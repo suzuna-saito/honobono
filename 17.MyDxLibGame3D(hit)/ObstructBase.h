@@ -9,35 +9,40 @@
 
 #include "DxLib.h"
 #include "Common.h"
-
+/// <summary>
+/// UIのクラスの定義
+/// </summary>
 class UIGoal;
 
+/// <summary>
+/// オブジェクトのベースクラスの定義
+/// </summary>
 class ObstructBase
 {
 public:
-	ObstructBase(int sourceModelHandle);	// コンストラクタ.
-	virtual ~ObstructBase();				// デストラクタ.
+	ObstructBase(int _sourceModelHandle);    // コンストラクタ.
+	virtual ~ObstructBase();    // デストラクタ.
 
-	virtual void Update(UIGoal& uiGoal);				// 更新.
-	virtual void Draw();					// 描画.
-	virtual void SpeedUp(UIGoal& uiGoal);
+	virtual void Update(UIGoal& _uiGoal);    // 更新.
+	virtual void Draw();    // 描画.
+	virtual void SpeedUp(UIGoal& _uiGoal);    //スピードが上がる
 
 	// モデルハンドルの取得.
-	int GetModelHandle(){ return modelHandle; }
+	int GetModelHandle(){ return mModelHandle; }
 
 	// ポジションのgetter/setter.
-	const VECTOR& GetPos() const { return pos; }
-	void SetPos(const VECTOR set) { pos = set; }
-	float GetHitRadius() { return hitRadius; }
+	const VECTOR& GetPos() const { return mPos; }
+	void SetPos(const VECTOR _set) { mPos = _set; }
+	float GetHitRadius() { return mHitRadius; }
 
 protected:
-	int		modelHandle;					// モデルハンドル.
-	VECTOR	pos;							// ポジション.
-	float	hitRadius;						// あたり判定の半径.
-	VECTOR velocity;                        // 速度
-	VECTOR BallPos;                         // ボールの位置
+	int		mModelHandle;    // モデルハンドル.
+	VECTOR	mPos;    // ポジション.
+	float	mHitRadius;    // あたり判定の半径.
+	VECTOR mVelocity;    // 速度
+	VECTOR mBallPos;    // ボールの位置
 private:
-	float rotationX;                        // 回転角度
+	float mRotationX;    // 回転角度
 };
 
 #endif // _OBSTACLE_BASE_H_

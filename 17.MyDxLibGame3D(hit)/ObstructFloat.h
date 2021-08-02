@@ -11,7 +11,7 @@
 class ObstructFloat : public ObstructBase
 {
 public:
-	ObstructFloat(int sourceModelHandle);	// コンストラクタ.
+	ObstructFloat(int _sourceModelHandle);	// コンストラクタ.
 	virtual ~ObstructFloat();				// デストラクタ.
 
 };

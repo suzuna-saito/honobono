@@ -10,24 +10,24 @@
 //-----------------------------------------------------------------------------
 // @brief  コンストラクタ.
 //-----------------------------------------------------------------------------
-ObstructBase::ObstructBase(int sourceModelHandle)
-	: modelHandle(-1)
-	, hitRadius(5.0f)
-	, rotationX(0.0f)
-	, velocity(VGet(0,0,0))
-	, pos(VGet(0,0,0))
-	, BallPos(VGet(0,0,0))
+ObstructBase::ObstructBase(int _sourceModelHandle)
+	: mModelHandle(-1)
+	, mHitRadius(5.0f)
+	, mRotationX(0.0f)
+	, mVelocity(VGet(0,0,0))
+	, mPos(VGet(0,0,0))
+	, mBallPos(VGet(0,0,0))
 {
 	// ３Ｄモデルの読み込み
 #if USE_MODEL_DUPLICATE
-	modelHandle = MV1DuplicateModel(sourceModelHandle);
-	if (modelHandle < 0)
+	mModelHandle = MV1DuplicateModel(_sourceModelHandle);
+	if (mModelHandle < 0)
 	{
-		printfDx("データ読み込みに失敗. sourceId:%d", sourceModelHandle);
+		printfDx("データ読み込みに失敗. sourceId:%d", _sourceModelHandle);
 	}
 #else
-	modelHandle = MV1LoadModel("data/model/obstructStatic/obstructStatic.pmd");
-	if (modelHandle < 0)
+	mModelHandle = MV1LoadModel("data/model/obstructStatic/obstructStatic.pmd");
+	if (mModelHandle < 0)
 	{
 		printfDx("ObstructStatic:データ読み込みに失敗");
 	}
@@ -40,23 +40,23 @@ ObstructBase::ObstructBase(int sourceModelHandle)
 ObstructBase::~ObstructBase()
 {
 	// モデルのアンロード.
-	MV1DeleteModel(modelHandle);
+	MV1DeleteModel(mModelHandle);
 }
 
 // 更新
-void ObstructBase::Update(UIGoal &uiGoal)
+void ObstructBase::Update(UIGoal &_uiGoal)
 {
 	// ボールの速度
-	SpeedUp(uiGoal);
+	SpeedUp(_uiGoal);
 	// 位置を更新
-	MV1SetPosition(modelHandle, pos);
-	pos = VAdd(pos, velocity);
+	MV1SetPosition(mModelHandle, mPos);
+	mPos = VAdd(mPos, mVelocity);
 
 	//回転の値の増加
-	rotationX -= BALL_ROTATION_X;
+	mRotationX -= BALL_ROTATION_X;
 
 	//モデルの回転関数
-	MV1SetRotationXYZ(modelHandle, VGet(rotationX, 0.0f, 0.0f));
+	MV1SetRotationXYZ(mModelHandle, VGet(mRotationX, 0.0f, 0.0f));
 }
 //-----------------------------------------------------------------------------
 // @brief  描画.
@@ -64,20 +64,20 @@ void ObstructBase::Update(UIGoal &uiGoal)
 void ObstructBase::Draw()
 {
 	// ３Ｄモデルの描画
-	MV1DrawModel(modelHandle);
-	MV1SetScale(modelHandle, VGet( MODEL_SCALE, MODEL_SCALE, MODEL_SCALE));
+	MV1DrawModel(mModelHandle);
+	MV1SetScale(mModelHandle, VGet( MODEL_SCALE, MODEL_SCALE, MODEL_SCALE));
 
 }
 
 // ボールの速度調整
-void ObstructBase::SpeedUp(UIGoal& uiGoal)
+void ObstructBase::SpeedUp(UIGoal& _uiGoal)
 {
-	if (uiGoal.GetUIPosY() < 240.0f)     // 中級速度
+	if (_uiGoal.GetUIPosY() < 240.0f)     // 中級速度
 	{
-		velocity = VGet(0.0f, 0.0f, BALL_Z_SPEED - 0.3);
+		mVelocity = VGet(0.0f, 0.0f, BALL_Z_SPEED - 0.3);
 	}
-	if (uiGoal.GetUIPosY() < 185.0f)     // 上級速度
+	if (_uiGoal.GetUIPosY() < 185.0f)     // 上級速度
 	{
-		velocity = VGet(0.0f, 0.0f, BALL_Z_SPEED - 0.5);
+		mVelocity = VGet(0.0f, 0.0f, BALL_Z_SPEED - 0.5);
 	}
 }
