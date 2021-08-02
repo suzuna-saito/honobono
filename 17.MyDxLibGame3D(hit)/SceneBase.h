@@ -7,18 +7,23 @@ class Player;
 class Title;
 class Fade;
 
+/// <summary>
+/// シーン遷移の基本クラス
+/// </summary>
 class SceneBase
 {
 protected:
 	int mIsScene;          // 現在のシーン
-	int Return;            // タイトルへが選択された
-	int End;               // ゲーム終了が選択された
-	int Start;             // ゲームスタートが選択された
-	int PointPosition;     // カーソル位置
-	float Move;            // キャラの動き
-	float Size;            // キャラの大きさ
-	float SizePoint;       // 大きさを変える値
-	bool FadeFlag;
+	int mReturn;            // タイトルへが選択された
+	int mEnd;               // ゲーム終了が選択された
+	int mStart;             // ゲームスタートが選択された
+	int mPointPosition;     // カーソル位置
+	float mMove;            // キャラの動き
+	float mSize;            // キャラの大きさ
+	float mSizePoint;       // 大きさを変える値
+	bool mFadeFlag;         // フェードしているか
+	const int mUp;
+	const int mDown;
 
 public:
 	// コンストラクタ
@@ -43,7 +48,7 @@ public:
 	};
 
 	// シーンを変える
-	void ChangeScene(UIGoal& uiGoal, Player& player);
+	void ChangeScene(UIGoal& _uiGoal, Player& _player);
 
 	// 現在のシーンを返す
 	int GetScene() { return mIsScene; }
@@ -55,10 +60,10 @@ public:
     void PointUpdate();
 
 	// 値を渡す
-	int GetStartPoint() { return Start; }
-	int GetEndPoint() { return End; }
-	int GetReturnPoint() { return Return; }
-	int GetPointPosition() { return PointPosition; }
+	int GetStartPoint() { return mStart; }
+	int GetEndPoint() { return mEnd; }
+	int GetReturnPoint() { return mReturn; }
+	int GetPointPosition() { return mPointPosition; }
 
 	bool GetChangeFlag() { return mChangeFlag; }
 	void SetChangeFlag(bool _change) { mChangeFlag = _change; }

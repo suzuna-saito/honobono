@@ -35,10 +35,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	SetGraphMode( SCREEN_W, SCREEN_H, 32);
 	//ChangeWindowMode(TRUE);
 
-	bool m_fadeOutFlag = true;
-
-	int m_alphaVal = 0;
-
 	// エスケープキーが押されるかウインドウが閉じられるまでループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{

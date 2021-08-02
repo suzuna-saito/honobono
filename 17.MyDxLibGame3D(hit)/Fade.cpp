@@ -5,9 +5,12 @@
 const int F_TIME = 420;			// フェードインさせる時間(クリア時)
 const int F_TIME2 = 150;		// フェードインさせる時間
 
+/// <summary>
+/// コンストラクタ
+/// </summary>
 Fade::Fade()
-	: fadeTime(F_TIME)
-	, fadeTime2(F_TIME2)
+	: mfadeTime(F_TIME)
+	, mfadeTime2(F_TIME2)
 	, mAlphaMin(0)
 	, mAlphaMax(255)
 	, mAlphaVal(3)
@@ -16,10 +19,18 @@ Fade::Fade()
 	mEndFlag = false;
 }
 
+/// <summary>
+/// デストラクタ
+/// </summary>
 Fade::~Fade()
 {
 }
 
+/// <summary>
+/// 更新
+/// </summary>
+/// <param name="_InOut">フェードインアウトフラグ</param>
+/// <param name="_color">色の構造体引数</param>
 void Fade::Update(bool _InOut,Color _color)
 {
 	if (_InOut)
@@ -32,7 +43,10 @@ void Fade::Update(bool _InOut,Color _color)
 	}
 }
 
-
+/// <summary>
+/// フェードアウト更新
+/// </summary>
+/// <param name="_color">色の構造体引数</param>
 void Fade::OutProcess(Color _color)
 {
 	// アルファ値の加算
@@ -52,6 +66,10 @@ void Fade::OutProcess(Color _color)
 	}
 }
 
+/// <summary>
+/// フェードイン更新
+/// </summary>
+/// <param name="_color">色の構造体引数</param>
 void Fade::InProcess(Color _color)
 {
 	// アルファ値の加算
@@ -72,6 +90,9 @@ void Fade::InProcess(Color _color)
 	}
 }
 
+/// <summary>
+/// 初期化
+/// </summary>
 void Fade::Init()
 {
 	mAlphaMin = 0;
