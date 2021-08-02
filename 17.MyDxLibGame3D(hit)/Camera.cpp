@@ -2,19 +2,34 @@
 // @brief  カメラクラス.
 // 2016 Takeru Yui All Rights Reserved.
 //-----------------------------------------------------------------------------
-//#include "Player.h"
 #include "Camera.h"
 
 #define USE_LERP_CAMERA 1
+
+// -----------------------------------------------------------
+//  @brief 定数
+//------------------------------------------------------------
+const float CAMERA_NEAR = 0.1f;                   // カメラの奥行(最小)
+const float CAMERA_FAR = 1000.0f;                 // カメラの奥行(最大)
+const VECTOR PLAY_POS = VGet(0, 50, -40);         // プレイ時のカメラ位置
+const VECTOR OTHERS_POS = VGet(0, 0, 0);          // プレイ時以外のカメラ位置.
+const VECTOR PLAY_TARGET = VGet(0, -40, 65);      // プレイ時のカメラの注視点
+const VECTOR OTHERS_TARGET = VGet(0, 400, -1000); // プレイ時以外のカメラの注視点
+
 
 //-----------------------------------------------------------------------------
 // @brief  コンストラクタ.
 //-----------------------------------------------------------------------------
 Camera::Camera()
-	:pos(VGet(0,0,0))
+	: mNear(CAMERA_NEAR)
+	, mFar(CAMERA_FAR)
+	, mPlayPos(PLAY_POS)
+	, mOthersPos(OTHERS_POS)
+	, mPlayTarget(PLAY_TARGET)
+	, mOthersTarget(OTHERS_TARGET)
 {
 	//奥行0.1～1000までをカメラの描画範囲とする（パースを調整してる。NearとFarの値）
-	SetCameraNearFar(0.1f, 1000.0f);
+	SetCameraNearFar(mNear, mFar);
 }
 
 //-----------------------------------------------------------------------------
@@ -25,18 +40,20 @@ Camera::~Camera()
 	// 処理なし.
 }
 
+//-----------------------------------------------------------------------------
+// @brief  プレイ中のカメラの更新.
+//-----------------------------------------------------------------------------
 void Camera::PlayerUpdate()
 {
-	pos = VGet(0, 50, -40); //-1050-40
-
 	// カメラの注視点を設定.
-	SetCameraPositionAndTarget_UpVecY(pos, VGet(0, -40, 65));
-	// プレイヤーを追尾する必要がないのでコンストラクタで固定したけど強引すぎ？？
+	SetCameraPositionAndTarget_UpVecY(mPlayPos, mPlayTarget);
 }
 
+//-----------------------------------------------------------------------------
+// @brief  タイトル、クリア、オーバー中のカメラの更新.
+//-----------------------------------------------------------------------------
 void Camera::SceneUpdate()
 {
-	pos = VGet(0, 0, 0);
-
-	SetCameraPositionAndTarget_UpVecY(pos, VGet(0, 400, -1000));
+	// カメラの注視点を設定.
+	SetCameraPositionAndTarget_UpVecY(mOthersPos, mOthersTarget);
 }
