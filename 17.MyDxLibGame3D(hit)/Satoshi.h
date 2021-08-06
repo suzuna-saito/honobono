@@ -29,7 +29,7 @@ public:
     /// </summary>
     /// <param name="scene"> ゲームシーンに入ってから描画するため </param>
     /// <param name="uiGoal"> プレイヤーとの距離を測るため </param>
-	void Update(SceneBase& _scene, UIGoal& _uiGoal);
+	void Update(UIGoal& _uiGoal);
 
 	/// <summary>
 	/// 描画

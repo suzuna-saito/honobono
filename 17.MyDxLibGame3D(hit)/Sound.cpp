@@ -67,6 +67,10 @@ void Sound::PlayBGM(SceneBase& _scene)
 		PlaySoundMem(overBGM, DX_PLAYTYPE_LOOP, TRUE);
 		PlaySoundMem(overSound, DX_PLAYTYPE_BACK);
 	}
+
+	if (_scene.GetScene() == _scene.gameEnd)
+	{
+	}
 }
 
 

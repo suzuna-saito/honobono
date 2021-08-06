@@ -170,6 +170,7 @@
     <ClCompile Include="ObstructBase.cpp" />
     <ClCompile Include="ObstructFloat.cpp" />
     <ClCompile Include="ObstructManager.cpp" />
+    <ClCompile Include="Play.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Satoshi.cpp" />
     <ClCompile Include="SceneBase.cpp">
@@ -195,6 +196,7 @@
     <ClInclude Include="ObstructBase.h" />
     <ClInclude Include="ObstructFloat.h" />
     <ClInclude Include="ObstructManager.h" />
+    <ClInclude Include="Play.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Satoshi.h" />
     <ClInclude Include="SceneBase.h">

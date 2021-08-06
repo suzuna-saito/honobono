@@ -88,6 +88,9 @@
     <ClCompile Include="HitChecker.cpp">
       <Filter>ソース ファイル\HitCheck</Filter>
     </ClCompile>
+    <ClCompile Include="Play.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ObstructBase.h">
@@ -143,6 +146,9 @@
     </ClInclude>
     <ClInclude Include="Hitchecker.h">
       <Filter>ソース ファイル\HitCheck</Filter>
+    </ClInclude>
+    <ClInclude Include="Play.h">
+      <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

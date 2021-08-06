@@ -1,13 +1,16 @@
 #include "GameOver.h"
+#include "Title.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 GameOver::GameOver()
-	:mCount(0)
-	, mColorAlpha(5)
-	, mFontSize(36)
 {
+	SetScene(gameOver);
+
+	// 背景用カメラ位置を設定
+	camera->SceneUpdate();
+
 	// モデルをクリア用に変更
 	mModel = MV1LoadModel("data/model/player/pika/pikaSad.pmx");
 	mBallModel = MV1LoadModel("data/model/ball/monsterBall.pmx");
@@ -16,7 +19,7 @@ GameOver::GameOver()
 	mBackGround = MV1LoadModel("data/model/BackGround/unnamed.pmx");
 	LoadDivGraph("data/Asset/Return.png", 2, 2, 1, 100, 30, mKeyText1, TRUE);
 	LoadDivGraph("data/Asset/End.png", 2, 2, 1, 100, 30, mKeyText2, TRUE);
-	mPointGraph = LoadGraph("data/Asset/mejirushi.png");
+	
 	// モデルの位置設定
 	MV1SetPosition(mModel, VGet(-1.5, 0, -6));
 	MV1SetPosition(mBallModel, VGet(1, 0, -5));
@@ -46,47 +49,37 @@ GameOver::~GameOver()
 	DeleteGraph(*mKeyText2);
 	// 描画ブレンドモードをノーブレンドにする
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	// カメラを削除.
+	delete(camera);
 }
 
-/// <summary>
-/// 描画
-/// </summary>
-/// <param name="scene">SceneBaseクラスのポインタ</param>
-void GameOver::Draw(SceneBase& _scene)
+// 更新処理
+/// <return>シーンのポインタ</return>
+SceneBase* GameOver::Update()
 {
-	MV1DrawModel(mBackGround);
-	MV1DrawModel(mOverText);
-	MV1DrawModel(mModel);
-	MV1DrawModel(mBallModel);
-	// 描画ブレンドモードをノーブレンドにする
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	DrawGraph(540, 350, mKeyText1[_scene.GetReturnPoint()], TRUE);
-	DrawGraph(540, 400, mKeyText2[_scene.GetEndPoint()], TRUE);
-	if (_scene.GetPointPosition() == 1)
+	// シーン遷移条件
+	if (GetPointPosition() == mUp && CheckHitKey(KEY_INPUT_RETURN))
 	{
-		DrawGraph(500, 350, mPointGraph, TRUE);
+		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
+		return new Title();
 	}
-	else if (_scene.GetPointPosition() == 2)
+	else if (GetPointPosition() == mDown && CheckHitKey(KEY_INPUT_RETURN))
 	{
-		DrawGraph(500, 400, mPointGraph, TRUE);
+		SetScene(gameEnd);
 	}
-	// 描画ブレンドモードにする(文字を点滅させる)
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mCount);
-	SetFontSize(mFontSize);
-	DrawString(200, 444, "Push The Enter", GetColor(0, 0, 0));
-}
 
-/// <summary>
-/// 更新
-/// </summary>
-void GameOver::Update()
-{
+	// カーソル位置更新
+	PointUpdate();
+
 	// モデルのサイズを変える
 	MV1SetScale(mModel, VGet(mSize, mSize, mSize));
 	// ボールを回転させる
 	MV1SetRotationXYZ(mBallModel, VGet(0, mMove, -0.5));
+
 	mMove += 0.10f;
 	mSize += mSizePoint;
+
 	// モデルのサイズを拡大、縮小させる
 	if (mSize > 1.02)
 	{
@@ -108,4 +101,36 @@ void GameOver::Update()
 	}
 
 	mCount += mColorAlpha;
+
+	// シーンが変更されていなかったら自分のポインタを返す
+	return this;
 }
+
+/// <summary>
+/// 描画
+/// </summary>
+/// <param name="scene">SceneBaseクラスのポインタ</param>
+void GameOver::Draw()
+{
+	MV1DrawModel(mBackGround);
+	MV1DrawModel(mOverText);
+	MV1DrawModel(mModel);
+	MV1DrawModel(mBallModel);
+	// 描画ブレンドモードをノーブレンドにする
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	DrawGraph(540, 350, mKeyText1[GetReturnPoint()], TRUE);
+	DrawGraph(540, 400, mKeyText2[GetEndPoint()], TRUE);
+	if (GetPointPosition() == 1)
+	{
+		DrawGraph(500, 350, mPointGraph, TRUE);
+	}
+	else if (GetPointPosition() == 2)
+	{
+		DrawGraph(500, 400, mPointGraph, TRUE);
+	}
+	// 描画ブレンドモードにする(文字を点滅させる)
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mCount);
+	SetFontSize(mFontSize);
+	DrawString(200, 444, "Push The Enter", GetColor(0, 0, 0));
+}
+

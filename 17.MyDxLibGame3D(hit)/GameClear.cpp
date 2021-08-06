@@ -1,13 +1,16 @@
 #include "GameClear.h"
+#include "Title.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 GameClear::GameClear()
-	: mCount(0)
-	, mColorAlpha(5)
-	, mFontSize(36)
 {
+	SetScene(gameClear);
+
+	// 背景用カメラ位置を設定
+	camera->SceneUpdate();
+
 	// モデルをクリア用に変更
 	mModel = MV1LoadModel("data/model/player/pika/pikaHandUP.pmx");
 	// 文字画像の読み込み
@@ -28,6 +31,9 @@ GameClear::GameClear()
 	MV1SetRotationXYZ(mBackGround, VGet(0, 180.0f * DX_PI_F / 180.0f, 0));
 	// モデルのシェイプ画像設定(ピカチュウの表情変更)
 	MV1SetShapeRate(mModel, 3, 1);
+
+	// 背景用カメラ位置を設定
+	&Camera::SceneUpdate;
 }
 
 /// <summary>
@@ -43,40 +49,29 @@ GameClear::~GameClear()
 	DeleteGraph(mPointGraph);
 	// 描画ブレンドモードをノーブレンドにする
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	// カメラを削除.
+	delete(camera);
 }
 
-/// <summary>
-/// 描画
-/// </summary>
-/// <param name="_scene">SceneBaseクラスのポインタ</param>
-void GameClear::Draw(SceneBase& _scene)
+// 更新処理
+/// <return>シーンのポインタ</return>
+SceneBase* GameClear::Update()
 {
-	MV1DrawModel(mBackGround);
-	MV1DrawModel(mClearText);
-	MV1DrawModel(mModel);
-	// 描画ブレンドモードをノーブレンドにする
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	DrawGraph(540, 350, mKeyText1[_scene.GetReturnPoint()], TRUE);
-	DrawGraph(540, 400, mKeyText2[_scene.GetEndPoint()], TRUE);
-	if (_scene.GetPointPosition() == 1)
+	// シーン遷移条件
+	if (GetPointPosition() == mUp && CheckHitKey(KEY_INPUT_RETURN))
 	{
-		DrawGraph(500, 350, mPointGraph, TRUE);
+		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
+		return new Title();
 	}
-	else if (_scene.GetPointPosition() == 2)
+	else if (GetPointPosition() == mDown && CheckHitKey(KEY_INPUT_RETURN))
 	{
-		DrawGraph(500, 400, mPointGraph, TRUE);
+		SetScene(gameEnd);
 	}
-	// 描画ブレンドモードにする(文字を点滅させる)
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mCount);
-	SetFontSize(mFontSize);
-	DrawString(200, 444, "Push The Enter", GetColor(0, 0, 0));
-}
 
-/// <summary>
-/// 更新
-/// </summary>
-void GameClear::Update()
-{
+	// カーソル位置更新
+	PointUpdate();
+
 	// モデルのサイズを変える
 	MV1SetScale(mModel, VGet(mSize, mSize, mSize));
 	mSize += mSizePoint;
@@ -101,4 +96,31 @@ void GameClear::Update()
 	}
 
 	mCount += mColorAlpha;
+
+	// シーンが変更されていなかったら自分のポインタを返す
+	return this;
+}
+
+// 描画
+void GameClear::Draw()
+{
+	MV1DrawModel(mBackGround);
+	MV1DrawModel(mClearText);
+	MV1DrawModel(mModel);
+	// 描画ブレンドモードをノーブレンドにする
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	DrawGraph(540, 350, mKeyText1[GetReturnPoint()], TRUE);
+	DrawGraph(540, 400, mKeyText2[GetEndPoint()], TRUE);
+	if (GetPointPosition() == 1)
+	{
+		DrawGraph(500, 350, mPointGraph, TRUE);
+	}
+	else if (GetPointPosition() == 2)
+	{
+		DrawGraph(500, 400, mPointGraph, TRUE);
+	}
+	// 描画ブレンドモードにする(文字を点滅させる)
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mCount);
+	SetFontSize(mFontSize);
+	DrawString(200, 444, "Push The Enter", GetColor(0, 0, 0));
 }
