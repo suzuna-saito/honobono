@@ -14,26 +14,33 @@ class Camera
 {
 public:
 	Camera();							// コンストラクタ.
-	~Camera();							// デストラクタ.
-										
-	/// プレイ時のカメラの位置、注視点の更新
-	void PlayerUpdate();
+	virtual ~Camera();				    // デストラクタ.
 
-	/// プレイ時以外のカメラの位置、注視点の更新
-	void SceneUpdate();
+	// カメラセット
+	void CameraSet();
+
+	// 描画位置確認用カメラ更新
+	void TryDrawCameraUpdate();
+
+	//------------------------------------
+	// カメラ位置
+	//------------------------------------
+	// 一つ目のカメラ位置
+	void FirstCameraUpdate();
+
+	// カメラ原点位置セット
+	void SetOriginCameraUpdate();
 
 private:
 	// カメラの奥行
 	const float mNear;
-	const float mFar;     
+	const float mFar;
 
-	// カメラ位置
-	const VECTOR mPlayPos;      
-	const VECTOR mOthersPos;
-
-	// カメラの注視点
-	const VECTOR mPlayTarget;  
-	const VECTOR mOthersTarget;
+	// カメラ
+	VECTOR mPos;      //カメラ位置
+	float mVAngle;	  //垂直方向アングル
+	float mHAngle;	  //水平方向アングル
+	float mTAngle;	  //捻り回転アングル
 };
 
 #endif // _CAMERA_H_
