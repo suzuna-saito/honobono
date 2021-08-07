@@ -12,7 +12,7 @@ class Sound
 {
 public:
 	// コンストラクタ
-	Sound();
+	Sound(SceneBase& _scene);
 	// デストラクタ
 	~Sound();
 

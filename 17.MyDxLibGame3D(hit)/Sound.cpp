@@ -6,7 +6,7 @@
 /// <summary>
 /// コンストラクト
 /// </summary>
-Sound::Sound()
+Sound::Sound(SceneBase& _scene)
 	:SoundFlag(false)
 {
 	// サウンドの読み込み
@@ -23,6 +23,9 @@ Sound::Sound()
 	moveSound = LoadSoundMem("data/Sound/move_SE.mp3");
 	damageSound = LoadSoundMem("data/Sound/damage_SE.mp3");
 	goalSound = LoadSoundMem("data/Sound/goal_SE.wav");
+
+	// 音楽を再生
+	PlayBGM(_scene);
 }
 
 /// <summary>
@@ -66,6 +69,10 @@ void Sound::PlayBGM(SceneBase& _scene)
 	{
 		PlaySoundMem(overBGM, DX_PLAYTYPE_LOOP, TRUE);
 		PlaySoundMem(overSound, DX_PLAYTYPE_BACK);
+	}
+
+	if (_scene.GetScene() == _scene.gameEnd)
+	{
 	}
 }
 
