@@ -4,18 +4,13 @@
 //-----------------------------------------------------------------------------
 #include "Camera.h"
 
-#define USE_LERP_CAMERA 1
-
 // -----------------------------------------------------------
 //  @brief 定数
 //------------------------------------------------------------
-const float CAMERA_NEAR = 0.1f;                   // カメラの奥行(最小)
-const float CAMERA_FAR = 1000.0f;                 // カメラの奥行(最大)
-const VECTOR PLAY_POS = VGet(0, 50, -40);         // プレイ時のカメラ位置
-const VECTOR OTHERS_POS = VGet(0, 0, 0);          // プレイ時以外のカメラ位置.
-const VECTOR PLAY_TARGET = VGet(0, -40, 65);      // プレイ時のカメラの注視点
-const VECTOR OTHERS_TARGET = VGet(0, 400, -1000); // プレイ時以外のカメラの注視点
-
+const float CAMERA_NEAR = 0.1f;                                     // カメラの奥行(最小)
+const float CAMERA_FAR = 100.0f;                                    // カメラの奥行(最大)
+const VECTOR ORIGIN_CAMERA_POS = VGet(0.0f, 0.0f, 0.0f);            // 確認用カメラ原点位置
+const VECTOR FIRST_CAMERA_POS = VGet(20.0f, 30.0f, -30.0f);         // 一つ目のカメラ
 
 //-----------------------------------------------------------------------------
 // @brief  コンストラクタ.
@@ -23,10 +18,10 @@ const VECTOR OTHERS_TARGET = VGet(0, 400, -1000); // プレイ時以外のカメ
 Camera::Camera()
 	: mNear(CAMERA_NEAR)
 	, mFar(CAMERA_FAR)
-	, mPlayPos(PLAY_POS)
-	, mOthersPos(OTHERS_POS)
-	, mPlayTarget(PLAY_TARGET)
-	, mOthersTarget(OTHERS_TARGET)
+	, mPos(ORIGIN_CAMERA_POS)
+	, mVAngle(0.0f)
+	, mHAngle(0.0f)
+	, mTAngle(0.0f)
 {
 	//奥行0.1～1000までをカメラの描画範囲とする（パースを調整してる。NearとFarの値）
 	SetCameraNearFar(mNear, mFar);
@@ -40,20 +35,109 @@ Camera::~Camera()
 	// 処理なし.
 }
 
-//-----------------------------------------------------------------------------
-// @brief  プレイ中のカメラの更新.
-//-----------------------------------------------------------------------------
-void Camera::PlayerUpdate()
+/// <summary>
+/// カメラセット
+/// </summary>
+void Camera::CameraSet()
 {
-	// カメラの注視点を設定.
-	SetCameraPositionAndTarget_UpVecY(mPlayPos, mPlayTarget);
+	SetCameraPositionAndAngle(mPos, mVAngle, mHAngle, mTAngle);
 }
 
-//-----------------------------------------------------------------------------
-// @brief  タイトル、クリア、オーバー中のカメラの更新.
-//-----------------------------------------------------------------------------
-void Camera::SceneUpdate()
+/// <summary>
+/// 一つ目のカメラ位置セット
+/// </summary>
+void Camera::FirstCameraUpdate()
 {
-	// カメラの注視点を設定.
-	SetCameraPositionAndTarget_UpVecY(mOthersPos, mOthersTarget);
+	mPos = FIRST_CAMERA_POS;
+	mVAngle = 0.5f;
+	mHAngle = -0.8f;
+	mTAngle = 0.0f;
+}
+
+/// <summary>
+/// カメラ原点位置セット
+/// </summary>
+void Camera::SetOriginCameraUpdate()
+{
+	mPos = ORIGIN_CAMERA_POS;
+	mVAngle = 0.0f;
+	mHAngle = 0.0f;
+	mTAngle = 0.0f;
+}
+
+/// <summary>
+/// 描画確認用カメラ更新(自分で動かせるカメラを呼び出す)
+/// 描画状態を確認したいとき呼出し
+/// </summary>
+void Camera::TryDrawCameraUpdate()
+{
+	// 上下左右奥行き移動
+	// 上下
+	if(CheckHitKey(KEY_INPUT_UP))
+	{
+		mPos.y += 1;
+	}
+	if (CheckHitKey(KEY_INPUT_DOWN))
+	{
+		mPos.y -= 1;
+	}
+	// 左右
+	if (CheckHitKey(KEY_INPUT_RIGHT))
+	{
+		mPos.x += 1;
+	}
+	if (CheckHitKey(KEY_INPUT_LEFT))
+	{
+		mPos.x -= 1;
+	}
+	// 奥行き
+	if (CheckHitKey(KEY_INPUT_Z))
+	{
+		mPos.z += 1;
+	}
+	if (CheckHitKey(KEY_INPUT_V))
+	{
+		mPos.z -= 1;
+	}
+
+	// 角度変更
+	// 垂直方向
+	if (CheckHitKey(KEY_INPUT_W))
+	{
+		mVAngle += 0.10f;
+	}
+	if (CheckHitKey(KEY_INPUT_S))
+	{
+		mVAngle -= 0.10f;
+	}
+	// 水平方向
+	if (CheckHitKey(KEY_INPUT_D))
+	{
+		mHAngle += 0.10f;
+	}
+	if (CheckHitKey(KEY_INPUT_A))
+	{
+		mHAngle -= 0.10f;
+	}
+	// 捻り回転
+	if (CheckHitKey(KEY_INPUT_E))
+	{
+		mTAngle += 0.10f;
+	}
+	if (CheckHitKey(KEY_INPUT_Q))
+	{
+		mTAngle -= 0.10f;
+	}
+
+	// カメラ座標を描画
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "Pos( %f, %f, %f)\nAngle( %f, %f, %f)"
+		, mPos.x
+		, mPos.y
+		, mPos.z
+	    , mVAngle
+	    , mHAngle
+	    , mTAngle);
+
+	// カメラ位置変更
+	SetCameraPositionAndAngle(mPos, mVAngle, mHAngle, mTAngle);
 }

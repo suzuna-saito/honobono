@@ -10,8 +10,8 @@
 const float M_S = 1000.0f;
 
 //スクリーンの大きさ
-const int  SCREEN_W = 640;
-const int SCREEN_H	=480;
+const int  SCREEN_W = 1920;
+const int SCREEN_H	= 900;
 
 //ボールのY軸移動スピード
 const float BALL_Y_SPEED = -0.05f;
