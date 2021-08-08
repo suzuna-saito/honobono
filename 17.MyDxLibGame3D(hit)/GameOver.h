@@ -24,8 +24,6 @@ public:
 
 
 private:
-    // カメラを生成.
-    Camera* camera = new Camera();
 
 	int mOverText;            // ゲームオーバーテキスト
 };

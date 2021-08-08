@@ -8,9 +8,6 @@ GameClear::GameClear()
 {
 	SetScene(gameClear);
 
-	// 背景用カメラ位置を設定
-	camera->SceneUpdate();
-
 	// モデルをクリア用に変更
 	mModel = MV1LoadModel("data/model/player/pika/pikaHandUP.pmx");
 	// 文字画像の読み込み
@@ -31,9 +28,6 @@ GameClear::GameClear()
 	MV1SetRotationXYZ(mBackGround, VGet(0, 180.0f * DX_PI_F / 180.0f, 0));
 	// モデルのシェイプ画像設定(ピカチュウの表情変更)
 	MV1SetShapeRate(mModel, 3, 1);
-
-	// 背景用カメラ位置を設定
-	&Camera::SceneUpdate;
 }
 
 /// <summary>
@@ -49,9 +43,6 @@ GameClear::~GameClear()
 	DeleteGraph(mPointGraph);
 	// 描画ブレンドモードをノーブレンドにする
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-	// カメラを削除.
-	delete(camera);
 }
 
 // 更新処理

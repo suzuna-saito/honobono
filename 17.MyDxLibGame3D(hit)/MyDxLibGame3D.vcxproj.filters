@@ -91,6 +91,9 @@
     <ClCompile Include="Play.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ObstructBase.h">
@@ -148,6 +151,9 @@
       <Filter>ソース ファイル\HitCheck</Filter>
     </ClInclude>
     <ClInclude Include="Play.h">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>

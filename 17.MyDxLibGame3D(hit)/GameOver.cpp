@@ -8,9 +8,6 @@ GameOver::GameOver()
 {
 	SetScene(gameOver);
 
-	// 背景用カメラ位置を設定
-	camera->SceneUpdate();
-
 	// モデルをクリア用に変更
 	mModel = MV1LoadModel("data/model/player/pika/pikaSad.pmx");
 	mBallModel = MV1LoadModel("data/model/ball/monsterBall.pmx");
@@ -49,9 +46,6 @@ GameOver::~GameOver()
 	DeleteGraph(*mKeyText2);
 	// 描画ブレンドモードをノーブレンドにする
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-	// カメラを削除.
-	delete(camera);
 }
 
 // 更新処理

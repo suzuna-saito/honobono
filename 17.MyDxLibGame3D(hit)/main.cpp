@@ -4,14 +4,8 @@
 //-----------------------------------------------------------------------------
 // インクルード
 #include "DxLib.h"
-#include "SceneBase.h"
-#include "Title.h"
-#include "Play.h"
-#include "GameOver.h"
-#include "GameClear.h"
-#include "Camera.h"
-#include "Sound.h"
 #include "Common.h"
+#include "SceneManager.h"
 
 //-----------------------------------------------------------------------------
 // @brief  メイン関数.
@@ -28,58 +22,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	SetGraphMode( SCREEN_W, SCREEN_H, 32);
 	ChangeWindowMode(TRUE);
 
-	// シーンの生成
-	SceneBase* nowScene = new Title();
+	// シーン管理するクラスを生成
+	SceneManager* sceneManager = new SceneManager();
 
-	// サウンドの生成
-	Sound* sound = new Sound();
+	// ゲームの更新を行うか確認するのためフラグ
+	bool isRun = true;
 
-	// 音楽を再生
-	sound->PlayBGM(*nowScene);
-
-	// エスケープキーが押されるかウインドウが閉じられるまでループ
-	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+	// 更新を行うかのフラグがtrueでエスケープキーが押されるか、ウインドウが閉じられるまでループ
+	while (!ProcessMessage() && !CheckHitKey(KEY_INPUT_ESCAPE) && isRun)
 	{
-
-		// シーンの更新処理
-		// 現在と次のシーンを比較するためのSceneBaseクラスポインタ
-		// Updateの戻り値で次のシーンのポインタが返ってくる
-		SceneBase* tmpScene = nowScene->Update();
-
-		// 現在のシーンであるnowSceneと次のシーンであるtmpSceneを比較
-		// シーンが変わっていたら
-		if (tmpScene != nowScene)
-		{
-			// 音楽を止める
-			sound->StopMusic(*tmpScene);
-
-			// 現在のシーンを解放
-			delete nowScene;
-			// nowSceneに現在のシーン（tmpScene）を代入
-			nowScene = tmpScene;
-
-			// 音楽を再生
-			sound->PlayBGM(*nowScene);
-		}
-		if (nowScene->GetScene() == nowScene->gameEnd)
-		{
-			break;
-		}
 		// 画面を初期化する
 		ClearDrawScreen();
 
-		// 現在のシーンを描画
-		nowScene->Draw();
+		// シーン管理更新
+		isRun = sceneManager->UpdateScene();
 
 		// 裏画面の内容を表画面に反映させる
 		ScreenFlip();
 	}
 
-	// シーンの削除
-	delete nowScene;
-
-	// 音楽の削除
-	delete sound;
+	// シーンの管理クラス削除
+	delete sceneManager;
 
 	// ＤＸライブラリの後始末
 	DxLib_End();

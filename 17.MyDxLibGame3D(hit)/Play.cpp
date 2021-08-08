@@ -7,8 +7,21 @@ Play::Play()
 {
 	SetScene(play);
 
-	// ゲーム用カメラ位置を設定
-	camera->PlayerUpdate();
+	// 背景を生成.
+	backGround = new BackGround();
+	// プレイヤーを生成.
+	player = new Player();
+	// UI（ゴール）の生成
+	uiGoal = new UIGoal();
+	//// UI(花火)の生成
+	//new UIFireworks();
+	// サトシを生成
+	satoshi = new Satoshi();
+	// 障害物を生成.
+	obstructManager = new ObstructManager();
+	// 当たり判定を生成
+	hit = new HitChecker();
+
 	// 障害物を生成.
 	obstructManager->CreateObstructs();
 }
@@ -16,15 +29,13 @@ Play::Play()
 // デストラクタ
 Play::~Play()
 {
-	// カメラを削除.
-	delete(camera);
 	// 背景の削除
 	delete(backGround);
 	// 当たり判定の削除
 	delete(hit);
 	// UIの削除
 	delete(uiGoal);
-	delete(uiFire);
+	//delete(uiFire);
 	// プレイヤーを削除.
 	delete(player);
 	// サトシの削除
@@ -39,13 +50,13 @@ Play::~Play()
 SceneBase* Play::Update()
 {
 	// シーン遷移条件(クリア)
-	if (&UIGoal::GetGoalFlag)
+	if (uiGoal->GetGoalFlag())
 	{
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
 		return new GameClear();
 	}
 	// シーン遷移条件(オーバー)
-	else if(&Player::GetHp == 0)
+	else if(player->GetHp() == 0)
 	{
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
 		return new GameOver();

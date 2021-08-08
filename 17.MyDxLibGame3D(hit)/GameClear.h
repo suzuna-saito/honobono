@@ -23,8 +23,6 @@ public:
     void Draw()override;
 
 private:
-    // ƒJƒƒ‰‚ğ¶¬.
-    Camera* camera = new Camera();
 
 	int mClearText;             
 };

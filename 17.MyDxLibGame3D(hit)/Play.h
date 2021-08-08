@@ -31,20 +31,18 @@ public:
     void Draw()override;
 
 private:
-	// カメラを生成.
-	Camera* camera = new Camera();
 	// 背景を生成.
-	BackGround* backGround = new BackGround();
+	BackGround* backGround;
 	// プレイヤーを生成.
-	Player* player = new Player();
+	Player* player;
 	// UI（ゴール）の生成
-	UIGoal* uiGoal = new UIGoal();
+	UIGoal* uiGoal;
 	// UI(花火)の生成
-	UIFireworks* uiFire = new UIFireworks();
+	UIFireworks* uiFire;
 	// サトシを生成
-	Satoshi* satoshi = new Satoshi();
+	Satoshi* satoshi;
 	// 障害物を生成.
-	ObstructManager* obstructManager = new ObstructManager();
+	ObstructManager* obstructManager;
 	// 当たり判定を生成
-	HitChecker* hit = new HitChecker();
+	HitChecker* hit;
 };

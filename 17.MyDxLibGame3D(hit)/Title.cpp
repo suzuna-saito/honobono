@@ -8,6 +8,8 @@ Title::Title()
 {
 	SetScene(title);
 
+	camera = new Camera();
+
 	// ”wŒi—pƒJƒƒ‰ˆÊ’u‚ðÝ’è
 	camera->SceneUpdate();
 
