@@ -50,7 +50,7 @@ Satoshi::~Satoshi()
 /// </summary>
 /// <param name="scene"> ゲームシーンに入ってから描画するため </param>
 /// <param name="uiGoal"> プレイヤーとの距離を測るため </param>
-void Satoshi::Update(SceneBase& _scene, UIGoal& _uiGoal)
+void Satoshi::Update(UIGoal& _uiGoal)
 {
 	// サトシ移動開始位置
 	if (_uiGoal.GetUIPosY() <= posMax)

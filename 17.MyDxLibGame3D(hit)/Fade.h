@@ -10,10 +10,10 @@ public:
 	Fade();			// コンストラクタ
 	~Fade();		// デストラクタ
 
-	void Update(bool _InOut,Color _color);   // 更新
+	bool Draw(bool _InOut,Color _color);   // 更新
 
-	void OutProcess(Color _color);	// フェードアウト更新
-	void InProcess(Color _color);	// フェードイン更新
+	bool OutProcess(Color _color);	// フェードアウト更新
+	bool InProcess(Color _color);	// フェードイン更新
 
 	void Init();				// 描画
 
