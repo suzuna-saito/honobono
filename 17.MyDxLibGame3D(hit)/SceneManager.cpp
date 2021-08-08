@@ -13,7 +13,7 @@
 /// </summary>
 SceneManager::SceneManager()
     // カメラ生成
-	:camera(new Camera())
+	: camera(new Camera())
 	// 現在のシーンの生成
 	, nowScene(new Title())
 	// 次のシーンに現在のシーンを保存
@@ -129,6 +129,8 @@ void SceneManager::UpdateNonFadeInOutCase()
 	// 現在のシーンを描画
 	nowScene->Draw();
 
+	camera->TryDrawCameraUpdate();
+
     // シーンが変わっていたら次のシーンを一時保存して、カメラのアングル、フェードインアウトの状態を切り替える
 	if (nextScene != nowScene)
 	{
@@ -136,18 +138,6 @@ void SceneManager::UpdateNonFadeInOutCase()
 		saveNextScene = nextScene;
 		// フェードインの状態に切り替える
 		fadeState = FadeState::FadeIn;
-
-		// カメラアングルを設定
-		if (saveNextScene->GetScene() == saveNextScene->title | saveNextScene->gameClear | saveNextScene->gameOver)
-		{
-			camera->SceneUpdate();
-		}
-
-		// カメラアングルをゲームシーン用に変更
-		if (saveNextScene->GetScene() == saveNextScene->play )
-		{
-			camera->PlayerUpdate();
-		}
 	}
 
 	// フェードインアウトが終わったら、音楽、シーンを切り替えて、フェードインアウト初期化

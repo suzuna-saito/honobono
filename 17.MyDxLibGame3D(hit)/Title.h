@@ -1,6 +1,10 @@
 #pragma once
 #include "SceneBase.h"
 
+// 前方宣言
+class Fish;
+class Pool;
+
 /// <summary>
 /// タイトルシーンの生成、描画
 /// </summary>
@@ -23,8 +27,10 @@ public:
     void Draw()override;
 
 private:
-    // カメラを生成.
-    Camera* camera;
+
+    Fish* fish = nullptr;
+
+    Pool* pool = nullptr;
 
     int mTitleText;    // タイトルテキスト
 };

@@ -25,6 +25,8 @@ Camera::Camera()
 {
 	//奥行0.1～1000までをカメラの描画範囲とする（パースを調整してる。NearとFarの値）
 	SetCameraNearFar(mNear, mFar);
+	CameraSet();
+	SetOriginCameraUpdate();
 }
 
 //-----------------------------------------------------------------------------

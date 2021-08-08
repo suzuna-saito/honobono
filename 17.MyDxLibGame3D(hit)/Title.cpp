@@ -1,5 +1,7 @@
 #include "Title.h"
 #include "Play.h"
+#include "Pool.h"
+#include "Fish.h"
 
 /// <summary>
 /// コンストラクタ
@@ -7,11 +9,6 @@
 Title::Title()
 {
 	SetScene(title);
-
-	camera = new Camera();
-
-	// 背景用カメラ位置を設定
-	camera->SceneUpdate();
 
 	// ３Ｄモデルの読み込み
 	mModel = MV1LoadModel("data/model/player/pika/pikapika.pmx");
@@ -34,6 +31,10 @@ Title::Title()
 	MV1SetRotationXYZ(mTitleText, VGet(0, 180.0f * DX_PI_F / 180.0f, 0));
 	MV1SetRotationXYZ(mBackGround, VGet(0, 180.0f * DX_PI_F / 180.0f, 0));
 
+	pool = new Pool();
+
+	fish = new Fish();
+
 }
 
 /// <summary>
@@ -51,8 +52,8 @@ Title::~Title()
 	// 描画ブレンドモードをノーブレンドにする
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// カメラを削除.
-	delete(camera);
+	delete pool;
+	delete fish;
 }
 
 
@@ -110,6 +111,9 @@ SceneBase* Title::Update()
 // 描画
 void Title::Draw()
 {
+	fish->Draw();
+	pool->Draw();
+
 	MV1DrawModel(mBackGround);
 	MV1DrawModel(mTitleText);
 	MV1DrawModel(mModel);

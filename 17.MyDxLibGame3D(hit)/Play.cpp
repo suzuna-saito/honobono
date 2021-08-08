@@ -21,7 +21,6 @@ Play::Play()
 	obstructManager = new ObstructManager();
 	// “–‚½‚è”»’è‚ð¶¬
 	hit = new HitChecker();
-
 	// áŠQ•¨‚ð¶¬.
 	obstructManager->CreateObstructs();
 }
