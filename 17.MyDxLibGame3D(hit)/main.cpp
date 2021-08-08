@@ -19,6 +19,7 @@
 #include "UIFireworks.h"
 #include "Common.h"
 #include "Sound.h"
+#include "Timing.h"
 
 //-----------------------------------------------------------------------------
 // @brief  メイン関数.
@@ -54,6 +55,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		Sound* sound = new Sound();
 		// フェードの生成
 		Fade* fade = new Fade();
+		// タイミングゲージの生成
+		Timing* timing = new Timing();
 
 		// フェードインちゅうかどうか
 		bool fadeFlag = false;
@@ -165,11 +168,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 					obstructManager->Draw();
 					// プレイヤー描画.
 					player->Draw();
+
+					
 				}
 				// 当たり判定UIの描画
 				hit->Draw(*player);
 				// UI(ゴール)の描画
 				uiGoal->Draw();
+				// タイミングゲージの描画
+				timing->Draw();
+
 
 				fadeFlag = true;
 
@@ -208,6 +216,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 					obstructManager->Update(*player, *uiGoal);
 					// 残りゴール距離の更新
 					uiGoal->Update();
+					// タイミングゲージの更新
+					timing->Update();
 
 					// ヒットのチェック.
 					hit->Check(*player, *obstructManager);
@@ -230,7 +240,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				hit->Draw(*player);
 				// UI(ゴール)の描画
 				uiGoal->Draw();
-
+				// タイミングゲージの描画
+				timing->Draw();
 
 
 				// 花火の処理

@@ -179,6 +179,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="Timing.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="UIBase.cpp" />
     <ClCompile Include="UIFireworks.cpp" />
@@ -204,6 +205,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="Timing.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="UIBase.h" />
     <ClInclude Include="UIFireworks.h" />
