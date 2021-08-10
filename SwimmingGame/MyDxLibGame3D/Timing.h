@@ -34,6 +34,12 @@ private:
 	int buttonX;
 	// ボタンの座標Y
 	int buttonY;
+	// ボタンが最大動ける範囲(左)
+	int buttonMoveLeft;
+	// ボタンが最大動ける範囲(右)
+	int buttonMoveRight;
+	// ボタンの動ける範囲
+	int movebutton;
 
 	//  ゲージ
 	// ゲージの座標X
@@ -45,11 +51,11 @@ private:
 	// ゲージの中心座標Y
 	int gageCY;
 	// 収縮するゲージの半径
-	float radius;
+	int radius;
 	// 判定がパーフェクトになるゲージの半径
-	float gageRadius;
+	int gageRadius;
 	// 半径の初期化
-	float radiusInit;
+	int radiusInit;
 	// 判定がパーフェクトになるゲージの色
 	int gageColor;
 	// 収縮するゲージの色
@@ -91,7 +97,17 @@ private:
 	bool BadFlag;
 	// Badリアクションの画像
 	int badImg;
-	
+
+	// スコア
+	int score;
+	// スコアを借入れする変数
+	int scoreMax;
+	// Score処理フラグ
+	bool ScoreFlag;
+	// 
+	int scoreX;
+	// 
+	int scoreY;
 	
 };
 
