@@ -160,13 +160,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Fish.cpp" />
     <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="HitChecker.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NPCBase.cpp" />
     <ClCompile Include="NPCManager.cpp" />
@@ -187,7 +187,6 @@
     <ClCompile Include="UIGoal.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BackGround.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Fade.h" />
@@ -195,6 +194,7 @@
     <ClInclude Include="GameClear.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="Hitchecker.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="NPCBase.h" />
     <ClInclude Include="NPCManager.h" />
     <ClInclude Include="Play.h" />

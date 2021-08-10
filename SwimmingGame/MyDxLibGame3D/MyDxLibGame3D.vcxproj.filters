@@ -23,17 +23,11 @@
     <Filter Include="ソース ファイル\UI\NPC">
       <UniqueIdentifier>{7448a41d-40ba-4245-82a9-d0124dd5fd50}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\UI\BackGround">
-      <UniqueIdentifier>{c43683d3-c504-4c36-8ec9-429658fb3849}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\GameObject">
       <UniqueIdentifier>{6ad6c216-134d-4b2c-9b74-6c8167196f93}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="SceneBase.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
@@ -57,9 +51,6 @@
     </ClCompile>
     <ClCompile Include="Fade.cpp">
       <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="BackGround.cpp">
-      <Filter>ソース ファイル\UI\BackGround</Filter>
     </ClCompile>
     <ClCompile Include="Sound.cpp">
       <Filter>ソース ファイル\UI\Sound</Filter>
@@ -91,6 +82,12 @@
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -116,9 +113,6 @@
     </ClInclude>
     <ClInclude Include="Fade.h">
       <Filter>ソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="BackGround.h">
-      <Filter>ソース ファイル\UI\BackGround</Filter>
     </ClInclude>
     <ClInclude Include="Sound.h">
       <Filter>ソース ファイル\UI\Sound</Filter>
@@ -152,6 +146,9 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>ソース ファイル\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

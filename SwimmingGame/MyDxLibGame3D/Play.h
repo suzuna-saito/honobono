@@ -32,15 +32,13 @@ public:
     void Draw()override;
 
 private:
-    // 魚
+    // 魚(モブ)
     Fish* fish = nullptr;
     // プール
     Pool* pool = nullptr;
     // リズムボタン
     Timing* timing = nullptr;
-	// 背景
-	BackGround* backGround;
-	// プレイヤー
+    // 魚(プレイヤー)
 	Player* player;
 	// UI（ゴール
 	UIGoal* uiGoal;

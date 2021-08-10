@@ -1,7 +1,6 @@
 #include "Play.h"
 #include "GameClear.h"
 #include "GameOver.h"
-#include "BackGround.h"
 #include "Player.h"
 #include "UIGoal.h"
 #include "HitChecker.h"
@@ -14,8 +13,6 @@ Play::Play()
 {
 	SetScene(play);
 
-	// 背景を生成.
-	backGround = new BackGround();
 	// プレイヤーを生成.
 	player = new Player();
 	// UI（ゴール）の生成
@@ -42,8 +39,6 @@ Play::~Play()
 	delete fish;
 	// リズムボタンUI削除
 	delete timing;
-	// 背景の削除
-	delete(backGround);
 	// 当たり判定の削除
 	delete(hit);
 	// UIの削除
@@ -98,8 +93,6 @@ void Play::Draw()
 	fish->Draw();
 	// リズムボタンUI描画
 	timing->Draw();
-	// 背景
-	backGround->Draw();
 	// プレイヤー描画.
 	player->Draw();
 	//// 当たり判定UIの描画

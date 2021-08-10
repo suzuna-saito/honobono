@@ -19,7 +19,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	}
 
 	//画面モードのセット
-	SetGraphMode( SCREEN_W, SCREEN_H, 32);
+	SetGraphMode(640, 480, 16);
+	/*SetGraphMode( SCREEN_W, SCREEN_H, 32);*/
 	ChangeWindowMode(TRUE);
 
 	// シーン管理するクラスを生成

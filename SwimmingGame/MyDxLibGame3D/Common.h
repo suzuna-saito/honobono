@@ -62,6 +62,10 @@ const float  SATOSHI_Z_SPEED = -2.75f;
 //ラジアン
 const double PI = 3.1415926535897932384626433832795;
 
+
+// 魚のサイズ変更値
+const VECTOR FISH_SIZE = (VGet(0.2f, 0.2f, 0.2f));
+
 struct Color
 {
 	int r;

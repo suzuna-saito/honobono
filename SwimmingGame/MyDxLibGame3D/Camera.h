@@ -31,6 +31,8 @@ public:
 	// カメラ原点位置セット
 	void SetOriginCameraUpdate();
 
+	// 飛び込み確認用カメラ @saito
+	void FixedCameraUpdate();
 private:
 	// カメラの奥行
 	const float mNear;

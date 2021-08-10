@@ -127,7 +127,7 @@ void SceneManager::UpdateNonFadeInOutCase()
 	// 現在のシーンを描画
 	nowScene->Draw();
 
-	camera->TryDrawCameraUpdate();
+	//camera->TryDrawCameraUpdate();
 
     // シーンが変わっていたら次のシーンを一時保存して、カメラのアングル、フェードインアウトの状態を切り替える
 	if (nextScene != nowScene)
