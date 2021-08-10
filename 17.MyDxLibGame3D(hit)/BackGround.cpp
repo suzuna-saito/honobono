@@ -1,67 +1,49 @@
 #include "BackGround.h"
-#include "DxLib.h"
 
-/// <summary>
-/// コンストラクタ
-/// </summary>
+
 BackGround::BackGround()
-	: cx(0.5f)
-	, cy(0.5f)
-	, angle(0.0f)
-	, x1(0.0f)
-	, y1(0.0f)
-	, z1(20.0f)
-	, size(130.0f)
-	, x2(0.0f)
-	, y2(40.0f)
-	, z2(50.0f)
-	, size2(140.0f)
-	, scrMax(-30)
-	, scrInitY(0)
-	, scrInitZ(20)
+	: mPos{VGet( 0.0f, 70.0f, 0.0f),VGet( 0.0f, 0.0f, 0.0f),VGet( 35.0f, 35.0f, 0.0f)
+          ,VGet( -35.0f, 35.0f, 0.0f),VGet( 0.0f, 35.0f, 35.0f),VGet( 0.0f, 35.0f, -35.0f)}
+	, mSize{VGet( 7.0f, 1.0f, 7.0f),VGet( 7.0f, 1.0f, 7.0f),VGet( 7.0f, 1.0f, 3.5f)
+	       ,VGet( 7.0f, 1.0f, 3.5f),VGet( 7.0f, 1.0f, 3.5f),VGet( 7.0f, 1.0f, 3.5f)}
+	, mRotate{VGet( 0.0f, 0.0f, 0.0f),VGet( 0.0f, 0.0f, 0.0f)
+	         ,VGet( 0.0f, 270.0f * DX_PI_F / 180.0f, 90.0f * DX_PI_F / 180.0f)
+	         ,VGet( 0.0f, 270.0f * DX_PI_F / 180.0f, 90.0f * DX_PI_F / 180.0f)
+	         ,VGet( 90.0f * DX_PI_F / 180.0f, 0.0f, 0.0f)
+	         ,VGet( 90.0f * DX_PI_F / 180.0f, 0.0f, 0.0f)}
+	, i(0)
+	, WALL_NUM(6)
+	, LIGHT_POS(VGet(0.0f,70.0f,0.0f))
+	, LIGHT_ROTATE(VGet(0.0f,0.0f,0.0f))
 {
-	// 背景座標
-	DrawPos = VGet(x1, y1, z1);
-
-	// 背景画像読み込み
-	bg = LoadGraph("data/Asset/sougen.jpeg");
+	mModelHandle[0] = MV1LoadModel("data/model/Wall/UpWall.mqo");
+	mModelHandle[1] = MV1LoadModel("data/model/Wall/DownWall.mqo");
+	mModelHandle[2] = MV1LoadModel("data/model/Wall/BesideWall.mqo");
+	mModelHandle[3] = MV1LoadModel("data/model/Wall/BesideWall.mqo");
+	mModelHandle[4] = MV1LoadModel("data/model/Wall/VerticalWall.mqo");
+	mModelHandle[5] = MV1LoadModel("data/model/Wall/VerticalWall.mqo");
+	mTexture[0] = LoadGraph("data/model/Wall/Texture/SeaLevel.png", TRUE);
+	mTexture[1] = LoadGraph("data/model/Wall/Texture/UnderSea.png", TRUE);
+	mTexture[2] = LoadGraph("data/model/Wall/Texture/UnderWater01.png", TRUE);
+	mTexture[3] = LoadGraph("data/model/Wall/Texture/UnderWater01.png", TRUE);
+	mTexture[4] = LoadGraph("data/model/Wall/Texture/UnderWater02.png", TRUE);
+	mTexture[5] = LoadGraph("data/model/Wall/Texture/UnderWater02.png", TRUE);
 }
 
-/// <summary>
-/// デストラクタ
-/// </summary>
 BackGround::~BackGround()
 {
-	DeleteGraph(bg);
+	MV1DeleteModel(*mModelHandle);
+	DeleteGraph(*mTexture);
 }
 
-/// <summary>
-/// 描画
-/// </summary>
 void BackGround::Draw()
 {
-	// 3D空間に画像を描画
-	DrawBillboard3D(DrawPos, cx, cy, size, angle, bg, FALSE);                       // 一枚目の画像
-
-	DrawBillboard3D(VAdd(DrawPos,VGet(x2,y2,z2)), cx, cy, size2, angle, bg, FALSE);// 二枚目の画像
-}
-
-/// <summary>
-/// スクロール
-/// </summary>
-void BackGround::Scroll()
-{
-	// スクロールスピードを代入
-	DrawPos.y -= SCROLL_SPEED;
-	// 背景拡大スピードを代入
-	DrawPos.z -= EXPANSION_SPEED;
-
-	// 一定数進んだら元の座標に戻す(ループ)
-	if (DrawPos.y <= scrMax)
+	for (i = 0; i < WALL_NUM; i++)
 	{
-		// Y座標を元の座標に戻す
-		DrawPos.y = scrInitY;
-		// Z座標を元の座標に戻す
-		DrawPos.z = scrInitZ;
+		MV1SetScale(mModelHandle[i], mSize[i]);
+		MV1SetRotationXYZ(mModelHandle[i], mRotate[i]);
+		MV1SetPosition(mModelHandle[i], mPos[i]);
+		MV1SetTextureGraphHandle(mModelHandle[i], 0, mTexture[i], TRUE);
+		MV1DrawModel(mModelHandle[i]);
 	}
 }
