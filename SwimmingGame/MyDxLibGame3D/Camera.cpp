@@ -10,7 +10,7 @@
 const float CAMERA_NEAR = 0.1f;                                     // カメラの奥行(最小)
 const float CAMERA_FAR = 100.0f;                                    // カメラの奥行(最大)
 const VECTOR ORIGIN_CAMERA_POS = VGet(0.0f, 0.0f, 0.0f);            // 確認用カメラ原点位置
-const VECTOR BESIDE_CAMERA_POS = VGet(44.0f, 18.0f, -10.0f);      // 確認用カメラ（横固定）@saito
+const VECTOR BESIDE_CAMERA_POS = VGet(50.0f, 18.0f, -10.0f);      // 確認用カメラ（横固定）@saito
 const VECTOR FIRST_CAMERA_POS = VGet(20.0f, 30.0f, -30.0f);         // 一つ目のカメラ
 
 //-----------------------------------------------------------------------------

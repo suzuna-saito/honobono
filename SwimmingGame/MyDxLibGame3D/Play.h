@@ -32,6 +32,9 @@ public:
     void Draw()override;
 
 private:
+    // 魚が動き始めるまでのカウント
+    int startCount;
+
     // 魚(モブ)
     Fish* fish = nullptr;
     // プール

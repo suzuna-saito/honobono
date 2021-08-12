@@ -26,6 +26,9 @@
     <Filter Include="ソース ファイル\GameObject">
       <UniqueIdentifier>{6ad6c216-134d-4b2c-9b74-6c8167196f93}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Jump">
+      <UniqueIdentifier>{3eb608b6-8294-4d47-b43c-f458c23fd8b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneBase.cpp">
@@ -88,6 +91,9 @@
     <ClCompile Include="Input.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Jump.cpp">
+      <Filter>ソース ファイル\Jump</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -149,6 +155,9 @@
     </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Jump.h">
+      <Filter>ソース ファイル\Jump</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

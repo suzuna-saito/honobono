@@ -167,6 +167,7 @@
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="HitChecker.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Jump.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NPCBase.cpp" />
     <ClCompile Include="NPCManager.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="Hitchecker.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Jump.h" />
     <ClInclude Include="NPCBase.h" />
     <ClInclude Include="NPCManager.h" />
     <ClInclude Include="Play.h" />

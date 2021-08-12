@@ -8,8 +8,10 @@
 #include "Fish.h"
 #include "Timing.h"
 
+
 // コンストラクタ
 Play::Play()
+	:startCount(0)
 {
 	SetScene(play);
 
@@ -74,6 +76,14 @@ SceneBase* Play::Update()
 
 	// プレイヤー制御.
 	player->Update();
+
+	startCount++;
+
+	if (startCount >= 60)
+	{
+		// 魚の制御
+		fish->Update();
+	}
 	// 残りゴール距離の更新
 	uiGoal->Update();
 
