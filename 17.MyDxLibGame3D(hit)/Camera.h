@@ -18,7 +18,7 @@ public:
 	virtual ~Camera();				    // デストラクタ.
 
 	// カメラセット
-	void CameraSet(Time& _time);
+	void CameraSet();
 
 	// 飛び込む前のカメラ更新
 	void DivingCameraUpdate(Time& _time);
@@ -29,18 +29,11 @@ public:
 	//------------------------------------
 	// カメラ位置
 	//------------------------------------
-	// 一つ目のカメラ位置
-	void FirstCameraUpdate();
-	// 二つ目のカメラ位置
-	void SecondCameraUpdate();
-	// 三つ目のカメラ位置
-	void ThirdCameraUpdate();
-	// 四つ目のカメラ位置
-	void FourthCameraUpdate();
 	// カメラ原点位置セット
 	void SetOriginCameraUpdate();
 
 private:
+	int i;
 	float mTimeCount;     // カメラ更新時間
 
 	// カメラの奥行
@@ -48,10 +41,8 @@ private:
 	const float mFar;
 
 	// カメラ
-	VECTOR mPos;      //カメラ位置
-	float mVAngle;	  //垂直方向アングル
-	float mHAngle;	  //水平方向アングル
-	float mTAngle;	  //捻り回転アングル
+	VECTOR mPos;      // カメラ位置
+	VECTOR mAngle;    // カメラ角度
 };
 
 #endif // _CAMERA_H_
