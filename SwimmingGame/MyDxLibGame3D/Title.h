@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneBase.h"
 
+
 /// <summary>
 /// タイトルシーンの生成、描画
 /// </summary>

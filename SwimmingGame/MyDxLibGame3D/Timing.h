@@ -1,11 +1,11 @@
 #pragma once
+#include "DxLib.h"
 
 /// <summary>
 /// タイミングゲージのクラス
 /// </summary>
 class Timing
 {
-
 public:
 	/// <summary>
 	/// コンストラクタ
@@ -25,6 +25,30 @@ public:
 	/// </summary>
 	void Draw();
 
+	// Perfectのフラグ管理
+	bool PerfectFlag;
+	// Goodのフラグ管理
+	bool GoodFlag;
+	// Badのフラグ管理
+	bool BadFlag;
+
+
+	// <summary>
+	/// リアクションを取得
+	/// </summary>
+	/// <returns>現在のリアクションを返す</returns>
+	int GetReaction() { return mIsReaction; }
+
+	/// <summary>
+	/// リアクションをセットする
+	/// </summary>
+	/// <param name="_isScene">現在のリアクション</param>
+	void SetReaction(int _isReaction) { mIsReaction = _isReaction; }
+
+protected:
+	// 現在のリアクションを返す
+	int mIsReaction;
+
 private:
 	// タイミングのフラグ管理
 	bool TimingFlag;
@@ -34,6 +58,12 @@ private:
 	int buttonX;
 	// ボタンの座標Y
 	int buttonY;
+	// ボタンが最大動ける範囲(左)
+	int buttonMoveLeft;
+	// ボタンが最大動ける範囲(右)
+	int buttonMoveRight;
+	// ボタンの動ける範囲
+	int movebutton;
 
 	//  ゲージ
 	// ゲージの座標X
@@ -45,11 +75,11 @@ private:
 	// ゲージの中心座標Y
 	int gageCY;
 	// 収縮するゲージの半径
-	float radius;
+	int radius;
 	// 判定がパーフェクトになるゲージの半径
-	float gageRadius;
+	int gageRadius;
 	// 半径の初期化
-	float radiusInit;
+	int radiusInit;
 	// 判定がパーフェクトになるゲージの色
 	int gageColor;
 	// 収縮するゲージの色
@@ -74,24 +104,24 @@ private:
 	// カウントを初期化
 	int countInit;
 
-	//  Perfect
-	// Perfectのフラグ管理
-	bool PerfectFlag;
+
 	// Perfectリアクションの画像
 	int perfectImg;
-
-	//  Good
-	// Goodのフラグ管理
-	bool GoodFlag;
 	//Goodリアクションの画像
 	int goodImg;
-
-	//  Bad
-	// Badのフラグ管理
-	bool BadFlag;
 	// Badリアクションの画像
 	int badImg;
-	
+
+	// スコア
+	int score;
+	// スコアを借入れする変数
+	int scoreMax;
+	// Score処理フラグ
+	bool ScoreFlag;
+	// スコアを描画する座標X
+	int scoreX;
+	// スコアを描画する座標Y
+	int scoreY;
 	
 };
 

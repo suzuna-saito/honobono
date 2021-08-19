@@ -127,7 +127,8 @@ void SceneManager::UpdateNonFadeInOutCase()
 	// 現在のシーンを描画
 	nowScene->Draw();
 
-	//camera->TryDrawCameraUpdate();
+
+	camera->TryDrawCameraUpdate();
 
     // シーンが変わっていたら次のシーンを一時保存して、カメラのアングル、フェードインアウトの状態を切り替える
 	if (nextScene != nowScene)
@@ -149,6 +150,9 @@ void SceneManager::UpdateNonFadeInOutCase()
 		nowScene = saveNextScene;
 		// 音楽を再生
 		sound->PlayBGM(*nowScene);
+		// 効果音の再生
+		sound->PlaySE(*nowScene);
+
 		// フェードインアウト初期化
 		fade->Init();
 	}
