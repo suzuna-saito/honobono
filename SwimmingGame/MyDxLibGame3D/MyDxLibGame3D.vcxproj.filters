@@ -29,6 +29,12 @@
     <Filter Include="ソース ファイル\Jump">
       <UniqueIdentifier>{3eb608b6-8294-4d47-b43c-f458c23fd8b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\BackGround">
+      <UniqueIdentifier>{9ddefda4-887c-4e48-8838-fa6f757f6b3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Camera\Time">
+      <UniqueIdentifier>{84942244-4a17-4a41-8af2-bec97014a621}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneBase.cpp">
@@ -38,12 +44,6 @@
       <Filter>ソース ファイル\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Title.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameClear.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameOver.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="UIBase.cpp">
@@ -94,6 +94,15 @@
     <ClCompile Include="Jump.cpp">
       <Filter>ソース ファイル\Jump</Filter>
     </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>ソース ファイル\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>ソース ファイル\Camera\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -103,12 +112,6 @@
       <Filter>ソース ファイル\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Title.h">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClear.h">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameOver.h">
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="UIBase.h">
@@ -158,6 +161,15 @@
     </ClInclude>
     <ClInclude Include="Jump.h">
       <Filter>ソース ファイル\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>ソース ファイル\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>ソース ファイル\Camera\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

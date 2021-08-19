@@ -1,6 +1,4 @@
 #include "Play.h"
-#include "GameClear.h"
-#include "GameOver.h"
 #include "Player.h"
 #include "UIGoal.h"
 #include "HitChecker.h"
@@ -8,7 +6,8 @@
 #include "Fish.h"
 #include "Timing.h"
 #include "Camera.h"
-
+#include "Result.h"
+#include "BackGround.h"
 
 // コンストラクタ
 Play::Play()
@@ -32,7 +31,14 @@ Play::Play()
 	// リズムボタンUI生成
 	timing = new Timing();
 
+	// 背景の生成
+	backGround = new BackGround();
+	// 時間の生成
+	time = new Time();
+
 	camera = new Camera();
+
+	camera->FixedCameraRightUpdate();
 }
 
 // デストラクタ
@@ -51,12 +57,21 @@ Play::~Play()
 	//delete(uiFire);
 	// プレイヤーを削除.
 	delete(player);
+	// 背景の削除
+	delete(backGround);
 }
 
 // 更新処理
 /// <return>シーンのポインタ</return>
 SceneBase* Play::Update()
 {
+	// シーン遷移条件(デバック用：右シフトキーを押すと遷移)
+	if (CheckHitKey(KEY_INPUT_RSHIFT))
+	{
+		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
+		return new Result();
+	}
+
 	// カメラの更新（デバック用）
 	if (CheckHitKey(KEY_INPUT_UP))        // ↑押したら上固定カメラ
 	{
@@ -67,25 +82,14 @@ SceneBase* Play::Update()
 		camera->FixedCameraRightUpdate();
 	}
 
+	time->Update();
+	
+	camera->DivingCameraUpdate(*time);
+	camera->CameraSet();
+
 	// リズムボタンUI更新
 	timing->Update();
 
-	///////////////////////////////////////////////////////////////////////////////
-	// ↓とりあえずシーン遷移しないようにコメントアウト
-
-	//// シーン遷移条件(クリア)
-	//if (uiGoal->GetGoalFlag())
-	//{
-	//	// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-	//	return new GameClear();
-	//}
-	//// シーン遷移条件(オーバー)
-	//else if(player->GetHp() == 0)
-	//{
-	//	// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-	//	return new GameOver();
-	//}
-	///////////////////////////////////////////////////////////////////////////////
 
 	// プレイヤー制御.
 	player->Update();
@@ -97,12 +101,7 @@ SceneBase* Play::Update()
 		// 魚の制御
 		fish->Update();
 	}
-	// 残りゴール距離の更新
-	uiGoal->Update();
-
-	// ヒットのチェック.
-	//hit->Check(*player, *obstructManager);
-
+	
 	// シーンが変更されていなかったら自分のポインタを返す
 	return this;
 }
@@ -110,6 +109,8 @@ SceneBase* Play::Update()
 // 描画
 void Play::Draw()
 {
+	// 背景の生成
+	backGround->Draw();
 	// プール描画
 	pool->Draw();
 	// 魚描画
@@ -118,10 +119,6 @@ void Play::Draw()
 	timing->Draw();
 	// プレイヤー描画.
 	player->Draw();
-	//// 当たり判定UIの描画
-	//hit->Draw(*player);
-	// UI(ゴール)の描画
-	uiGoal->Draw();
 
 
 	// 真ん中の位置が分かりやすくなるように一本の線を表示（デバック用）

@@ -1,34 +1,63 @@
 #include "Title.h"
 #include "Play.h"
+#include "Camera.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 Title::Title()
+	: i(0)
+	, mAlpha(0)
+	, mTextAlpha(0)
+	, mCount(6)
+	, mTextCount(1)
+	, mEndFlag(false)
+	, mFishPos{ VGet(-50.0f, -200.0f, 80.0f), VGet(50.0f, -200.0f, 80.0f) }
+	, mTextPos{ VGet(-30.0f, 10.0f, 40.0f), VGet(-2.5f,-1.0f,10.0f)
+			  ,VGet(-1.0f,-2.0f,10.0f) }
+	, mCursorPos(VGet(-0.05f, -0.15f, 2.0f))
+	, mBackPosX(0)
+	, mBackPosY(0)
+	, mFishRotate{ VGet(10.0f,0.0f,-1.5f),VGet(-0.5f,0.0f,-1.5f) }
+	, mFishSize{ VGet(1.5f,1.5f,0.5f), VGet(1.5f,1.5f,0.5f) }
+	, mTextSize{ VGet(10.0f,10.0f,1.0f), VGet(1.0f,1.0f,1.0f), VGet(1.0f,1.0f,1.0f) }
+	, POINT_X(0.5f)
+	, POINT_Y(0.5f)
+	, SIZE(1.0f)
+	, ANGLE(0.0f)
+	, FISH_NUM(2)
+	, TEXT_NUM(3)
+	, BACK_EXTEND_X(2000)
+	, BACK_EXTEND_Y(1000)
+	, CURSOR_SIZE(1.0f)
+	, CURSOR_ANGLE(0.0f)
+	, GAME_START(1)
+	, EXIT(2)
+	, mCursorPoint(1)
+	, ALPHA_MAX_POINT(255)
+	, ALPHA_MIN_POINT(0)
+	, FONT_SIZE(60)
+	, mJympPower{ 7.0f , 7.0f }
+	, mGravity(0.1f)
+	, mJympFlag{ false,false }
+	, mKeepPower(7.0f)
 {
 	SetScene(title);
+	// モデルをロード
+	mFishModel = MV1LoadModel("data/model/TitleAsset/Fish.mqo");
+	mTextModel[0] = MV1LoadModel("data/model/TitleAsset/TitleText.mqo");
+	mTextModel[1] = MV1LoadModel("data/model/TextAsset/GameStart.mqo");
+	mTextModel[2] = MV1LoadModel("data/model/TextAsset/Exit.mqo");
 
-	// ３Ｄモデルの読み込み
-	mModel = MV1LoadModel("data/model/player/pika/pikapika.pmx");
-	mBallModel = MV1LoadModel("data/model/ball/monsterBall.pmx");
-	mBackGround = MV1LoadModel("data/model/BackGround/sougen.pmx");
-	mTitleText = MV1LoadModel("data/model/BackGround/Title.pmx");
-	LoadDivGraph("data/Asset/Start.png", 2, 2, 1, 100, 30, mKeyText1, TRUE);
-	LoadDivGraph("data/Asset/End.png", 2, 2, 1, 100, 30, mKeyText2, TRUE);
-	
-	// モデルの位置設定
-	MV1SetPosition(mModel, VGet(0, -1.0, -6));
-	MV1SetPosition(mBallModel, VGet(-2.5, 3, -4));
-	MV1SetPosition(mTitleText, VGet(18, 35, -44));
-	MV1SetPosition(mBackGround, VGet(0, 10, -45));
-	// 背景の大きさ変更
-	MV1SetScale(mBackGround, VGet(5.0f, 5.0f, 5.0f));
-	// モデルを回転(ピカチュウが背中を向けているので前に変更)
-	MV1SetRotationXYZ(mModel, VGet(5.6, 180.0f * DX_PI_F / 180.0f, 0));
-	MV1SetRotationXYZ(mBallModel, VGet(5.6, 180.0f * DX_PI_F / 180.0f, 0));
-	MV1SetRotationXYZ(mTitleText, VGet(0, 180.0f * DX_PI_F / 180.0f, 0));
-	MV1SetRotationXYZ(mBackGround, VGet(0, 180.0f * DX_PI_F / 180.0f, 0));
+	// 画像をロード
+	mCursor = LoadGraph("data/model/TextAsset/Cursor.png");
+	mTextTexture = LoadGraph("data/model/TitleAsset/texture/watergarasu.jpg", true);
+	mBackGroundGraph = LoadGraph("data/model/TitleAsset/Title.png", false);
 
+	// テクスチャ貼り付け
+	MV1SetTextureGraphHandle(mTextModel[0], 0, mTextTexture, true);
+
+	camera = new Camera();
 }
 
 /// <summary>
@@ -36,16 +65,12 @@ Title::Title()
 /// </summary>
 Title::~Title()
 {
-	MV1DeleteModel(mModel);
-	MV1DeleteModel(mBallModel);
-	MV1DeleteModel(mBackGround);
-	MV1DeleteModel(mTitleText);
-	DeleteGraph(mPointGraph);
-	DeleteGraph(*mKeyText1);
-	DeleteGraph(*mKeyText2);
-	// 描画ブレンドモードをノーブレンドにする
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
+	DeleteGraph(mTextTexture);
+	MV1DeleteModel(mFishModel);
+	MV1DeleteModel(*mTextModel);
+	DeleteGraph(mCursor);
+	DeleteGraph(mBackGroundGraph);
+	delete(camera);
 }
 
 
@@ -54,75 +79,132 @@ Title::~Title()
 SceneBase* Title::Update()
 {
 	// シーン遷移条件
-	if (GetPointPosition() == mUp && CheckHitKey(KEY_INPUT_RETURN))
+	if (mCursorPoint == GAME_START && CheckHitKey(KEY_INPUT_RETURN))
 	{
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
 		return new Play();
 
 	}
-	else if (GetPointPosition() == mDown && CheckHitKey(KEY_INPUT_RETURN))
+	else if (mCursorPoint == EXIT && CheckHitKey(KEY_INPUT_RETURN))
 	{
 		SetScene(gameEnd);
 	}
-	// カーソル位置更新
-	PointUpdate();
-
-	// モデルのサイズを変える
-	MV1SetScale(mModel, VGet(mSize, mSize, mSize));
-	// ボールを回転させる
-	MV1SetRotationXYZ(mBallModel, VGet(0, mMove, -0.5));
-
-	mMove += 0.05f;
-	mSize += mSizePoint;
-
-	// モデルのサイズを拡大、縮小させる
-	if (mSize > 1.02)
-	{
-		mSizePoint *= -1;
-	}
-	else if (mSize < 1.0)
-	{
-		mSizePoint *= -1;
-	}
-
-	// 描画ブレンドモードを濃さを変える
-	if (mCount > 255)
-	{
-		mColorAlpha *= -1;
-	}
-	else if (mCount < 0)
-	{
-		mColorAlpha *= -1;
-	}
-
-	mCount += mColorAlpha;
+	
+	CursorUpdate();
+	FishMove();
 
 	// シーンが変更されていなかったら自分のポインタを返す
 	return this;
 }
 
+// カーソルの更新処理
+void Title::CursorUpdate()
+{
+	// カーソル移動
+	if (CheckHitKey(KEY_INPUT_UP))
+	{
+		mCursorPos.y = -0.15f;
+		mCursorPoint = GAME_START;
+	}
+	else if (CheckHitKey(KEY_INPUT_DOWN))
+	{
+		mCursorPos.y = -0.35f;
+		mCursorPoint = EXIT;
+	}
+
+	// 画像の透明度を変更
+	if (mAlpha > ALPHA_MAX_POINT)
+	{
+		mCount *= -1;
+	}
+	else if (mAlpha < ALPHA_MIN_POINT)
+	{
+		mCount *= -1;
+	}
+	if (mTextAlpha > ALPHA_MAX_POINT)
+	{
+		mTextCount *= -1;
+	}
+	else if (mTextAlpha < ALPHA_MIN_POINT)
+	{
+		mTextCount *= -1;
+	}
+
+	mAlpha += mCount;
+	mTextAlpha += mTextCount;
+}
+
 // 描画
 void Title::Draw()
 {
-	MV1DrawModel(mBackGround);
-	MV1DrawModel(mTitleText);
-	MV1DrawModel(mModel);
-	MV1DrawModel(mBallModel);
-	// 描画ブレンドモードをノーブレンドにする
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	DrawGraph(540, 350, mKeyText1[GetStartPoint()], TRUE);
-	DrawGraph(540, 400, mKeyText2[GetEndPoint()], TRUE);
-	if (GetPointPosition() == 1)
+	// 背景描画
+	DrawExtendGraph(mBackPosX, mBackPosY,
+		BACK_EXTEND_X, BACK_EXTEND_Y, mBackGroundGraph, true);
+
+	// 魚を描画
+	for (i = 0; i < FISH_NUM; i++)
 	{
-		DrawGraph(500, 350, mPointGraph, TRUE);
-	}
-	else if (GetPointPosition() == 2)
-	{
-		DrawGraph(500, 400, mPointGraph, TRUE);
+		MV1SetPosition(mFishModel, mFishPos[i]);
+		MV1SetScale(mFishModel, mFishSize[i]);
+		MV1SetRotationXYZ(mFishModel, mFishRotate[i]);
+		MV1DrawModel(mFishModel);
 	}
 
-	// 描画ブレンドモードにする(文字を点滅させる)
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mCount);
-	SetFontSize(mFontSize);
-	DrawString(200, 444, "Push The Enter", GetColor(0, 0, 0));
+	// テキストを描画
+	for (i = 0; i < TEXT_NUM; i++)
+	{
+		MV1SetPosition(mTextModel[i], mTextPos[i]);
+		MV1SetScale(mTextModel[i], mTextSize[i]);
+		MV1DrawModel(mTextModel[i]);
+	}
+
+	// アルファで表示する画像を描画
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mAlpha);
+	DrawBillboard3D(mCursorPos, POINT_X, POINT_Y,
+		CURSOR_SIZE, CURSOR_ANGLE, mCursor, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mAlpha);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mTextAlpha);
+	SetFontSize(FONT_SIZE);
+	DrawString(750, 750, "Push The Enter", GetColor(0, 0, 0));
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mTextAlpha);
+}
+
+/// <summary>
+/// 魚の挙動
+/// </summary>
+void Title::FishMove()
+{
+	// 魚のジャンプ処理
+	for (i = 0; i < FISH_NUM; i++)
+	{
+		if (!mJympFlag[i])
+		{
+			mJympFlag[i] = true;
+		}
+		if (mJympFlag[i])
+		{
+			mFishPos[i].y += mJympPower[i];
+			mJympPower[i] -= mGravity;
+
+			// 角度を変える
+			if (i == 0 && mFishRotate[i].z < -0.5f)
+			{
+				mFishRotate[i].z += 0.01f;
+			}
+			if (i == 1 && mFishRotate[i].z > -2.5f)
+			{
+				mFishRotate[i].z -= 0.01f;
+			}
+		}
+
+		if (mFishPos[i].y < -200.0f)
+		{
+			mJympPower[i] = mKeepPower;
+			mFishRotate[i].z = -1.5f;
+			mJympFlag[i] = false;
+		}
+	}
+
+	// ジャンプ量をランダムにセットする
+	mKeepPower = (float)(GetRand(2) + 6);
 }

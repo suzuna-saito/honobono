@@ -6,11 +6,12 @@
 #define _CAMERA_H_
 
 #include "DxLib.h"
+#include "Time.h"
 
 /// <summary>
 /// カメラの更新
 /// </summary>
-class Camera
+class Camera:public Time
 {
 public:
 	Camera();							// コンストラクタ.
@@ -19,15 +20,15 @@ public:
 	// カメラセット
 	void CameraSet();
 
+	// 飛び込む前のカメラ更新
+	void DivingCameraUpdate(Time& _time);
+
 	// 描画位置確認用カメラ更新
 	void TryDrawCameraUpdate();
 
 	//------------------------------------
 	// カメラ位置
 	//------------------------------------
-	// 一つ目のカメラ位置
-	void FirstCameraUpdate();
-
 	// カメラ原点位置セット
 	void SetOriginCameraUpdate();
 
@@ -35,15 +36,16 @@ public:
 	void FixedCameraUpUpdate();
 	void FixedCameraRightUpdate();
 private:
+	int i;
+	float mTimeCount;     // カメラ更新時間
+
 	// カメラの奥行
 	const float mNear;
 	const float mFar;
 
 	// カメラ
-	VECTOR mPos;      //カメラ位置
-	float mVAngle;	  //垂直方向アングル
-	float mHAngle;	  //水平方向アングル
-	float mTAngle;	  //捻り回転アングル
+	VECTOR mPos;      // カメラ位置
+	VECTOR mAngle;    // カメラ角度
 };
 
 #endif // _CAMERA_H_
