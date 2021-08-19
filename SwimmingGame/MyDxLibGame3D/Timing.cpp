@@ -1,7 +1,5 @@
-
 // インクルード
 #include "Timing.h"
-#include "DxLib.h"
 
 // コンストラクタ
 Timing::Timing()
@@ -60,7 +58,6 @@ Timing::~Timing()
 // 更新
 void Timing::Update()
 {
-
 	// Ａキーを押したらボタンが左に動く
 	if (CheckHitKey(KEY_INPUT_A))
 	{

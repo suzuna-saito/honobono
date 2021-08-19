@@ -28,6 +28,7 @@ Title::Title()
 	MV1SetRotationXYZ(mBallModel, VGet(5.6, 180.0f * DX_PI_F / 180.0f, 0));
 	MV1SetRotationXYZ(mTitleText, VGet(0, 180.0f * DX_PI_F / 180.0f, 0));
 	MV1SetRotationXYZ(mBackGround, VGet(0, 180.0f * DX_PI_F / 180.0f, 0));
+
 }
 
 /// <summary>
@@ -44,6 +45,7 @@ Title::~Title()
 	DeleteGraph(*mKeyText2);
 	// 描画ブレンドモードをノーブレンドにする
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 }
 
 
@@ -56,6 +58,7 @@ SceneBase* Title::Update()
 	{
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
 		return new Play();
+
 	}
 	else if (GetPointPosition() == mDown && CheckHitKey(KEY_INPUT_RETURN))
 	{

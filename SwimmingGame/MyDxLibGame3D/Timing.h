@@ -1,11 +1,11 @@
 #pragma once
+#include "DxLib.h"
 
 /// <summary>
 /// タイミングゲージのクラス
 /// </summary>
 class Timing
 {
-
 public:
 	/// <summary>
 	/// コンストラクタ
@@ -24,6 +24,30 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
+
+	// Perfectのフラグ管理
+	bool PerfectFlag;
+	// Goodのフラグ管理
+	bool GoodFlag;
+	// Badのフラグ管理
+	bool BadFlag;
+
+
+	// <summary>
+	/// リアクションを取得
+	/// </summary>
+	/// <returns>現在のリアクションを返す</returns>
+	int GetReaction() { return mIsReaction; }
+
+	/// <summary>
+	/// リアクションをセットする
+	/// </summary>
+	/// <param name="_isScene">現在のリアクション</param>
+	void SetReaction(int _isReaction) { mIsReaction = _isReaction; }
+
+protected:
+	// 現在のリアクションを返す
+	int mIsReaction;
 
 private:
 	// タイミングのフラグ管理
@@ -80,21 +104,11 @@ private:
 	// カウントを初期化
 	int countInit;
 
-	//  Perfect
-	// Perfectのフラグ管理
-	bool PerfectFlag;
+
 	// Perfectリアクションの画像
 	int perfectImg;
-
-	//  Good
-	// Goodのフラグ管理
-	bool GoodFlag;
 	//Goodリアクションの画像
 	int goodImg;
-
-	//  Bad
-	// Badのフラグ管理
-	bool BadFlag;
 	// Badリアクションの画像
 	int badImg;
 
@@ -104,9 +118,9 @@ private:
 	int scoreMax;
 	// Score処理フラグ
 	bool ScoreFlag;
-	// 
+	// スコアを描画する座標X
 	int scoreX;
-	// 
+	// スコアを描画する座標Y
 	int scoreY;
 	
 };

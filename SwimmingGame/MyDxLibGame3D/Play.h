@@ -7,7 +7,6 @@ class Pool;
 class Timing;
 class BackGround;
 class Player;
-class UIGoal;
 class HitChecker;
 
 /// <summary>
@@ -42,8 +41,9 @@ private:
 	BackGround* backGround;
 	// プレイヤー
 	Player* player;
-	// UI（ゴール
-	UIGoal* uiGoal;
+	// UI（ゴール）
+	//UIGoal* uiGoal;
 	// 当たり判定
 	HitChecker* hit;
+
 };

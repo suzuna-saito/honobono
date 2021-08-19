@@ -3,7 +3,6 @@
 #include "GameOver.h"
 #include "BackGround.h"
 #include "Player.h"
-#include "UIGoal.h"
 #include "HitChecker.h"
 #include "Pool.h"
 #include "Fish.h"
@@ -20,7 +19,7 @@ Play::Play()
 	// プレイヤーを生成.
 	player = new Player();
 	// UI（ゴール）の生成
-	uiGoal = new UIGoal();
+	//uiGoal = new UIGoal();
 	//// UI(花火)の生成
 	//new UIFireworks();
 	// 当たり判定を生成
@@ -32,6 +31,7 @@ Play::Play()
 	fish = new Fish();
 	// リズムボタンUI生成
 	timing = new Timing();
+
 }
 
 // デストラクタ
@@ -47,11 +47,9 @@ Play::~Play()
 	delete(backGround);
 	// 当たり判定の削除
 	delete(hit);
-	// UIの削除
-	delete(uiGoal);
-	//delete(uiFire);
 	// プレイヤーを削除.
 	delete(player);
+
 }
 
 // 更新処理
@@ -81,10 +79,13 @@ SceneBase* Play::Update()
 	// プレイヤー制御.
 	player->Update();
 	// 残りゴール距離の更新
-	uiGoal->Update();
+	//uiGoal->Update();
 
 	// ヒットのチェック.
 	//hit->Check(*player, *obstructManager);
+
+
+
 
 	// シーンが変更されていなかったら自分のポインタを返す
 	return this;
@@ -106,5 +107,5 @@ void Play::Draw()
 	//// 当たり判定UIの描画
 	//hit->Draw(*player);
 	// UI(ゴール)の描画
-	uiGoal->Draw();
+	//uiGoal->Draw();
 }

@@ -23,7 +23,6 @@ enum class FadeState : int
 class SceneManager
 {
 public:
-
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -55,7 +54,6 @@ public:
 	void UpdateNonFadeInOutCase();
 
 private:
-
 	// カメラ
 	Camera* camera = nullptr;
 	// 現在のシーン
@@ -70,4 +68,5 @@ private:
 	Fade* fade = nullptr;
 	// フェードインアウトの状態
 	FadeState fadeState = FadeState::Empty;
+
 };
