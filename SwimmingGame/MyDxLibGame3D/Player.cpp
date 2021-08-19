@@ -15,6 +15,8 @@ Player::Player()
 	: mPHandle(-1)
 	, FISH_ROTATE(VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f))
 	, mPos(VGet(7.0f, 20.0f, -26.0f))
+	, mVelocity(VGet(0.0f, 0.0f, 0.0f))
+	, mAdvance(0.05f)
 {
 	// 画像データの読み込み
 	mPHandle = MV1LoadModel("data/model/fish/fish.mqo");
@@ -58,9 +60,16 @@ void Player::Update()
 
 		// ジャンプの更新をする
 		jump->JumpUpdate(mPos);
+		// ポジションの更新
+		mPos = jump->GetPos();
+	}
+	// 全てのジャンプが終わったらプレイヤーが0の所に行くまで直進させる
+	else if (mPos.z <= 0.0f)
+	{
+		mVelocity = VGet(0.0f, 0.0f, mAdvance);
+		mPos = VAdd(mPos, mVelocity);
 	}
 
-	mPos = jump->GetPos();
 }
 
 //-----------------------------------------------------------------------------

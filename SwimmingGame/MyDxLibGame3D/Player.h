@@ -25,9 +25,12 @@ private:
 	int mPHandle;                   // Player画像変数
 	int mFishTexture;                // Playerテクスチャ
 
-	VECTOR	mPos;			// ポジション.
+	VECTOR mPos;			// ポジション.
+	VECTOR mVelocity;       // 移動力
 
 	const VECTOR FISH_ROTATE;// Playerの回転角度
+
+	const float mAdvance;         // 前進する値
 
 	 // ジャンプ
 	Jump* jump;

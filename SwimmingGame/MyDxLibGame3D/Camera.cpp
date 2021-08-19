@@ -10,7 +10,8 @@
 const float CAMERA_NEAR = 0.1f;                                     // カメラの奥行(最小)
 const float CAMERA_FAR = 100.0f;                                    // カメラの奥行(最大)
 const VECTOR ORIGIN_CAMERA_POS = VGet(0.0f, 0.0f, 0.0f);            // 確認用カメラ原点位置
-const VECTOR BESIDE_CAMERA_POS = VGet(50.0f, 18.0f, -10.0f);      // 確認用カメラ（横固定）@saito
+const VECTOR FIXED_CAMERA_UP_POS = VGet(0.0f, 80.0f, -8.0f);      // 確認用カメラ（上固定）@saito
+const VECTOR FIXED_CAMERA_RIGHT_POS = VGet(53.0f, 18.0f, -10.0f);   // 確認用カメラ（右固定）@saito
 const VECTOR FIRST_CAMERA_POS = VGet(20.0f, 30.0f, -30.0f);         // 一つ目のカメラ
 
 //-----------------------------------------------------------------------------
@@ -26,7 +27,7 @@ Camera::Camera()
 {
 	//奥行0.1～1000までをカメラの描画範囲とする（パースを調整してる。NearとFarの値）
 	SetCameraNearFar(mNear, mFar);
-	FixedCameraUpdate();
+	FixedCameraRightUpdate();
 	CameraSet();
 }
 
@@ -70,14 +71,30 @@ void Camera::SetOriginCameraUpdate()
 
 
 /// <summary>
-/// 横からの固定カメラ（飛び込み確認用）@saito
+/// 上からの固定カメラ（デバック用）@saito
 /// </summary>
-void Camera::FixedCameraUpdate()
+void Camera::FixedCameraUpUpdate()
 {
-	mPos = BESIDE_CAMERA_POS;
-	mVAngle = 3.0f;
-	mHAngle = 1.8f;
-	mTAngle = -3.1f;
+	mPos = FIXED_CAMERA_UP_POS;
+	mVAngle = 1.3f;
+	mHAngle = 0.0f;
+	mTAngle = 0.0f;
+
+	// カメラ位置変更
+	SetCameraPositionAndAngle(mPos, mVAngle, mHAngle, mTAngle);
+}
+/// <summary>
+/// 右からの固定カメラ（デバック用）@saito
+/// </summary>
+void Camera::FixedCameraRightUpdate()
+{
+	mPos = FIXED_CAMERA_RIGHT_POS;
+	mVAngle = 0.0f;
+	mHAngle = -1.6f;
+	mTAngle = 0.0f;
+
+	// カメラ位置変更
+	SetCameraPositionAndAngle(mPos, mVAngle, mHAngle, mTAngle);
 }
 
 /// <summary>

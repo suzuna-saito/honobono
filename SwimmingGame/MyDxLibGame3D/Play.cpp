@@ -7,6 +7,7 @@
 #include "Pool.h"
 #include "Fish.h"
 #include "Timing.h"
+#include "Camera.h"
 
 
 // コンストラクタ
@@ -30,6 +31,8 @@ Play::Play()
 	fish = new Fish();
 	// リズムボタンUI生成
 	timing = new Timing();
+
+	camera = new Camera();
 }
 
 // デストラクタ
@@ -54,6 +57,16 @@ Play::~Play()
 /// <return>シーンのポインタ</return>
 SceneBase* Play::Update()
 {
+	// カメラの更新（デバック用）
+	if (CheckHitKey(KEY_INPUT_UP))        // ↑押したら上固定カメラ
+	{
+		camera->FixedCameraUpUpdate();
+	}
+	else if (CheckHitKey(KEY_INPUT_RIGHT))// →押したら右固定カメラ
+	{
+		camera->FixedCameraRightUpdate();
+	}
+
 	// リズムボタンUI更新
 	timing->Update();
 
@@ -109,4 +122,8 @@ void Play::Draw()
 	//hit->Draw(*player);
 	// UI(ゴール)の描画
 	uiGoal->Draw();
+
+
+	// 真ん中の位置が分かりやすくなるように一本の線を表示（デバック用）
+	DrawLine3D(VGet(0.0f, -25.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(255, 0, 0));
 }

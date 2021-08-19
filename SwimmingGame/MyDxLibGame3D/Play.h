@@ -9,6 +9,7 @@ class BackGround;
 class Player;
 class UIGoal;
 class HitChecker;
+class Camera;
 
 /// <summary>
 /// プレイシーンの生成、描画
@@ -47,4 +48,6 @@ private:
 	UIGoal* uiGoal;
 	// 当たり判定
 	HitChecker* hit;
+
+    Camera* camera;
 };

@@ -43,8 +43,8 @@ Jump::Jump()
 	, mGravity(0.2f)
 	, mGravityNpc(0.005f)
 	, mInitPos(0.0f)
-	, mAdd(0.0f)
-	, mSub(0.0f)
+	, mAdd(VGet(0.0f, 0.0f, 0.0f))
+	, mSub(VGet(0.0f, 0.0f, 0.0f))
 {
 }
 //-----------------------------------------------------------------------------
@@ -66,54 +66,6 @@ void Jump::JumpUpdate(VECTOR _pos)
 	
 	// ポジション更新
 	JumpPosUpdate();
-}
-
-//-----------------------------------------------------------------------------
-// @brief  NPCのジャンプ更新.
-//-----------------------------------------------------------------------------
-void Jump::NpcJumpUpdate(VECTOR _pos, int _number)
-{
-	if (_number == 1 || _number == 4 || _number == 7 || _number == 10)
-	{
-		mInitPos = INIT_POS_Y3;
-	}
-	else if (_number == 0 || _number == 3 || _number == 6 || _number == 9)
-	{
-		mInitPos = INIT_POS_Y2;
-	}
-	else
-	{
-		mInitPos = INIT_POS_Y;
-	}
-	//----------------------------------------------------
-
-	if (_number == 0 || _number == 1)
-	{
-		mAdd = JUMP_UP_Z;
-		mSub = JUMP_DOWN_Z;
-	}
-	else if (_number == 2 || _number == 3 || _number == 4)
-	{
-		mAdd = -JUMP_UP_Z;
-		mSub = -JUMP_DOWN_Z;
-	}
-	else if(_number == 5 || _number == 6 || _number == 7)
-	{
-		mAdd = JUMP_UP_X;
-		mSub = JUMP_DOWN_X;
-	}
-	else
-	{
-		mAdd = -JUMP_UP_X;
-		mSub = -JUMP_DOWN_X;
-	}
-	SetPosNpc(_pos);
-
-	// ジャンプアップの更新
-	NpcJumpUpUpdate();
-
-	// ポジション更新
-	NpcJumpPosUpdate();
 }
 
 //-----------------------------------------------------------------------------
@@ -210,7 +162,7 @@ void Jump::JumpPosUpdate()
 			}
 			else
 			{
-				mSecondJump = false;       // 1回目のジャンプを終了する
+				mSecondJump = false;       // 2回目のジャンプを終了する
 				mThirdJump = true;         // 飛び込みのジャンプができるようにする
 			}
 		}
@@ -230,6 +182,58 @@ void Jump::JumpPosUpdate()
 	}
 }
 
+
+
+/*-----------------------NPC関連-------------------------------------*/
+
+//-----------------------------------------------------------------------------
+// @brief  NPCのジャンプ更新.
+//-----------------------------------------------------------------------------
+void Jump::NpcJumpUpdate(VECTOR _pos, int _number)
+{
+	if (_number == 1 || _number == 4 || _number == 7 || _number == 10)
+	{
+		mInitPos = INIT_POS_Y3;
+	}
+	else if (_number == 0 || _number == 3 || _number == 6 || _number == 9)
+	{
+		mInitPos = INIT_POS_Y2;
+	}
+	else
+	{
+		mInitPos = INIT_POS_Y;
+	}
+	//----------------------------------------------------
+
+	if (_number == 0 || _number == 1)
+	{
+		mAdd = VGet(0.0f, 0.0f, JUMP_UP_Z);
+		mSub = VGet(0.0f, 0.0f, JUMP_DOWN_Z);
+	}
+	else if (_number == 2 || _number == 3 || _number == 4)
+	{
+		mAdd = VGet(0.0f, 0.0f, -JUMP_UP_Z);
+		mSub = VGet(-JUMP_DOWN_Z, 0.0f, 0.0f);
+	}
+	else if (_number == 5 || _number == 6 || _number == 7)
+	{
+		mAdd = VGet(JUMP_UP_X, 0.0f, 0.0f);
+		mSub = VGet(JUMP_DOWN_X, 0.0f, 0.0f);
+	}
+	else
+	{
+		mAdd = VGet(-JUMP_UP_X, 0.0f, 0.0f);
+		mSub = VGet(-JUMP_DOWN_X, 0.0f, 0.0f);
+	}
+	SetPosNpc(_pos);
+
+	// ジャンプアップの更新
+	NpcJumpUpUpdate();
+
+	// ポジション更新
+	NpcJumpPosUpdate();
+}
+
 //-----------------------------------------------------------------------------
 // @brief  NPCのジャンプアップの更新.
 //-----------------------------------------------------------------------------
@@ -246,7 +250,7 @@ void Jump::NpcJumpUpUpdate()
 		}
 		else               // 飛び込みだったらY軸とZ軸を上げる
 		{
-			mVelocityNpc = VGet(0.0f, JUMP_UP_Y, mAdd);
+			mVelocityNpc = VAdd(VGet(0.0f, JUMP_UP_Y, 0.0f),mAdd);
 		}
 
 		// 最大の高さを更新、設定----------
@@ -288,7 +292,7 @@ void Jump::NpcJumpDownUpdate()
 	{
 		if (mPosNpc.y >= (mInitPos + mJumpMaxNpc))
 		{
-			mVelocityNpc = VGet(0.0f, -JUMP_DOWN_Y, mSub);
+			mVelocityNpc = VAdd(VGet(0.0f, -JUMP_DOWN_Y, 0.0f), mSub);
 		}
 	}
 }

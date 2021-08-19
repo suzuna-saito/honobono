@@ -51,8 +51,8 @@ private:
 	VECTOR mPosNpc;         // NPCのポジション
 	VECTOR mVelocityNpc;	// NPCの移動力.
 
-	float mAdd;
-	float mSub;
+	VECTOR mAdd;
+	VECTOR mSub;
 
 	float mJumpMaxNpc;      // NPCのy軸の最大値
 
