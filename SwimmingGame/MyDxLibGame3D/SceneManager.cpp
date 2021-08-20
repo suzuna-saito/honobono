@@ -2,7 +2,6 @@
 #include "SceneManager.h"
 #include "Title.h"
 #include "Camera.h"
-#include "Sound.h"
 #include "Common.h"
 #include "Fade.h"
 
@@ -18,8 +17,6 @@ SceneManager::SceneManager()
 	, nextScene(nowScene)
 	// 現在のシーンを一時保存
 	, saveNextScene(nowScene)
-	// サウンドの生成
-	, sound(new Sound(*nowScene))
 	// フェードインアウト生成
 	, fade(new Fade())
 	// フェードインアウトの状態をフェードインアウトしていない状態に変更
@@ -36,8 +33,7 @@ SceneManager::~SceneManager()
 	delete camera;
     // シーン削除
 	delete nowScene;
-	// サウンド削除
-	delete sound;
+
 	// フェードインアウト削除
 	delete fade;
 }
@@ -143,15 +139,11 @@ void SceneManager::UpdateNonFadeInOutCase()
 	if (saveNextScene != nowScene)
 	{
 		// 音楽を止める
-		sound->StopMusic(*saveNextScene);
+		//sound->StopMusic(*saveNextScene);
 		// 現在のシーンを解放
 		delete nowScene;
 		// 現在のシーンに一時保存したシーンを保存
 		nowScene = saveNextScene;
-		// 音楽を再生
-		sound->PlayBGM(*nowScene);
-		// 効果音の再生
-		sound->PlaySE(*nowScene);
 
 		// フェードインアウト初期化
 		fade->Init();

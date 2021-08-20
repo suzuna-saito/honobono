@@ -82,5 +82,9 @@ private:
 
     Camera* camera;
 
+	class Sound* mResultBGM;
+	class Sound* mResultSE;
+	class Sound* mRestartSE;
+	class Sound* mCancelSE;
 public: // ゲッター、セッター
 };

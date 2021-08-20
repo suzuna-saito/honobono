@@ -37,17 +37,18 @@ public:
 	/// リアクションを取得
 	/// </summary>
 	/// <returns>現在のリアクションを返す</returns>
-	int GetReaction() { return mIsReaction; }
+//	int GetReaction() { return mIsReaction; }
+
 
 	/// <summary>
 	/// リアクションをセットする
 	/// </summary>
 	/// <param name="_isScene">現在のリアクション</param>
-	void SetReaction(int _isReaction) { mIsReaction = _isReaction; }
+//	void SetReaction(int _isReaction) { mIsReaction = _isReaction; }
 
 protected:
 	// 現在のリアクションを返す
-	int mIsReaction;
+//	int mIsReaction;
 
 private:
 	// タイミングのフラグ管理
@@ -122,6 +123,9 @@ private:
 	int scoreX;
 	// スコアを描画する座標Y
 	int scoreY;
-	
+
+	class Sound* mPerfectSound;
+	class Sound* mGoodSound;
+	class Sound* mBadSound;
 };
 

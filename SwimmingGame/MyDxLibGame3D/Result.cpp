@@ -1,6 +1,7 @@
 #include "Result.h"
 #include "Title.h"
 #include "Camera.h"
+#include "Sound.h"
 
 /// <summary>
 /// コンストラクタ
@@ -41,6 +42,10 @@ Result::Result()
 	, FONT_SIZE(60)
 	, MAX_SIZE(VGet(1.60f, 1.60f, 1.60f))
 	, MIN_SIZE(VGet(1.40f, 1.40f, 1.40f))
+	, mResultBGM(nullptr)
+	, mResultSE(nullptr)
+	, mRestartSE(nullptr)
+	, mCancelSE(nullptr)
 {
 	// モデルをロード
 	mFishModel = MV1LoadModel("data/model/ResultAsset/Fish.mqo");
@@ -57,6 +62,12 @@ Result::Result()
 	MV1SetTextureGraphHandle(mTextModel[0], 0, mTexture, true);
 
 	camera = new Camera();
+
+	// サウンドのロード
+	mResultBGM = new Sound("data/newSound/bgm/result.mp3");
+	mResultSE = new Sound("data/newSound/se/resultSE.mp3");
+	mRestartSE = new Sound("data/newSound/se/restartSE.mp3");
+	mCancelSE = new Sound("data/newSound/se/cancelSE.mp3");
 }
 
 /// <summary>
@@ -70,21 +81,33 @@ Result::~Result()
 	DeleteGraph(mCursor);
 	DeleteGraph(mBackGroundGraph);
 	DeleteGraph(mTexture);
+	delete mResultBGM;
+	delete mResultSE;
+	delete mCancelSE;
 }
 
 // 更新処理
 /// <return>シーンのポインタ</return>
 SceneBase* Result::Update()
 {
+	// リザルト時のBGM
+	mResultBGM->PlayBGM();
+	
 	// シーン遷移条件
 	if (mCursorPoint == TITLE && CheckHitKey(KEY_INPUT_RETURN))
 	{
+		// リスタートを選んだ時の効果音
+		mRestartSE->PlaySE();
+		// BGMをとめる
+		mResultBGM->StopMusic();
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
 		return new Title();
-
 	}
 	else if (mCursorPoint == EXIT && CheckHitKey(KEY_INPUT_RETURN))
 	{
+		// ゲーム終了を選んだ時の効果音
+		mCancelSE->PlaySE();
+		// ゲームを終了させる
 		SetScene(gameEnd);
 	}
 

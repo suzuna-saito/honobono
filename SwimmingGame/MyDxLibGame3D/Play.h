@@ -13,6 +13,7 @@ class Camera;
 class Result;
 class BackGround;
 class Time;
+class Sound;
 
 /// <summary>
 /// プレイシーンの生成、描画
@@ -60,4 +61,15 @@ private:
     Result* result;
 
     Camera* camera;
+
+    Sound* mPlayBGM1;
+    Sound* mPlayBGM2;
+    Sound* mPlayBGM3;
+
+   
+    // 飛び込んで水の入った時の音
+    Sound* mWaterInSound;
+    // シンクロでちゃぷちゃぷする音
+    Sound* mWaterOutSound;
+
 };

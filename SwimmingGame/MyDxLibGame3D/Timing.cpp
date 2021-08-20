@@ -1,5 +1,7 @@
 // インクルード
 #include "Timing.h"
+#include "Input.h"
+#include "Sound.h"
 
 // コンストラクタ
 Timing::Timing()
@@ -15,7 +17,7 @@ Timing::Timing()
 	, buttonX(80)
 	, buttonY(385)
 	, buttonMoveLeft(120)
-	, buttonMoveRight(120)
+	, buttonMoveRight(320)
 	, movebutton(200)
 	, freamX(490)
 	, freamY(180)
@@ -31,6 +33,9 @@ Timing::Timing()
 	, scoreMax(0)
 	, scoreX(800)
 	, scoreY(20)
+	, mPerfectSound(nullptr)
+	, mGoodSound(nullptr)
+	, mBadSound(nullptr)
 {
 	// 画像読み込み
 	freamImg = LoadGraph("data/newUI/frame.png");
@@ -40,8 +45,13 @@ Timing::Timing()
 	badImg = LoadGraph("data/newUI/good.png");
 
 	// 色
-	color = GetColor(255, 0, 0);
+	color = GetColor(0, 0, 0);
 	gageColor = GetColor(255, 255, 255);
+
+	// サウンド
+	mPerfectSound = new Sound("data/newSound/se/perfect.mp3");
+	mGoodSound = new Sound("data/newSound/se/good.mp3");
+	mBadSound = new Sound("data/newSound/se/bad.mp3");
 	
 }
 
@@ -53,40 +63,48 @@ Timing::~Timing()
 	DeleteGraph(perfectImg);
 	DeleteGraph(goodImg);
 	DeleteGraph(badImg);
+
+	delete mPerfectSound;
+	delete mGoodSound;
+	delete mBadSound;
 }
 
 // 更新
 void Timing::Update()
 {
-	// Ａキーを押したらボタンが左に動く
-	if (CheckHitKey(KEY_INPUT_A))
-	{
-		// ゲージの1番左側に来たらこれ以上移動できない
-		if (buttonMoveLeft >= buttonX)
-		{
-			buttonX = buttonX;
-		}
-		else
-		{
-			buttonX = buttonX - movebutton;
-		}
-	}
-	// Ｄキーを押したらボタンが右に動く
-	if (CheckHitKey(KEY_INPUT_D))
-	{
-		// ゲージの1番右側に来たらこれ以上移動できない
-		if (320 <= buttonX)
-		{
-			buttonX = buttonX;
-		}
-		else
-		{
-			buttonX = buttonX + movebutton;
-		}
-	}
+	UpdateKey();
+
+	/* 今、まだ3つのゲージを別で描画できていないのでコメントアウトしてます */
+
+	//// 左キーを押したらボタンが左に動く
+	//if (Key[KEY_INPUT_LEFT] == 1)
+	//{
+	//	// ゲージの1番左側に来たらこれ以上移動できない
+	//	if (buttonMoveLeft >= buttonX)
+	//	{
+	//		buttonX = buttonX;
+	//	}
+	//	else
+	//	{
+	//		buttonX = buttonX - movebutton;
+	//	}
+	//}
+	//// 右キーを押したらボタンが右に動く
+	//if (Key[KEY_INPUT_RIGHT] == 1)
+	//{
+	//	// ゲージの1番右側に来たらこれ以上移動できない
+	//	if (buttonMoveRight <= buttonX)
+	//	{
+	//		buttonX = buttonX;
+	//	}
+	//	else
+	//	{
+	//		buttonX = buttonX + movebutton;
+	//	}
+	//}
 
 	// スペースキーを押したらタイミングフラグが「真」となる
-	if (CheckHitKey(KEY_INPUT_SPACE))
+	if (Key[KEY_INPUT_SPACE] == 1)
 	{
 		TimingFlag = true;
 	}
@@ -98,22 +116,25 @@ void Timing::Update()
 		// バッドの条件
 		if (radius - gageRadius <= 25)
 		{
+			mBadSound->PlaySE();
 			BadFlag = true;
 		}
 		// グッドの条件
 		if (radius - gageRadius > 20)
 		{
+			mGoodSound->PlaySE();
 			GoodFlag = true;
 		}
 		// パーフェクトの条件
 		if (radius - gageRadius <= 0 && radius - gageRadius < 10)
 		{
+			mPerfectSound->PlaySE();
 			PerfectFlag = true;
 		}
 		if (!(count < countMax))
 		{
 			// スコアの計算
-			// 半径の最大値から現在の半径を差を出して、その差にスコアくらいの数字を掛ける
+			// 半径の最大値から現在の半径を差を出し、その差にスコアくらいの数字を掛ける
 			int n;
 			n = radiusInit - radius;
 			scoreMax = n * 10;
@@ -122,6 +143,16 @@ void Timing::Update()
 			// それ以外の場合はタイミングフラグを「偽」とする
 			TimingFlag = false;
 		}
+	}
+	// タイミングフラグが「偽」であるとき
+	if (!TimingFlag)
+	{
+		// カウントを初期化する
+		count = countInit;
+		// フラグを「偽」にする
+		BadFlag = false;
+		GoodFlag = false;
+		PerfectFlag = false;
 	}
 }
 
@@ -178,20 +209,11 @@ void Timing::Draw()
 			}
 		}
 
-		// タイミングフラグが「偽」であるとき
-		if(!TimingFlag)
-		{ 
-			// カウントを初期化する
-			count = countInit;
-			// フラグを「偽」にする
-			BadFlag = false;
-			GoodFlag = false;
-			PerfectFlag = false;
-		}
+		
 	
 	// スコアの画面を表示する
 	DrawFormatString(scoreX, scoreY, gageColor, "score : %d", score);
 	// 魚（自分が選んでいる操作出来るところを示すもの）の描画
-	DrawGraph(buttonX, buttonY, selectButtonImg, TRUE);
+	//DrawGraph(buttonX, buttonY, selectButtonImg, TRUE);
 }
 
