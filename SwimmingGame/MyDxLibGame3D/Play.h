@@ -9,6 +9,11 @@ class BackGround;
 class Player;
 class UIGoal;
 class HitChecker;
+class Camera;
+class Result;
+class BackGround;
+class Time;
+class Sound;
 
 /// <summary>
 /// プレイシーンの生成、描画
@@ -32,6 +37,9 @@ public:
     void Draw()override;
 
 private:
+    // 魚が動き始めるまでのカウント
+    int startCount;
+
     // 魚(モブ)
     FishManager* fish = nullptr;
     // プール
@@ -44,4 +52,24 @@ private:
 	UIGoal* uiGoal;
 	// 当たり判定
 	HitChecker* hit;
+    // バックグラウンド
+    BackGround* backGround;
+    // 時間の生成
+    Time* time;
+
+    // リザルトシーン
+    Result* result;
+
+    Camera* camera;
+
+    Sound* mPlayBGM1;
+    Sound* mPlayBGM2;
+    Sound* mPlayBGM3;
+
+   
+    // 飛び込んで水の入った時の音
+    Sound* mWaterInSound;
+    // シンクロでちゃぷちゃぷする音
+    Sound* mWaterOutSound;
+
 };

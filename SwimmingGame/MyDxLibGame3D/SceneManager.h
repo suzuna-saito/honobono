@@ -3,7 +3,6 @@
 // 前方宣言
 class Camera;
 class SceneBase;
-class Sound;
 class Fade;
 
 /// <summary>
@@ -23,7 +22,6 @@ enum class FadeState : int
 class SceneManager
 {
 public:
-
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -55,7 +53,6 @@ public:
 	void UpdateNonFadeInOutCase();
 
 private:
-
 	// カメラ
 	Camera* camera = nullptr;
 	// 現在のシーン
@@ -64,10 +61,9 @@ private:
 	SceneBase* nextScene = nullptr;
 	// 次のシーンをフェードインアウト処理のために一時保存するためのポインタ
 	SceneBase* saveNextScene = nullptr;
-	// サウンド
-	Sound* sound = nullptr;
 	// フェードインアウト
 	Fade* fade = nullptr;
 	// フェードインアウトの状態
 	FadeState fadeState = FadeState::Empty;
+
 };

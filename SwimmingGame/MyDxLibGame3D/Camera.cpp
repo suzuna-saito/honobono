@@ -9,10 +9,20 @@
 //------------------------------------------------------------
 const float CAMERA_NEAR = 0.1f;                                     // カメラの奥行(最小)
 const float CAMERA_FAR = 100.0f;                                    // カメラの奥行(最大)
-const VECTOR ORIGIN_CAMERA_POS = VGet(0.0f, 0.0f, 0.0f);            // 確認用カメラ原点位置
-const VECTOR BESIDE_CAMERA_POS = VGet(44.0f, 18.0f, -10.0f);      // 確認用カメラ（横固定）@saito
-const VECTOR FIRST_CAMERA_POS = VGet(20.0f, 30.0f, -30.0f);         // 一つ目のカメラ
+const float CAMERA_FAZE[4] = { 5.0f,10.0f,15.0f,20.0f };            // カメラ切り替え時間
+const VECTOR ORIGIN_CAMERA_POS = VGet(0.0f, 0.0f, 0.0f);            // カメラ原点位置
+const VECTOR ORIGIN_CAMERA_ANGLE = VGet(0.0f, 0.0f, 0.0f);          // カメラ原点角度
+const VECTOR PLAY_CAMERA_POS[4] = { VGet(20.0f, 30.0f, -30.0f),     // 一つ目のカメラ位置
+									VGet(1.0f, 28.0f, -24.0f),		// 二つ目のカメラ位置
+									VGet(0.0f, 5.0f, 18.0f),		// 三つ目のカメラ位置
+									VGet(12.0f, 5.0f, 24.0f) };		// 四つ目のカメラ位置
+const VECTOR PLAY_CAMERA_ANGLE[4] = { VGet(0.50f, -0.80f, 0.0f),    // 一つ目のカメラ角度
+									  VGet(0.50f, 0.0f, 0.0f),		// 二つ目のカメラ角度
+									  VGet(0.0f, 3.210f, 0.0f),		// 三つ目のカメラ角度
+									  VGet(0.0f, -2.50f, 0.0f) };	// 四つ目のカメラ角度
 
+const VECTOR FIXED_CAMERA_UP_POS = VGet(0.0f, 80.0f, -8.0f);      // 確認用カメラ（上固定）@saito
+const VECTOR FIXED_CAMERA_RIGHT_POS = VGet(53.0f, 18.0f, -10.0f);   // 確認用カメラ（右固定）@saito
 //-----------------------------------------------------------------------------
 // @brief  コンストラクタ.
 //-----------------------------------------------------------------------------
@@ -20,13 +30,13 @@ Camera::Camera()
 	: mNear(CAMERA_NEAR)
 	, mFar(CAMERA_FAR)
 	, mPos(ORIGIN_CAMERA_POS)
-	, mVAngle(0.0f)
-	, mHAngle(0.0f)
-	, mTAngle(0.0f)
+	, mAngle(ORIGIN_CAMERA_ANGLE)
+	, mTimeCount(0)
+	, i(0)
 {
 	//奥行0.1～1000までをカメラの描画範囲とする（パースを調整してる。NearとFarの値）
 	SetCameraNearFar(mNear, mFar);
-	FixedCameraUpdate();
+	SetOriginCameraUpdate();
 	CameraSet();
 }
 
@@ -43,18 +53,38 @@ Camera::~Camera()
 /// </summary>
 void Camera::CameraSet()
 {
-	SetCameraPositionAndAngle(mPos, mVAngle, mHAngle, mTAngle);
+	// カメラ位置セット
+	SetCameraPositionAndAngle(mPos, mAngle.x, mAngle.y, mAngle.z);
 }
 
 /// <summary>
-/// 一つ目のカメラ位置セット
+/// 飛び込む前のカメラ更新
 /// </summary>
-void Camera::FirstCameraUpdate()
+/// <param name="_time">Timeクラスのポインタ変数</param>
+void Camera::DivingCameraUpdate(Time& _time)
 {
-	mPos = FIRST_CAMERA_POS;
-	mVAngle = 0.5f;
-	mHAngle = -0.8f;
-	mTAngle = 0.0f;
+	// DeltaTimeを取得
+	float DeltaTime = _time.GetDeltaTime();
+
+	// DeltaTimeを更新時間に加算
+	mTimeCount += DeltaTime;
+
+	// 一周が終わったらカメラ更新時間をリセット
+	if (mTimeCount > CAMERA_FAZE[3])
+	{
+		mTimeCount = 0;
+		i = 0;
+	}
+
+	if (mTimeCount > CAMERA_FAZE[i])
+	{
+		i++;
+	}
+
+	mPos = PLAY_CAMERA_POS[i];
+	mAngle = PLAY_CAMERA_ANGLE[i];
+
+	CameraSet();
 }
 
 /// <summary>
@@ -63,21 +93,31 @@ void Camera::FirstCameraUpdate()
 void Camera::SetOriginCameraUpdate()
 {
 	mPos = ORIGIN_CAMERA_POS;
-	mVAngle = 0.0f;
-	mHAngle = 0.0f;
-	mTAngle = 0.0f;
+	mAngle = ORIGIN_CAMERA_ANGLE;
 }
 
 
 /// <summary>
-/// 横からの固定カメラ（飛び込み確認用）@saito
+/// 上からの固定カメラ（デバック用）@saito
 /// </summary>
-void Camera::FixedCameraUpdate()
+void Camera::FixedCameraUpUpdate()
 {
-	mPos = BESIDE_CAMERA_POS;
-	mVAngle = 3.0f;
-	mHAngle = 1.8f;
-	mTAngle = -3.1f;
+	mPos = FIXED_CAMERA_UP_POS;
+	mAngle = VGet(1.3f, 0.0f, 0.0f);
+
+	// カメラ位置変更
+	SetCameraPositionAndAngle(mPos, mAngle.x,mAngle.y,mAngle.z);
+}
+/// <summary>
+/// 右からの固定カメラ（デバック用）@saito
+/// </summary>
+void Camera::FixedCameraRightUpdate()
+{
+	mPos = FIXED_CAMERA_RIGHT_POS;
+	mAngle = VGet(0.0f, -1.6f, 0.0f);
+
+	// カメラ位置変更
+	SetCameraPositionAndAngle(mPos, mAngle.x, mAngle.y, mAngle.z);
 }
 
 /// <summary>
@@ -119,29 +159,29 @@ void Camera::TryDrawCameraUpdate()
 	// 垂直方向
 	if (CheckHitKey(KEY_INPUT_W))
 	{
-		mVAngle += 0.10f;
+		mAngle.x += 0.01f;
 	}
 	if (CheckHitKey(KEY_INPUT_S))
 	{
-		mVAngle -= 0.10f;
+		mAngle.x -= 0.01f;
 	}
 	// 水平方向
 	if (CheckHitKey(KEY_INPUT_D))
 	{
-		mHAngle += 0.10f;
+		mAngle.y += 0.01f;
 	}
 	if (CheckHitKey(KEY_INPUT_A))
 	{
-		mHAngle -= 0.10f;
+		mAngle.y -= 0.01f;
 	}
 	// 捻り回転
 	if (CheckHitKey(KEY_INPUT_E))
 	{
-		mTAngle += 0.10f;
+		mAngle.z += 0.01f;
 	}
 	if (CheckHitKey(KEY_INPUT_Q))
 	{
-		mTAngle -= 0.10f;
+		mAngle.z -= 0.01f;
 	}
 
 	// カメラ座標を描画
@@ -149,10 +189,9 @@ void Camera::TryDrawCameraUpdate()
 		, mPos.x
 		, mPos.y
 		, mPos.z
-	    , mVAngle
-	    , mHAngle
-	    , mTAngle);
+		, mAngle.x
+		, mAngle.y
+		, mAngle.z);
 
-	// カメラ位置変更
-	SetCameraPositionAndAngle(mPos, mVAngle, mHAngle, mTAngle);
+	CameraSet();
 }

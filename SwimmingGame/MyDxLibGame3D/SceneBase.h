@@ -73,10 +73,16 @@ protected:
 
 public: // ゲッター、セッター
 
-	// 現在のシーンを返す
+	/// <summary>
+	/// シーンを取得
+	/// </summary>
+	/// <returns>現在のシーンを返す</returns>
 	int GetScene() { return mIsScene; }
 
-	// _isScene 現在のシーン
+	/// <summary>
+	/// シーンをセットする
+	/// </summary>
+	/// <param name="_isScene">現在のシーン</param>
 	void SetScene(int _isScene) { mIsScene = _isScene; }
 
 	// 値を渡す

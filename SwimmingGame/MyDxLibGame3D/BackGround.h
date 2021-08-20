@@ -1,46 +1,24 @@
-#ifndef _BACKGROUND_H_
-#define _BACKGROUND_H_
-/*
-* 名前の変更や追加・削除は行っても大丈夫です
-*/
-
+#pragma once
 #include "DxLib.h"
 
-/// <summary>
-/// 背景クラス
-/// </summary>
 class BackGround
 {
-public:
-	/// <summary>
-    /// コンストラクタ 
-    /// </summary>
-	BackGround();
-
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~BackGround();
-
-	
-	/// <summary>
-	/// 更新関数
-	/// </summary>
-	/*
-	* 動く(スクロールをする等)のであればここで
-	*/
-	void Update();
-
-	/// <summary>
-	/// 描画
-	/// </summary>
-	void Draw();
-
-
 private:
-	VECTOR mDrawPos;   // 描画座標
-	float mSize;         // サイズ
-	int mBackGroundImage;    // 背景のハンドル
-};
+	int mModelHandle[6];
+	int mTexture[6];
+	int i;
 
-#endif // _BACKGROUND_H_
+	VECTOR mPos[6];
+	VECTOR mSize[6];
+	VECTOR mRotate[6];
+
+	const int WALL_NUM;
+	const VECTOR LIGHT_POS;
+	const VECTOR LIGHT_ROTATE;
+
+public:
+	BackGround();
+	virtual ~BackGround();
+
+	void Draw();
+};

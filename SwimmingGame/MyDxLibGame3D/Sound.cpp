@@ -3,19 +3,16 @@
 */
 
 #include "Sound.h"
-#include"FishBase.h"
-#include"SceneBase.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Sound::Sound(SceneBase& _scene)
+Sound::Sound(const char* _filePath)
 	:mOnceSoundFlag(false)
 {
-	//サウンド読み込み
-	//アーティスティックスイミングのBGMとショート.verBGM
-	mDanceBGM = LoadSoundMem("data/Sound/魔王魂シャイニングスター.mp3");
-	mDanceShortBGM = LoadSoundMem("data/Sound/魔王魂ショートシャイニングスター.mp3");
+	// サウンドの読み込み
+	mSoundHandle = LoadSoundMem(_filePath);
+
 }
 
 /// <summary>
@@ -23,42 +20,40 @@ Sound::Sound(SceneBase& _scene)
 /// </summary>
 Sound::~Sound()
 {
-	//サウンドデータを全て削除
-	InitSoundMem();
+	DeleteSoundMem(mSoundHandle);
 }
 
 /// <summary>
 /// 音楽を再生させる
 /// </summary>
-/// <param name="_scene"> シーンベースからシーンを拝借 </param>
-void Sound::PlayBGM(SceneBase& _scene)
+/// < param name = "_scene"> シーン取得 </param>
+void Sound::PlayBGM()
 {
-	//アーティスティックスイミング時のBGM
-	if (_scene.GetScene() == _scene.DanceGame)
+	if (CheckSoundMem(mSoundHandle) != 1)
 	{
-		PlaySoundMem(mDanceBGM, DX_PLAYTYPE_BACK, true);
+		PlaySoundMem(mSoundHandle, DX_PLAYTYPE_LOOP, TRUE);
 	}
+	
 }
 
 /// <summary>
 /// ゲーム内の効果音再生
 /// </summary>
-/// < param name = "_moveCheck"> プレイヤーが動いていることを確認 </param>
-/// < param name = "_hitCheck">  プレイヤーがボールにぶつかったことを確認 </param>
-/// < param name = "_movecheck"> プレイヤーがゴールしたことを確認 </param>
-void Sound::PlaySE(bool _moveCheck, bool _hitCheck, bool _goalCheck)
+/// < param name = "_scene"> シーン取得 </param>
+void Sound::PlaySE()
 {
+	if (CheckSoundMem(mSoundHandle) != 1)
+	{
+		PlaySoundMem(mSoundHandle, DX_PLAYTYPE_BACK, TRUE);
+	}
+	
 }
 
 /// <summary>
 /// 再生している音楽を停止
 /// </summary>
 /// < param name = "_scene"> シーンベースからシーンを拝借 </param>
-void Sound::StopMusic(SceneBase& _scene)
+void Sound::StopMusic()
 {
-	//アーティスティックスイミング時以外は止める
-	if (_scene.GetScene() != _scene.DanceGame)
-	{
-		StopSoundMem(mDanceBGM);
-	}
+	StopSoundMem(mSoundHandle);
 }

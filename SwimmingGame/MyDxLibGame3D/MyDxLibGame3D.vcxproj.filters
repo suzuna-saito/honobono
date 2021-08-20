@@ -20,8 +20,20 @@
     <Filter Include="ソース ファイル\HitCheck">
       <UniqueIdentifier>{216da7b9-800a-4aeb-ab9a-6bb6bb82e5af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\UI\NPC">
+      <UniqueIdentifier>{7448a41d-40ba-4245-82a9-d0124dd5fd50}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ソース ファイル\GameObject">
       <UniqueIdentifier>{6ad6c216-134d-4b2c-9b74-6c8167196f93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Jump">
+      <UniqueIdentifier>{3eb608b6-8294-4d47-b43c-f458c23fd8b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\BackGround">
+      <UniqueIdentifier>{9ddefda4-887c-4e48-8838-fa6f757f6b3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Camera\Time">
+      <UniqueIdentifier>{84942244-4a17-4a41-8af2-bec97014a621}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -32,12 +44,6 @@
       <Filter>ソース ファイル\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Title.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameClear.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameOver.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="UIBase.cpp">
@@ -55,13 +61,19 @@
     <ClCompile Include="HitChecker.cpp">
       <Filter>ソース ファイル\HitCheck</Filter>
     </ClCompile>
+    <ClCompile Include="NPCBase.cpp">
+      <Filter>ソース ファイル\UI\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCManager.cpp">
+      <Filter>ソース ファイル\UI\NPC</Filter>
+    </ClCompile>
     <ClCompile Include="Play.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Timing.cpp">
       <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
-    <ClCompile Include="FishBase.cpp">
+    <ClCompile Include="Fish.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Pool.cpp">
@@ -79,8 +91,17 @@
     <ClCompile Include="Input.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="FishManager.cpp">
-      <Filter>ソース ファイル\GameObject</Filter>
+    <ClCompile Include="Jump.cpp">
+      <Filter>ソース ファイル\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>ソース ファイル\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>ソース ファイル\Camera\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,12 +112,6 @@
       <Filter>ソース ファイル\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Title.h">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClear.h">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameOver.h">
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="UIBase.h">
@@ -114,13 +129,19 @@
     <ClInclude Include="Hitchecker.h">
       <Filter>ソース ファイル\HitCheck</Filter>
     </ClInclude>
+    <ClInclude Include="NPCBase.h">
+      <Filter>ソース ファイル\UI\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCManager.h">
+      <Filter>ソース ファイル\UI\NPC</Filter>
+    </ClInclude>
     <ClInclude Include="Play.h">
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Timing.h">
       <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
-    <ClInclude Include="FishBase.h">
+    <ClInclude Include="Fish.h">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Pool.h">
@@ -138,8 +159,17 @@
     <ClInclude Include="Input.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="FishManager.h">
-      <Filter>ソース ファイル\GameObject</Filter>
+    <ClInclude Include="Jump.h">
+      <Filter>ソース ファイル\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>ソース ファイル\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>ソース ファイル\Camera\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
