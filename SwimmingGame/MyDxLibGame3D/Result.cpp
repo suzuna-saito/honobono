@@ -42,6 +42,8 @@ Result::Result()
 	, MAX_SIZE(VGet(1.60f, 1.60f, 1.60f))
 	, MIN_SIZE(VGet(1.40f, 1.40f, 1.40f))
 {
+	SetScene(gameClear);
+
 	// ƒ‚ƒfƒ‹‚ğƒ[ƒh
 	mFishModel = MV1LoadModel("data/model/ResultAsset/Fish.mqo");
 	mTextModel[0] = MV1LoadModel("data/model/ResultAsset/ResultText.mqo");
