@@ -42,22 +42,24 @@ Fish::~Fish()
 /// </summary>
 void Fish::Update()
 {
-	for (int i = 0; i < FISH_MOB_NUM; i++)
+	if (jump->GetGroundNpc())
 	{
-		if (jump->GetGroundNpc())
-		{
-			jump->SetJumpNpc(true);
-		}
+		jump->SetJumpNpc(true);
+	}
 
-		// １回目、２回目、飛び込みいずれかのフラグがtrueだったら
-		if (jump->GetFirstNpc() || jump->GetSecondNpc() || jump->GetThirdNpc())
+	// １回目、２回目、飛び込みいずれかのフラグがtrueだったら
+	if (jump->GetFirstNpc() || jump->GetSecondNpc() || jump->GetThirdNpc())
+	{
+		for (int i = 0; i < FISH_MOB_NUM; i++)
 		{
 			// ジャンプの更新をする
-			jump->NpcJumpUpdate(mMobPos[i],i);
-		}
+			jump->NpcJumpUpdate(mMobPos[i], i);
 
-		mMobPos[i] = jump->GetPosNpc();
+			mMobPos[i] = jump->GetPosNpc();
+		}
 	}
+	
+	
 }
 
 /// <summary>
