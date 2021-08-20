@@ -1,6 +1,7 @@
 #include "Title.h"
 #include "Play.h"
 #include "Camera.h"
+#include "Sound.h"
 
 /// <summary>
 /// コンストラクタ
@@ -41,6 +42,9 @@ Title::Title()
 	, mGravity(0.1f)
 	, mJympFlag{ false,false }
 	, mKeepPower(7.0f)
+	, mTitleBGM(nullptr)
+	, mTitleSE(nullptr)
+	, mCancelSE(nullptr)
 {
 	SetScene(title);
 	// モデルをロード
@@ -58,6 +62,14 @@ Title::Title()
 	MV1SetTextureGraphHandle(mTextModel[0], 0, mTextTexture, true);
 
 	camera = new Camera();
+
+	// サウンドのロード
+	mTitleBGM = new Sound("data/newSound/bgm/title.mp3");
+	mTitleSE = new Sound("data/newSound/se/startSE.mp3");
+	mCancelSE = new Sound("data/newSound/se/cancelSE.mp3");
+
+	// BGMの再生
+	mTitleBGM->PlayBGM();
 }
 
 /// <summary>
@@ -71,6 +83,9 @@ Title::~Title()
 	DeleteGraph(mCursor);
 	DeleteGraph(mBackGroundGraph);
 	delete(camera);
+	delete mTitleBGM;
+	delete mTitleSE;
+	delete mCancelSE;
 }
 
 
@@ -81,12 +96,18 @@ SceneBase* Title::Update()
 	// シーン遷移条件
 	if (mCursorPoint == GAME_START && CheckHitKey(KEY_INPUT_RETURN))
 	{
+		// タイトルの効果音
+		mTitleSE->PlaySE();
+		// タイトルのBGMを止める
+		mTitleBGM->StopMusic();
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
 		return new Play();
 
 	}
 	else if (mCursorPoint == EXIT && CheckHitKey(KEY_INPUT_RETURN))
 	{
+		// ゲーム終了を選択したときになる効果音
+		mCancelSE->PlaySE();
 		SetScene(gameEnd);
 	}
 	

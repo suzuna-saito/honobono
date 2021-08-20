@@ -3,6 +3,7 @@
 
 class Camera;
 
+
 /// <summary>
 /// タイトルシーンの生成、描画
 /// </summary>
@@ -83,6 +84,11 @@ private:
     float mKeepPower;                      // ジャンプ量ランダム値セット変数
 
     Camera* camera;
+
+    class Sound* mTitleBGM;
+    class Sound* mTitleSE;
+    class Sound* mCancelSE;
+
 
 public: // ゲッター、セッター
 };

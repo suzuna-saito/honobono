@@ -13,6 +13,7 @@ class Camera;
 class Result;
 class BackGround;
 class Time;
+class Sound;
 
 /// <summary>
 /// プレイシーンの生成、描画
@@ -36,6 +37,10 @@ public:
     void Draw()override;
 
 private:
+
+    int mTime;
+    const int ENDTIME;
+
     // 魚が動き始めるまでのカウント
     int startCount;
 
@@ -60,4 +65,15 @@ private:
     Result* result;
 
     Camera* camera;
+
+    Sound* mPlayBGM1;
+    Sound* mPlayBGM2;
+    Sound* mPlayBGM3;
+
+   
+    // 飛び込んで水の入った時の音
+    Sound* mWaterInSound;
+    // シンクロでちゃぷちゃぷする音
+    Sound* mWaterOutSound;
+
 };

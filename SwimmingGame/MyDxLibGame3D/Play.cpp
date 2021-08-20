@@ -12,8 +12,11 @@
 // コンストラクタ
 Play::Play()
 	:startCount(0)
+	,ENDTIME(10000 * 2)
 {
 	SetScene(play);
+
+	mTime = GetNowCount();
 
 	// プレイヤーを生成.
 	player = new Player();
@@ -108,8 +111,15 @@ SceneBase* Play::Update()
 		fish->Update();
 	}
 	
-	// シーンが変更されていなかったら自分のポインタを返す
-	return this;
+	if (GetNowCount() - mTime > ENDTIME)
+	{
+		return new Result();
+	}
+	else
+	{
+		// シーンが変更されていなかったら自分のポインタを返す
+		return this;
+	}
 }
 
 // 描画
