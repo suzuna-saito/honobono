@@ -8,18 +8,15 @@
 #include "Camera.h"
 #include "Result.h"
 #include "BackGround.h"
-#include "Sound.h"
 
 // コンストラクタ
 Play::Play()
 	:startCount(0)
-	, mPlayBGM1(nullptr)
-	, mPlayBGM2(nullptr)
-	, mPlayBGM3(nullptr)
-	, mWaterInSound(nullptr)
-	,mWaterOutSound(nullptr)
+	,ENDTIME(10000 * 2)
 {
 	SetScene(play);
+
+	mTime = GetNowCount();
 
 	// プレイヤーを生成.
 	player = new Player();
@@ -37,8 +34,6 @@ Play::Play()
 	// リズムボタンUI生成
 	timing = new Timing();
 
-	//sound = new Sound();
-
 	// 背景の生成
 	backGround = new BackGround();
 	// 時間の生成
@@ -47,13 +42,6 @@ Play::Play()
 	camera = new Camera();
 
 	camera->FixedCameraRightUpdate();
-
-	mPlayBGM1 = new Sound("data/newSound/bgm/bgm_1.mp3");
-	mPlayBGM2 = new Sound("data/newSound/bgm/bgm_2.mp3");
-	mPlayBGM3 = new Sound("data/newSound/bgm/bgm_3.mp3");
-
-	mWaterInSound = new Sound("data/newSound/se/in.mp3");
-	mWaterOutSound = new Sound("data/newSound/se/out.mp3");
 }
 
 // デストラクタ
@@ -74,27 +62,12 @@ Play::~Play()
 	delete(player);
 	// 背景の削除
 	delete(backGround);
-	mPlayBGM1->StopMusic();
-	mPlayBGM2->StopMusic();
-	mPlayBGM3->StopMusic();
-	delete mPlayBGM1;
-	delete mPlayBGM2;
-	delete mPlayBGM3;
-
-	delete mWaterInSound;
-	delete mWaterOutSound;
 }
 
 // 更新処理
 /// <return>シーンのポインタ</return>
 SceneBase* Play::Update()
 {
-	mPlayBGM1->PlayBGM();
-	if (CheckHitKey(KEY_INPUT_SPACE))        // ↑押したら上固定カメラ
-	{
-		
-	}
-
 	// シーン遷移条件(デバック用：右シフトキーを押すと遷移)
 	if (CheckHitKey(KEY_INPUT_RSHIFT))
 	{
@@ -132,8 +105,15 @@ SceneBase* Play::Update()
 		fish->Update();
 	}
 	
-	// シーンが変更されていなかったら自分のポインタを返す
-	return this;
+	if (GetNowCount() - mTime > ENDTIME)
+	{
+		return new Result();
+	}
+	else
+	{
+		// シーンが変更されていなかったら自分のポインタを返す
+		return this;
+	}
 }
 
 // 描画

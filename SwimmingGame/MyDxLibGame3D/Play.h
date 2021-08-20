@@ -37,6 +37,10 @@ public:
     void Draw()override;
 
 private:
+
+    int mTime;
+    const int ENDTIME;
+
     // 魚が動き始めるまでのカウント
     int startCount;
 
