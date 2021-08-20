@@ -31,8 +31,10 @@
 *.out
 *.app
 .vs
-17.MyDxLibGame3D(hit)/Debug
-17.MyDxLibGame3D(hit)/Release
-17.MyDxLibGame3D(hit)/.vs
 
-17.MyDxLibGame3D(hit)/Log.txt
+SwimmingGame/Debug
+SwimmingGame/MyDxLibGame3D/Debug
+SwimmingGame/Release
+SwimmingGame/MyDxLibGame3D/Release
+SwimmingGame/MyDxLibGame3D/Log.txt
+17.MyDxLibGame3D(hit)
