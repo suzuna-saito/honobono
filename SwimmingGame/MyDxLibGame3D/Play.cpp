@@ -26,8 +26,14 @@ Play::Play()
 
 	// プール生成
 	pool = new Pool();
-	// 魚生成
-	fish = new Fish();
+
+	// NPC分
+	for (int i = 0; i < 11;i++)
+	{
+		// 魚生成
+		fish = new Fish();
+	}
+	
 	// リズムボタンUI生成
 	timing = new Timing();
 

@@ -5,7 +5,7 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Fish::Fish()
+Fish::Fish(VECTOR _pos,VECTOR _rotate)
 	: FISH_MOB_ROTATE{VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)
 	                 ,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)
 	                 ,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f, 0.0f,0.0f)
@@ -56,7 +56,6 @@ void Fish::Update()
 			jump->NpcJumpUpdate(mMobPos[i], i);
 
 			mMobPos[i] = jump->GetPosNpc();
-
 		}
 	}
 	
