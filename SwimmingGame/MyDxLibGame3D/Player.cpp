@@ -46,9 +46,6 @@ Player::~Player()
 //-----------------------------------------------------------------------------
 void Player::Update()
 {
-	// ボタンがおしっぱにならないようにする
-	UpdateKey();
-
 	// １回目、２回目、飛び込みいずれかのフラグがtrueだったら
 	if (jump->GetFirst() || jump->GetSecond() || jump->GetThird())
 	{

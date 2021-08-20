@@ -126,7 +126,6 @@ SceneBase* Play::Update()
 	// リズムボタンUI更新
 	timing->Update();
 
-
 	// プレイヤー制御.
 	player->Update();
 
@@ -146,7 +145,7 @@ SceneBase* Play::Update()
 void Play::Draw()
 {
 	// 背景の生成
-	//backGround->Draw();
+	backGround->Draw();
 	// プール描画
 	pool->Draw();
 	// 魚描画

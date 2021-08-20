@@ -10,7 +10,7 @@ class Fish
 {
 public:
 	// コンストラクタ
-	Fish(VECTOR _pos,VECTOR _rotate);
+	Fish();
 	// デストラクタ
 	virtual ~Fish();
 
