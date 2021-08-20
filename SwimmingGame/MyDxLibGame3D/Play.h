@@ -1,0 +1,67 @@
+#pragma once
+#include "SceneBase.h"
+
+// 前方宣言
+class Fish;
+class Pool;
+class Timing;
+class BackGround;
+class Player;
+class UIGoal;
+class HitChecker;
+class Camera;
+class Result;
+class BackGround;
+class Time;
+
+/// <summary>
+/// プレイシーンの生成、描画
+/// </summary>
+class Play : public SceneBase
+{
+public:
+    /// コンストラクタ
+    Play();
+    /// デストラクタ
+    ~Play();
+
+    /// <summary>
+    /// プレイシーンの更新処理
+    /// </summary>
+    SceneBase* Update()override;
+
+    /// <summary>
+    /// プレイシーンの描画
+    /// </summary>
+    void Draw()override;
+
+private:
+
+    int mTime;
+    const int ENDTIME;
+
+    // 魚が動き始めるまでのカウント
+    int startCount;
+
+    // 魚(モブ)
+    Fish* fish = nullptr;
+    // プール
+    Pool* pool = nullptr;
+    // リズムボタン
+    Timing* timing = nullptr;
+    // 魚(プレイヤー)
+	Player* player;
+	// UI（ゴール
+	UIGoal* uiGoal;
+	// 当たり判定
+	HitChecker* hit;
+    // バックグラウンド
+    BackGround* backGround;
+    // 時間の生成
+    Time* time;
+
+    // リザルトシーン
+    Result* result;
+
+    Camera* camera;
+};
