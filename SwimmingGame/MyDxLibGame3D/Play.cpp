@@ -72,6 +72,11 @@ SceneBase* Play::Update()
 		return new Result();
 	}
 
+	time->Update();
+
+	camera->DivingCameraUpdate(*time);
+	camera->CameraSet();
+
 	// カメラの更新（デバック用）
 	if (CheckHitKey(KEY_INPUT_UP))        // ↑押したら上固定カメラ
 	{
@@ -81,11 +86,6 @@ SceneBase* Play::Update()
 	{
 		camera->FixedCameraRightUpdate();
 	}
-
-	time->Update();
-	
-	camera->DivingCameraUpdate(*time);
-	camera->CameraSet();
 
 	// リズムボタンUI更新
 	timing->Update();
@@ -110,7 +110,7 @@ SceneBase* Play::Update()
 void Play::Draw()
 {
 	// 背景の生成
-	backGround->Draw();
+	//backGround->Draw();
 	// プール描画
 	pool->Draw();
 	// 魚描画

@@ -145,7 +145,6 @@ void Jump::JumpPosUpdate()
 	mPos = VAdd(mPos, mVelocity);
 
 
-
 	// 初期位置orプールまでいったら動きを止め次のジャンプに移行する
 	if (!mThirdJump)
 	{
@@ -205,6 +204,9 @@ void Jump::NpcJumpUpdate(VECTOR _pos, int _number)
 	}
 	//----------------------------------------------------
 
+	mAdd = VGet(0.0f, 0.0f, 0.0f);
+	mSub = VGet(0.0f, 0.0f, 0.0f);
+
 	if (_number == 0 || _number == 1)
 	{
 		mAdd = VGet(0.0f, 0.0f, JUMP_UP_Z);
@@ -213,7 +215,7 @@ void Jump::NpcJumpUpdate(VECTOR _pos, int _number)
 	else if (_number == 2 || _number == 3 || _number == 4)
 	{
 		mAdd = VGet(0.0f, 0.0f, -JUMP_UP_Z);
-		mSub = VGet(-JUMP_DOWN_Z, 0.0f, 0.0f);
+		mSub = VGet(0.0f, 0.0f, -JUMP_DOWN_Z);
 	}
 	else if (_number == 5 || _number == 6 || _number == 7)
 	{
