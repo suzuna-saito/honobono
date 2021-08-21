@@ -66,7 +66,6 @@ void Player::Update()
 		mVelocity = VGet(0.0f, 0.0f, mAdvance);
 		mPos = VAdd(mPos, mVelocity);
 	}
-
 }
 
 //-----------------------------------------------------------------------------

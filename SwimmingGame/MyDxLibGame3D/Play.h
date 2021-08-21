@@ -2,7 +2,7 @@
 #include "SceneBase.h"
 
 // 前方宣言
-class FishManager;
+class Fish;
 class Pool;
 class Timing;
 class BackGround;
@@ -41,7 +41,7 @@ private:
     int startCount;
 
     // 魚(モブ)
-    FishManager* fish = nullptr;
+    Fish* fish = nullptr;
     // プール
     Pool* pool = nullptr;
     // リズムボタン

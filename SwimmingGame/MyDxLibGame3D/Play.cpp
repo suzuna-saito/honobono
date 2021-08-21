@@ -145,7 +145,8 @@ SceneBase* Play::Update()
 void Play::Draw()
 {
 	// 背景の生成
-	backGround->Draw();
+	//backGround->Draw();
+	//DrawLine3D(VGet(20.0f, -25.0f, -25.0f), VGet(20.0f, 25.0f, -25.0f), GetColor(255, 0, 0));
 	// プール描画
 	pool->Draw();
 	// 魚描画
@@ -154,8 +155,6 @@ void Play::Draw()
 	timing->Draw();
 	// プレイヤー描画.
 	player->Draw();
-
-
-	// 真ん中の位置が分かりやすくなるように一本の線を表示（デバック用）
-	DrawLine3D(VGet(0.0f, -25.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(255, 0, 0));
+	//// 真ん中の位置が分かりやすくなるように一本の線を表示（デバック用）
+	DrawLine3D(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
 }

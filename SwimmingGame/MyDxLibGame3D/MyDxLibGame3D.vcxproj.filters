@@ -144,9 +144,6 @@
     <ClInclude Include="Fish.h">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Pool.h">
-      <Filter>ソース ファイル\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
@@ -170,6 +167,9 @@
     </ClInclude>
     <ClInclude Include="Result.h">
       <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Pool.h">
+      <Filter>ソース ファイル\HitCheck</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
