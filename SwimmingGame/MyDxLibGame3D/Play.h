@@ -65,7 +65,6 @@ private:
     Sound* mPlayBGM1;
     Sound* mPlayBGM2;
     Sound* mPlayBGM3;
-
    
     // ”ò‚Ñ‚ñ‚Å…‚Ì“ü‚Á‚½‚Ì‰¹
     Sound* mWaterInSound;

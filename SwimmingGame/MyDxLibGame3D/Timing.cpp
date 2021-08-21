@@ -36,23 +36,32 @@ Timing::Timing()
 	, mPerfectSound(nullptr)
 	, mGoodSound(nullptr)
 	, mBadSound(nullptr)
+	, mEffectAngle(0)
+	, mEffectScale(1)
+	, mEffectFlag(false)
+	, mAngleRotate(15.0f * DX_PI_F / 180.0f)
+	, mScalePlus(0.02)
+	, mEffectImg(-1)
 {
 	// 画像読み込み
 	freamImg = LoadGraph("data/newUI/frame.png");
 	selectButtonImg = LoadGraph("data/newUI/UIfish.png");
 	perfectImg = LoadGraph("data/newUI/perfect.png");
-	goodImg = LoadGraph("data/newUI/bad.png");
-	badImg = LoadGraph("data/newUI/good.png");
+	goodImg = LoadGraph("data/newUI/good.png");
+	badImg = LoadGraph("data/newUI/bad.png");
+	mPerfectEffectImg = LoadGraph("data/newUI/PerfectEffect.png");
+	mGoodEffectImg = LoadGraph("data/newUI/GoodEffect.png");
+	mBadEffectImg = LoadGraph("data/newUI/BadEffect.png");
 
 	// 色
 	color = GetColor(0, 0, 0);
-	gageColor = GetColor(255, 255, 255);
+	NormalGageColor = GetColor(255, 255, 255);
+	mPushGageColor = GetColor(0, 255, 255);
 
 	// サウンド
 	mPerfectSound = new Sound("data/newSound/se/perfect.mp3");
 	mGoodSound = new Sound("data/newSound/se/good.mp3");
 	mBadSound = new Sound("data/newSound/se/bad.mp3");
-	
 }
 
 // デストラクタ
@@ -111,23 +120,34 @@ void Timing::Update()
 	// ボタンを押されタイミングフラグが「真」となったら
 	if (TimingFlag)
 	{
+		// ボタンを押せた目印に色を変える
+		mGageColor = mPushGageColor;
 		// カウントをし続ける
 		count++;
 		// バッドの条件
 		if (radius - gageRadius <= 25)
 		{
+			// エフェクト画像をバッドの画像に変える
+			mEffectImg = mBadEffectImg;
+			mEffectFlag = true;
 			mBadSound->PlaySE();
 			BadFlag = true;
 		}
 		// グッドの条件
-		if (radius - gageRadius > 20)
+		if (radius - gageRadius < 20)
 		{
+			// エフェクト画像をグッドの画像に変える
+			mEffectImg = mGoodEffectImg;
+			mEffectFlag = true;
 			mGoodSound->PlaySE();
 			GoodFlag = true;
 		}
 		// パーフェクトの条件
 		if (radius - gageRadius <= 0 && radius - gageRadius < 10)
 		{
+			// エフェクト画像をパーフェクトの画像に変える
+			mEffectImg = mPerfectEffectImg;
+			mEffectFlag = true;
 			mPerfectSound->PlaySE();
 			PerfectFlag = true;
 		}
@@ -147,12 +167,23 @@ void Timing::Update()
 	// タイミングフラグが「偽」であるとき
 	if (!TimingFlag)
 	{
+		mGageColor = NormalGageColor;
 		// カウントを初期化する
 		count = countInit;
 		// フラグを「偽」にする
 		BadFlag = false;
 		GoodFlag = false;
 		PerfectFlag = false;
+		// エフェクトフラグと大きさを初期化
+		mEffectFlag = false;
+		mEffectScale = 1;
+	}
+
+	// エフェクトフラグが真なら大きさを拡大、回転させる
+	if (mEffectFlag)
+	{
+		mEffectScale += mScalePlus;
+		mEffectAngle += mAngleRotate;
 	}
 }
 
@@ -165,7 +196,14 @@ void Timing::Draw()
 	/*for (int i = 0; i < 3; i++)
 	{*/
 		// パーフェクト判定の位置となるゲージの描画
-		DrawCircle(gageCX + (1 * movebutton), gageCY, gageRadius, gageColor, TRUE);
+		DrawCircle(gageCX + (1 * movebutton), gageCY, gageRadius, mGageColor, TRUE);
+
+		// エフェクトフラグが真なら
+		if (mEffectFlag)
+		{
+			// パーフェクト判定の位置の回りに出現させる
+			DrawRotaGraph(gageCX + (1 * movebutton), gageCY, mEffectScale, mEffectAngle, mEffectImg, true, false, false);
+		}
 
 		// ボタンが押されていない場合ループし続ける
 		if(!TimingFlag)
@@ -212,7 +250,7 @@ void Timing::Draw()
 		
 	
 	// スコアの画面を表示する
-	DrawFormatString(scoreX, scoreY, gageColor, "score : %d", score);
+	DrawFormatString(scoreX, scoreY, NormalGageColor, "score : %d", score);
 	// 魚（自分が選んでいる操作出来るところを示すもの）の描画
 	//DrawGraph(buttonX, buttonY, selectButtonImg, TRUE);
 }

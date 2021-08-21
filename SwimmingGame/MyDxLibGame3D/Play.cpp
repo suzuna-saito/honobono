@@ -60,6 +60,9 @@ Play::Play()
 
 	mWaterInSound = new Sound("data/newSound/se/in.mp3");
 	mWaterOutSound = new Sound("data/newSound/se/out.mp3");
+
+	// Updateが始まる前に流す(Loopしないように)
+	mPlayBGM1->PlayBackBGM();
 }
 
 // デストラクタ
@@ -95,10 +98,16 @@ Play::~Play()
 /// <return>シーンのポインタ</return>
 SceneBase* Play::Update()
 {
-	mPlayBGM1->PlayBGM();
-	if (CheckHitKey(KEY_INPUT_SPACE))        // ↑押したら上固定カメラ
+	//if (CheckHitKey(KEY_INPUT_SPACE))        // ↑押したら上固定カメラ
+	//{
+	//	
+	//}
+
+	// 音楽が流れているかチェック
+	if (!mPlayBGM1->CheckBGM())
 	{
-		
+		// 流れていなかったらリザルトへ
+		return new Result();
 	}
 
 	// シーン遷移条件(デバック用：右シフトキーを押すと遷移)

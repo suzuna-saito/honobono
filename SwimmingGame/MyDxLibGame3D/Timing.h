@@ -82,9 +82,13 @@ private:
 	// 半径の初期化
 	int radiusInit;
 	// 判定がパーフェクトになるゲージの色
-	int gageColor;
+	int NormalGageColor;
 	// 収縮するゲージの色
 	int	color;
+
+	// ボタンが押したときと通常時のパーフェクトエリアの色
+	int mGageColor;
+	int mPushGageColor;
 
 	//  リアクション
 	// リアクションが描画される位置にあるフレームの画像
@@ -112,6 +116,16 @@ private:
 	int goodImg;
 	// Badリアクションの画像
 	int badImg;
+
+	int mEffectImg;                        // 描画するエフェクト
+	int mPerfectEffectImg;                 // パーフェクトのエフェクト 
+	int mGoodEffectImg;                    // グッドのエフェクト
+	int mBadEffectImg;                     // バッドのエフェクト
+    double mEffectScale;                   // エフェクトの大きさ
+	double mEffectAngle;                   // エフェクトの回転角度
+	double mScalePlus;                     // 大きさの増加値
+	double mAngleRotate;                   // 回転させる度合い
+	bool mEffectFlag;                      // エフェクトを描画するか
 
 	// スコア
 	int score;

@@ -47,6 +47,9 @@ Result::Result()
 	, mRestartSE(nullptr)
 	, mCancelSE(nullptr)
 {
+	// シーン変更
+	SetScene(gameClear);
+
 	// モデルをロード
 	mFishModel = MV1LoadModel("data/model/ResultAsset/Fish.mqo");
 	mTextModel[0] = MV1LoadModel("data/model/ResultAsset/ResultText.mqo");

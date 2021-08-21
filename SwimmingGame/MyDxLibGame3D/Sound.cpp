@@ -36,6 +36,14 @@ void Sound::PlayBGM()
 	
 }
 
+void Sound::PlayBackBGM()
+{
+	if (CheckSoundMem(mSoundHandle) != 1)
+	{
+		PlaySoundMem(mSoundHandle, DX_PLAYTYPE_BACK, TRUE);
+	}
+}
+
 /// <summary>
 /// ゲーム内の効果音再生
 /// </summary>
@@ -56,4 +64,20 @@ void Sound::PlaySE()
 void Sound::StopMusic()
 {
 	StopSoundMem(mSoundHandle);
+}
+
+/// <summary>
+/// 音楽が再生されているかどうか
+/// </summary>
+/// <returns>再生されていない：0  再生されている：1</returns>
+int Sound::CheckBGM()
+{
+	if (!CheckSoundMem(mSoundHandle))
+	{
+		return false;
+	}
+	else if (CheckSoundMem(mSoundHandle))
+	{
+		return true;
+	}
 }
