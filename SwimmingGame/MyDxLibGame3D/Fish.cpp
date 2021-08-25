@@ -6,22 +6,20 @@
 /// コンストラクタ
 /// </summary>
 Fish::Fish()
-	: FISH_MOB_ROTATE{VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)
-	                 ,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)
-	                 ,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f, 0.0f,0.0f)
-	                 ,VGet(0.0f,0.0f,0.0f),VGet(0.0f,0.0f,0.0f) }
+	: FISH_MOB_ROTATE{ VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)
+					 ,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)
+					 ,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f),VGet(0.0f, 0.0f,0.0f)
+					 ,VGet(0.0f,0.0f,0.0f),VGet(0.0f,0.0f,0.0f) }
 	, FISH_MOB_NUM(11)
-	, mMobPos{ VGet(1.5f,15.0f,-28.0f),VGet(12.0f,9.0f,-28.0f),VGet(-7.0f,20.0f,26.0f)  // 左、左、右
-	          ,VGet(-2.0f,15.0f,28.0f),VGet(-12.0f,9.0f,29.0f),VGet(-16.0f,20.0f,-7.0f)// 右、右、奥
-	          ,VGet(-17.0f,15.0f,-2.0f),VGet(-17.0f,9.0f,-12.0f),VGet(16.0f,20.0f,7.0f)// 奥、奥、手前
-	          ,VGet(17.0f,15.0f,2.0f),VGet(17.0f,9.0f,12.0f) }
+	, mMobPos{ VGet(-5.0f,18.0f,-22.0f),VGet(5.0f,11.0f,-22.0f)// 左、右
+			  ,VGet(5.0f,18.0f,22.0f),VGet(0.0f,23.0f,20.0f),VGet(-5.0f,11.0f,22.0f) // 左、真ん中、右
+			  ,VGet(-12.0f,18.0f,5.0f),VGet(-10.0f,23.0f,0.0f),VGet(-12.0f,11.0f,-5.0f) // 左、真ん中、右
+			  ,VGet(12.0f,18.0f,-5.0f),VGet(10.0f,23.0f,0.0f),VGet(12.0f,11.0f,5.0f) } // 左、真ん中、右
 {
 	// 画像データの読み込み
-	mMHandle = MV1LoadModel("data/model/fish/Mobfish.mqo");
-	MobFishTexture = LoadGraph("data/model/fish/MobFish.png");
+	mMHandle = MV1LoadModel("data/model/fish/npc.mv1");
 	// 画像サイズ変更
 	MV1SetScale(mMHandle, FISH_SIZE);
-	MV1SetTextureGraphHandle(mMHandle, 0, MobFishTexture, FALSE);
 
 	// ジャンプを生成.
 	jump = new Jump();
@@ -42,24 +40,22 @@ Fish::~Fish()
 /// </summary>
 void Fish::Update()
 {
-	if (jump->GetGroundNpc())
-	{
-		jump->SetJumpNpc(true);
-	}
+	//for (int i = 0; i < FISH_MOB_NUM; i++)
+	//{
+	//	if (jump->GetGroundNpc())
+	//	{
+	//		jump->SetJumpNpc(true);
+	//	}
 
-	// １回目、２回目、飛び込みいずれかのフラグがtrueだったら
-	if (jump->GetFirstNpc() || jump->GetSecondNpc() || jump->GetThirdNpc())
-	{
-		for (int i = 0; i < FISH_MOB_NUM; i++)
-		{
-			// ジャンプの更新をする
-			jump->NpcJumpUpdate(mMobPos[i], i);
+	//	// １回目、２回目、飛び込みいずれかのフラグがtrueだったら
+	//	if (jump->GetFirstNpc() || jump->GetSecondNpc() || jump->GetThirdNpc())
+	//	{
+	//		// ジャンプの更新をする
+	//		jump->NpcJumpUpdate(mMobPos[i],i);
+	//	}
 
-			mMobPos[i] = jump->GetPosNpc();
-		}
-	}
-	
-	
+	//	mMobPos[i] = jump->GetPosNpc();
+	//}
 }
 
 /// <summary>

@@ -143,15 +143,15 @@ SceneBase* Play::Update()
 void Play::Draw()
 {
 	// 背景の生成
-	backGround->Draw();
-	// プール描画
-	pool->Draw();
+	//backGround->Draw();
 	// 魚描画
 	fish->Draw();
-	// リズムボタンUI描画
-	timing->Draw();
 	// プレイヤー描画.
 	player->Draw();
+	// プール描画
+	pool->Draw();
+	// リズムボタンUI描画
+	timing->Draw();
 
 
 	// 真ん中の位置が分かりやすくなるように一本の線を表示（デバック用）

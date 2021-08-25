@@ -64,7 +64,7 @@ const double PI = 3.1415926535897932384626433832795;
 
 
 // 魚のサイズ変更値
-const VECTOR FISH_SIZE = (VGet(0.2f, 0.2f, 0.2f));
+const VECTOR FISH_SIZE = (VGet(0.0025f, 0.0025f, 0.0025f));
 
 struct Color
 {

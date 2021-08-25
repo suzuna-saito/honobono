@@ -14,8 +14,8 @@ Pool::Pool()
 	                   ,VGet( 0.0f, 0.0f, 0.0f)}
 	,mPoolPos(VGet( 0.0f, 0.0f, 0.0f))
 	,mWaterPos(VGet( 0.0f, 2.0f, 0.0f))
-	,mDivingBoardPos{VGet( 0.0f, 3.0f, -27.0f),VGet( -17.0f, 3.0f, 0.0f)
-	                ,VGet( 17.0f, 3.0f, 0.0f), VGet( 0.0f, 3.0f, 27.0f)}
+	,mDivingBoardPos{ VGet(-1.0f, 3.0f, -27.0f),VGet(-17.0f, 3.0f, 1.0f)
+					,VGet(17.0f, 3.0f, -1.0f), VGet(1.0f, 3.0f, 27.0f) }
 	,i(0)
 {
 	// âÊëúÇÃì«Ç›çûÇ›
