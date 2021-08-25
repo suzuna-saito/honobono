@@ -40,6 +40,9 @@ private:
     // 魚が動き始めるまでのカウント
     int startCount;
 
+    // スコアを保持する変数
+    int mScore;
+
     // 魚(モブ)
     Fish* fish = nullptr;
     // プール

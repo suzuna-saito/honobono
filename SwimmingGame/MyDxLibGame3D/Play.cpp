@@ -13,6 +13,7 @@
 // コンストラクタ
 Play::Play()
 	:startCount(0)
+	, mScore(0)
 	, mPlayBGM1(nullptr)
 	, mPlayBGM2(nullptr)
 	, mPlayBGM3(nullptr)
@@ -39,7 +40,7 @@ Play::Play()
 		// 魚生成
 		fish = new Fish();
 	}
-	
+
 	// リズムボタンUI生成
 	timing = new Timing();
 
@@ -106,15 +107,19 @@ SceneBase* Play::Update()
 	// 音楽が流れているかチェック
 	if (!mPlayBGM1->CheckBGM())
 	{
+		// スコアをもらう
+		mScore = timing->GetScore()->GetResult();
 		// 流れていなかったらリザルトへ
-		return new Result();
+		return new Result(mScore);
 	}
 
 	// シーン遷移条件(デバック用：右シフトキーを押すと遷移)
 	if (CheckHitKey(KEY_INPUT_RSHIFT))
 	{
+		// スコアをもらう
+		mScore = timing->GetScore()->GetResult();
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-		return new Result();
+		return new Result(mScore);
 	}
 
 	time->Update();

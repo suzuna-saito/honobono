@@ -2,6 +2,7 @@
 #include "Timing.h"
 #include "Input.h"
 #include "Sound.h"
+#include "Score.h"
 
 // コンストラクタ
 Timing::Timing()
@@ -29,10 +30,6 @@ Timing::Timing()
 	, count(countInit)
 	, countInit(0)
 	, countMax(50)
-	, score(0)
-	, scoreMax(0)
-	, scoreX(800)
-	, scoreY(20)
 	, mPerfectSound(nullptr)
 	, mGoodSound(nullptr)
 	, mBadSound(nullptr)
@@ -62,6 +59,9 @@ Timing::Timing()
 	mPerfectSound = new Sound("data/newSound/se/perfect.mp3");
 	mGoodSound = new Sound("data/newSound/se/good.mp3");
 	mBadSound = new Sound("data/newSound/se/bad.mp3");
+
+	// スコア
+	score = new Score();
 }
 
 // デストラクタ
@@ -116,6 +116,7 @@ void Timing::Update()
 	if (Key[KEY_INPUT_SPACE] == 1)
 	{
 		TimingFlag = true;
+		ScoreFlag = true;
 	}
 	// ボタンを押されタイミングフラグが「真」となったら
 	if (TimingFlag)
@@ -153,12 +154,15 @@ void Timing::Update()
 		}
 		if (!(count < countMax))
 		{
-			// スコアの計算
-			// 半径の最大値から現在の半径を差を出し、その差にスコアくらいの数字を掛ける
-			int n;
-			n = radiusInit - radius;
-			scoreMax = n * 10;
-			score = scoreMax + score;
+			if (ScoreFlag)
+			{
+				// スコアの計算
+				// 半径の最大値から現在の半径を差を出し、その差にスコアくらいの数字を掛ける
+				int n;
+				n = radiusInit - radius;
+				score->GetScore(&n);
+				ScoreFlag = false;
+			}
 	
 			// それ以外の場合はタイミングフラグを「偽」とする
 			TimingFlag = false;
@@ -247,10 +251,9 @@ void Timing::Draw()
 			}
 		}
 
-		
+		// スコアを描画
+		score->Draw();
 	
-	// スコアの画面を表示する
-	DrawFormatString(scoreX, scoreY, NormalGageColor, "score : %d", score);
 	// 魚（自分が選んでいる操作出来るところを示すもの）の描画
 	//DrawGraph(buttonX, buttonY, selectButtonImg, TRUE);
 }

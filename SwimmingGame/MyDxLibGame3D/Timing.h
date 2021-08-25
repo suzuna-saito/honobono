@@ -1,6 +1,8 @@
 #pragma once
 #include "DxLib.h"
 
+class Score;
+
 /// <summary>
 /// タイミングゲージのクラス
 /// </summary>
@@ -25,6 +27,8 @@ public:
 	/// </summary>
 	void Draw();
 
+	// スコアを渡す
+	Score* GetScore() { return score; }
 	// Perfectのフラグ管理
 	bool PerfectFlag;
 	// Goodのフラグ管理
@@ -127,16 +131,10 @@ private:
 	double mAngleRotate;                   // 回転させる度合い
 	bool mEffectFlag;                      // エフェクトを描画するか
 
-	// スコア
-	int score;
-	// スコアを借入れする変数
-	int scoreMax;
 	// Score処理フラグ
 	bool ScoreFlag;
-	// スコアを描画する座標X
-	int scoreX;
-	// スコアを描画する座標Y
-	int scoreY;
+
+	class Score* score;
 
 	class Sound* mPerfectSound;
 	class Sound* mGoodSound;

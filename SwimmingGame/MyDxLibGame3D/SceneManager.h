@@ -65,5 +65,4 @@ private:
 	Fade* fade = nullptr;
 	// フェードインアウトの状態
 	FadeState fadeState = FadeState::Empty;
-
 };
