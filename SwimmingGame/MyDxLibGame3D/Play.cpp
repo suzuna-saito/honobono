@@ -25,8 +25,6 @@ Play::Play()
 	player = new Player();
 	// UIiƒS[ƒ‹j‚Ì¶¬
 	uiGoal = new UIGoal();
-	//// UI(‰Ô‰Î)‚Ì¶¬
-	//new UIFireworks();
 	// “–‚½‚è”»’è‚ğ¶¬
 	hit = new HitChecker();
 
