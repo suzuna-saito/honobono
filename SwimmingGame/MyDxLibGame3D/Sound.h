@@ -53,8 +53,8 @@ public:
 
 private:
 
+	// サウンドを格納するハンドル
 	int mSoundHandle;
-
 	// 一回きりの音
 	bool mOnceSoundFlag;
 

@@ -1,8 +1,6 @@
 #pragma once
 #include "DxLib.h"
 
-class Score;
-
 /// <summary>
 /// タイミングゲージのクラス
 /// </summary>
@@ -22,53 +20,34 @@ public:
 	/// 更新
 	/// </summary>
 	void Update();
+
 	/// <summary>
 	/// 描画
 	/// </summary>
 	void Draw();
 
-	// スコアを渡す
-	Score* GetScore() { return score; }
-	// Perfectのフラグ管理
-	bool PerfectFlag;
-	// Goodのフラグ管理
-	bool GoodFlag;
-	// Badのフラグ管理
-	bool BadFlag;
-
-
-	// <summary>
-	/// リアクションを取得
-	/// </summary>
-	/// <returns>現在のリアクションを返す</returns>
-//	int GetReaction() { return mIsReaction; }
-
-
 	/// <summary>
-	/// リアクションをセットする
+	/// CSVデータの読み込み
 	/// </summary>
-	/// <param name="_isScene">現在のリアクション</param>
-//	void SetReaction(int _isReaction) { mIsReaction = _isReaction; }
+	void CSVRead();
 
 protected:
 	// 現在のリアクションを返す
 //	int mIsReaction;
 
 private:
-	// タイミングのフラグ管理
+	//  フラグ
+	// タイミングゲージが収縮するフラグ管理
+	bool TimingShrinkFlag;
+	// タイミングゲージのクリック出来るかのフラグ管理
 	bool TimingFlag;
-	// 魚（自分が選んでいる操作出来るところを示すもの）
-	int selectButtonImg;
-	// ボタンの座標X
-	int buttonX;
-	// ボタンの座標Y
-	int buttonY;
-	// ボタンが最大動ける範囲(左)
-	int buttonMoveLeft;
-	// ボタンが最大動ける範囲(右)
-	int buttonMoveRight;
-	// ボタンの動ける範囲
-	int movebutton;
+	
+	// Perfectのフラグ管理
+	bool PerfectFlag;
+	// Goodのフラグ管理
+	bool GoodFlag;
+	// Badのフラグ管理
+	bool BadFlag;
 
 	//  ゲージ
 	// ゲージの座標X
@@ -85,14 +64,13 @@ private:
 	int gageRadius;
 	// 半径の初期化
 	int radiusInit;
-	// 判定がパーフェクトになるゲージの色
-	int NormalGageColor;
-	// 収縮するゲージの色
-	int	color;
 
-	// ボタンが押したときと通常時のパーフェクトエリアの色
-	int mGageColor;
-	int mPushGageColor;
+	//  
+	// 黒色
+	int	brack;
+	// 白色
+	int white;
+	
 
 	//  リアクション
 	// リアクションが描画される位置にあるフレームの画像
@@ -105,39 +83,55 @@ private:
 	int reactionX;
 	// リアクションの座標Y
 	int reactionY;
+	// パーフェクトリアクションの画像
+	int perfectImg;
+	// パーフェクトの半径
+	int perfectRadius;
+	// グッドリアクションの画像
+	int goodImg;
+	// バッドリアクションの画像
+	int badImg;
+	// バッドの半径
+	int badRadius;
 
+
+	//  カウント
 	// リアクションを描画する時間をカウントする
-	int count;
+	int reactionCount;
 	// リアクションを描画する時間の最大値
-	int countMax;
+	int reactionCountMax;
 	// カウントを初期化
 	int countInit;
+	
 
 
-	// Perfectリアクションの画像
-	int perfectImg;
-	//Goodリアクションの画像
-	int goodImg;
-	// Badリアクションの画像
-	int badImg;
-
-	int mEffectImg;                        // 描画するエフェクト
-	int mPerfectEffectImg;                 // パーフェクトのエフェクト 
-	int mGoodEffectImg;                    // グッドのエフェクト
-	int mBadEffectImg;                     // バッドのエフェクト
-    double mEffectScale;                   // エフェクトの大きさ
-	double mEffectAngle;                   // エフェクトの回転角度
-	double mScalePlus;                     // 大きさの増加値
-	double mAngleRotate;                   // 回転させる度合い
-	bool mEffectFlag;                      // エフェクトを描画するか
-
+	//  スコア
+	// 現在のスコア
+	int score;
+	// スコアを借入れする変数
+	int scoreMax;
 	// Score処理フラグ
 	bool ScoreFlag;
+	// スコアを描画する座標X
+	int scoreX;
+	// スコアを描画する座標Y
+	int scoreY;
 
-	class Score* score;
+	//  CSV
+	// CSVファイルを格納
+	char csv[24] = "data/CSV/TestTiming.csv";
+	// ファイルのポインタ
+	FILE* filePointer;
+	// データを格納
+	int csvData;
 
+
+	//  サウンド
+	// パーフェクトの時になる効果音
 	class Sound* mPerfectSound;
+	// グッドの時になる効果音
 	class Sound* mGoodSound;
+	// バッドの時になる効果音
 	class Sound* mBadSound;
 };
 
