@@ -63,8 +63,7 @@ const float  SATOSHI_Z_SPEED = -2.75f;
 const double PI = 3.1415926535897932384626433832795;
 
 // 魚のサイズ変更値
-const VECTOR FISH_SIZE = (VGet(0.2f, 0.2f, 0.2f));
-
+const VECTOR FISH_SIZE = (VGet(0.0025f, 0.0025f, 0.0025f));
 
 struct Color
 {
@@ -77,3 +76,21 @@ struct Color
 const Color WHITE = { 255,255,255 };
 //RGBを使った黒色の定義
 const Color BLACK = { 0,0,0 };
+
+//---------------------DrawSphere3D使用のための定義---------------------------
+//描画半径
+const float debugRad = 2.5f;
+
+//色の定義
+const int whiteColor = GetColor(255, 255, 255);
+const int yellowColor = GetColor(255, 255, 0);
+const int lightBlueColor = GetColor(0, 255, 255);
+const int yellowGreenColor = GetColor(0, 255, 0);
+const int orangeColor = GetColor(255, 102, 0);
+const int redColor = GetColor(255, 0, 0);
+const int greenColor = GetColor(0, 128, 0);
+const int purpleColor = GetColor(128, 0, 128);
+const int brownColor = GetColor(153, 51, 0);
+const int blueColor = GetColor(0, 0, 255);
+const int pinkColor = GetColor(255, 153, 204);
+//-------------------------------------------------

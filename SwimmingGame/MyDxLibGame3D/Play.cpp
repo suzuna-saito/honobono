@@ -3,7 +3,7 @@
 #include "UIGoal.h"
 #include "HitChecker.h"
 #include "Pool.h"
-#include "Fish.h"
+#include "FishManager.h"
 #include "Timing.h"
 #include "Camera.h"
 #include "Result.h"
@@ -33,12 +33,8 @@ Play::Play()
 	// プール生成
 	pool = new Pool();
 
-	// NPC分
-	for (int i = 0; i < 11;i++)
-	{
-		// 魚生成
-		fish = new Fish();
-	}
+	// 魚生成
+	fishManager = new FishManager();
 	
 	// リズムボタンUI生成
 	timing = new Timing();
@@ -53,6 +49,7 @@ Play::Play()
 	camera = new Camera();
 
 	camera->FixedCameraRightUpdate();
+	fishManager->CreatFish();
 
 	mPlayBGM1 = new Sound("data/newSound/bgm/bgm_1.mp3");
 	mPlayBGM2 = new Sound("data/newSound/bgm/bgm_2.mp3");
@@ -65,10 +62,13 @@ Play::Play()
 // デストラクタ
 Play::~Play()
 {
+	//魚たちの配列の削除
+	fishManager->DestroyFish();
+
+	// 魚削除
+	delete fishManager;
 	// プール削除
 	delete pool;
-	// 魚削除
-	delete fish;
 	// リズムボタンUI削除
 	delete timing;
 	// 当たり判定の削除
@@ -134,7 +134,7 @@ SceneBase* Play::Update()
 	if (startCount >= 60)
 	{
 		// 魚の制御
-		fish->Update();
+		fishManager->Updata();
 	}
 	
 	// シーンが変更されていなかったら自分のポインタを返す
@@ -146,15 +146,31 @@ void Play::Draw()
 {
 	// 背景の生成
 	//backGround->Draw();
-	//DrawLine3D(VGet(20.0f, -25.0f, -25.0f), VGet(20.0f, 25.0f, -25.0f), GetColor(255, 0, 0));
 	// プール描画
 	pool->Draw();
 	// 魚描画
-	fish->Draw();
+	fishManager->Draw();
 	// リズムボタンUI描画
 	timing->Draw();
 	// プレイヤー描画.
 	player->Draw();
-	//// 真ん中の位置が分かりやすくなるように一本の線を表示（デバック用）
-	DrawLine3D(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, 15.0f, 0.0f), GetColor(255, 0, 0));
+
+	
+	//それぞれの位置が分かりやすくなるように一本の線を表示（デバック用）
+	int redColor = GetColor(255, 0, 0);				//真ん中の色
+	int greenColor = GetColor(0, 255, 0);			//左上の色
+	int yellowColor = GetColor(255, 255, 0);		//左下の色
+	int purpleColor = GetColor(128, 0, 128);		//右上の色
+	int lightBlueColor = GetColor(0, 255, 255);		//右下の色
+
+	//プールの真ん中
+	DrawLine3D(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, 15.0f, 0.0f), redColor);
+	//プールの左上端
+	DrawLine3D(VGet(-15.0f, 0.0f, 25.0f), VGet(-15.0f, 15.0f, 25.0f), greenColor);
+	//プールの左下端
+	DrawLine3D(VGet(-15.0f, 0.0f, -25.0f), VGet(-15.0f, 15.0f, -25.0f), yellowColor);
+	//プールの右上端
+	DrawLine3D(VGet(15.0f, 0.0f, 25.0f), VGet(15.0f, 15.0f, 25.0f), purpleColor);
+	//プールの右下端
+	DrawLine3D(VGet(15.0f, 0.0f, -25.0f), VGet(15.0f, 15.0f, -25.0f), lightBlueColor);
 }

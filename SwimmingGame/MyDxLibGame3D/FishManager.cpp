@@ -1,5 +1,8 @@
 #include"FishManager.h"
 #include"FishBase.h"
+#include"Fish.h"
+#include"Common.h"
+
 
 ////各Mbbの向いている方向
 //: FISH_MOB_ROTATE{ VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)    //1
@@ -28,16 +31,66 @@
 //				,VGet(17.0f,9.0f,12.0f)	    //11
 //}
 
+/*
+* 上方向キーを押した時の視点での
+* 飛び込み前の魚たちの位置と配列
+*				4,3,2
+*	-----------------------------
+*	|							|
+*	|							|
+*	|							|
+*	|							|
+* 5 |							|10
+* 6 |							|9
+* 7 |							|8
+*	|							|
+*	|							|
+*	|							|
+*	|							|
+*	|							|
+*	-----------------------------
+*			0,player,1
+*/
+
+
 /// <summary>
 /// コンストラクタ
 /// </summary>
 FishManager::FishManager()
-	:mModelSourceHandle(-1)
-	,mModelSourceTexture(-1)
+	:mSourceModelHandle(-1)
+	, BEFORE_DIVING_POS{ VGet(1.5f,15.0f,-28.0f)    //1
+						,VGet(12.0f,9.0f,-28.0f)	//2
+						,VGet(-7.0f,20.0f,26.0f)	//3
+						,VGet(-2.0f,15.0f,28.0f)	//4
+						,VGet(-12.0f,9.0f,29.0f)	//5
+						,VGet(-16.0f,20.0f,-7.0f)	//6
+						,VGet(-17.0f,15.0f,-2.0f)	//7
+						,VGet(-17.0f,9.0f,-12.0f)	//8
+						,VGet(16.0f,20.0f,7.0f)     //9
+						,VGet(17.0f,15.0f,2.0f)	    //10
+						,VGet(17.0f,9.0f,12.0f) }	//11
+	, BEFORE_DIVING_ROTATE{	VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f)    //1
+							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //2
+							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //3
+							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //4
+							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //5
+							,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)    //6
+							,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)    //7
+							,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)    //8
+							,VGet(0.0f, 0.0f,0.0f)    //9
+							,VGet(0.0f,0.0f,0.0f)     //10
+							,VGet(0.0f,0.0f,0.0f) }   //11
+	,SET_DANCING_POS{	VGet(-7.5f,0.0f,-12.5f),VGet(7.5f,0.0f,-12.5f)							//[0]、[1]
+						,VGet(0.0f,0.0f,5.0f),VGet(7.5f,0.0f,12.5f),VGet(-7.5f,0.0f,-12.5f)		//[2]、[3]、[4]
+						,VGet(-5.0f,0.0f,-10.0f),VGet(-7.5f,0.0f,10.0f),VGet(-7.5f,0.0f,-10.0f)	//[5]、[6]、[7]
+						,VGet(7.5f,0.0f,10.0f),VGet(-7.5f,0.0f,-10.0f),VGet(5.0f,0.0f,0.0f) }	//[8]、[9]、[10]
+	,DEBUG_SPHERE_COLOR{ whiteColor ,yellowColor ,lightBlueColor ,yellowGreenColor ,
+							orangeColor ,redColor ,greenColor ,purpleColor ,brownColor ,
+								blueColor ,pinkColor }
 {
-	for (int i = 0; i < FISH_MOB_NUM; i++)
+	for (int i = 0; i < FISH_NUM; i++)
 	{
-		mMobFish[i] = NULL;
+		mFish[i] = NULL;
 	}
 }
 
@@ -51,87 +104,15 @@ FishManager::~FishManager()
 /// <summary>
 /// 魚たちの生成
 /// </summary>
-void FishManager::CreatMobFish()
+void FishManager::CreatFish()
 {
-	mModelSourceHandle = MV1LoadModel("data/model/fish/Mobfish.mqo");
-    mModelSourceTexture = LoadGraph("data/model/fish/MobFish.png");
+	mSourceModelHandle = MV1LoadModel("data/model/fish/npc.mv1");
 
-	for (int i = 0; i < FISH_MOB_NUM; i++)
+	for (int i = 0; i < FISH_NUM; i++)
 	{
 		//魚たちの生成
-		mMobFish[i] = new FishBase(mModelSourceHandle, mModelSourceTexture);
-
-		//位置と向きの初期化
-		switch (i)
-		{
-		case 0:	mMobFish[i]->SetPos(VGet(1.5f, 15.0f, -28.0f));
-			mMobFish[i]->SetRotate(VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f));
-			mMobFish[i]->SetDancePos(VGet(0.0f, 0.0f, 0.0f));
-			break;
-
-		case 1:	mMobFish[i]->SetPos(VGet(12.0f, 9.0f, -28.0f));
-			mMobFish[i]->SetRotate(VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f));
-			mMobFish[i]->SetDancePos(VGet(0.0f, 0.0f, 0.0f));
-
-			break;
-
-		case 2:	mMobFish[i]->SetPos(VGet(-7.0f, 20.0f, 26.0f));
-			mMobFish[i]->SetRotate(VGet(0.0f, -90.0f * DX_PI_F / 180.0f, 0.0f));
-			mMobFish[i]->SetDancePos(VGet(0.0f, 0.0f, 0.0f));
-
-			break;
-
-		case 3:	mMobFish[i]->SetPos(VGet(-2.0f, 15.0f, 28.0f));
-			mMobFish[i]->SetRotate(VGet(0.0f, -90.0f * DX_PI_F / 180.0f, 0.0f));
-			mMobFish[i]->SetDancePos(VGet(0.0f, 0.0f, 0.0f));
-
-			break;
-
-		case 4:	mMobFish[i]->SetPos(VGet(-12.0f, 9.0f, 29.0f));
-			mMobFish[i]->SetRotate(VGet(0.0f, -90.0f * DX_PI_F / 180.0f, 0.0f));
-			mMobFish[i]->SetDancePos(VGet(0.0f, 0.0f, 0.0f));
-
-			break;
-
-		case 5: mMobFish[i]->SetPos(VGet(-16.0f, 20.0f, -7.0f));
-			mMobFish[i]->SetRotate(VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f));
-			mMobFish[i]->SetDancePos(VGet(0.0f, 0.0f, 0.0f));
-
-			break;
-
-		case 6: mMobFish[i]->SetPos(VGet(-17.0f, 15.0f, -2.0f));
-			mMobFish[i]->SetRotate(VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f));
-			mMobFish[i]->SetDancePos(VGet(0.0f, 0.0f, 0.0f));
-
-			break;
-
-		case 7: mMobFish[i]->SetPos(VGet(-17.0f, 9.0f, -12.0f));
-			mMobFish[i]->SetRotate(VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f));
-			mMobFish[i]->SetDancePos(VGet(0.0f, 0.0f, 0.0f));
-
-			break;
-
-		case 8: mMobFish[i]->SetPos(VGet(16.0f, 20.0f, 7.0f));
-			mMobFish[i]->SetRotate(VGet(0.0f, 0.0f, 0.0f));
-			mMobFish[i]->SetDancePos(VGet(0.0f, 0.0f, 0.0f));
-
-			break;
-
-		case 9: mMobFish[i]->SetPos(VGet(17.0f, 15.0f, 2.0f));
-			mMobFish[i]->SetRotate(VGet(0.0f, 0.0f, 0.0f));
-			mMobFish[i]->SetDancePos(VGet(0.0f, 0.0f, 0.0f));
-
-			break;
-
-		case 10: mMobFish[i]->SetPos(VGet(17.0f, 9.0f, 12.0f));
-			mMobFish[i]->SetRotate(VGet(0.0f, 0.0f, 0.0f));
-			mMobFish[i]->SetDancePos(VGet(0.0f, 0.0f, 0.0f));
-
-			break;
-
-		default:
-			break;
-		}
+		mFish[i] = new Fish(mSourceModelHandle,
+			BEFORE_DIVING_POS[i], BEFORE_DIVING_ROTATE[i], SET_DANCING_POS[i]);
 	}
 
 }
@@ -139,16 +120,15 @@ void FishManager::CreatMobFish()
 /// <summary>
 /// 魚たちの削除
 /// </summary>
-void FishManager::DestroyMobFish()
+void FishManager::DestroyFish()
 {
-	for (int i = 0; i < FISH_MOB_NUM; i++)
+	for (int i = 0; i < FISH_NUM; i++)
 	{
-		delete[] mMobFish;
-		mMobFish[i] = NULL;
+		delete mFish[i];
+		mFish[i] = NULL;
 	}
 
-	MV1DeleteModel(mModelSourceHandle);
-	DeleteGraph(mModelSourceTexture);
+	MV1DeleteModel(mSourceModelHandle);
 }
 
 /// <summary>
@@ -156,11 +136,11 @@ void FishManager::DestroyMobFish()
 /// </summary>
 void FishManager::Updata()
 {
-	for (int i = 0; i < FISH_MOB_NUM; i++)
+	for (int i = 0; i < FISH_NUM; i++)
 	{
-		if (mMobFish[i] != NULL)
+		if (mFish[i] != NULL)
 		{
-			mMobFish[i]->Updata(mMobFish[i]);
+			mFish[i]->Updata();
 		}
 	}
 }
@@ -170,11 +150,11 @@ void FishManager::Updata()
 /// </summary>
 void FishManager::Draw()
 {
-	for (int i = 0; i < FISH_MOB_NUM; i++)
+	for (int i = 0; i < FISH_NUM; i++)
 	{
-		if (mMobFish != NULL)
+		if (mFish[i] != NULL)
 		{
-			mMobFish[i]->Draw();
+			mFish[i]->Draw(DEBUG_SPHERE_COLOR[i]);
 		}
 	}
 }

@@ -103,7 +103,7 @@ void Camera::SetOriginCameraUpdate()
 void Camera::FixedCameraUpUpdate()
 {
 	mPos = FIXED_CAMERA_UP_POS;
-	mAngle = VGet(1.3f, 0.0f, 0.0f);
+	mAngle = VGet(1.5f, 0.0f, 0.0f);
 
 	// カメラ位置変更
 	SetCameraPositionAndAngle(mPos, mAngle.x,mAngle.y,mAngle.z);
