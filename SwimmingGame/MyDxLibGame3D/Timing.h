@@ -1,6 +1,8 @@
 #pragma once
 #include "DxLib.h"
 
+class Score;
+
 /// <summary>
 /// タイミングゲージのクラス
 /// </summary>
@@ -25,6 +27,8 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
+
+	Score* GetScore() { return mScorePtr; }
 
 	/// <summary>
 	/// CSVデータの読み込み
@@ -65,12 +69,15 @@ private:
 	// 半径の初期化
 	int radiusInit;
 
+	int NormalGageColor;
 	//  
 	// 黒色
 	int	brack;
 	// 白色
 	int white;
 	
+	int mGageColor;
+	int mPushGageColor;
 
 	//  リアクション
 	// リアクションが描画される位置にあるフレームの画像
@@ -107,9 +114,20 @@ private:
 
 	//  スコア
 	// 現在のスコア
-	int score;
+	int mScore;
 	// スコアを借入れする変数
 	int scoreMax;
+
+	int mEffectImg;       
+	int mPerfectEffectImg;
+	int mGoodEffectImg;   
+	int mBadEffectImg;    
+	double mEffectScale;  
+	double mEffectAngle;  
+	double mScalePlus;    
+	double mAngleRotate;  
+	bool mEffectFlag;
+
 	// Score処理フラグ
 	bool ScoreFlag;
 	// スコアを描画する座標X
@@ -125,6 +143,8 @@ private:
 	// データを格納
 	int csvData;
 
+
+	class Score* mScorePtr;
 
 	//  サウンド
 	// パーフェクトの時になる効果音
