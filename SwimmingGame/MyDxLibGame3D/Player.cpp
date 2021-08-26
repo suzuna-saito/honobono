@@ -22,7 +22,7 @@ Player::Player()
 	, mAdvance(0.05f)
 {
 	// 画像データの読み込み
-	mPHandle = MV1LoadModel("data/model/player/player.mv1");
+	mPHandle = MV1LoadModel("data/model/fish/player.mv1");
 	//mFishTexture = LoadGraph("data/model/fish/Fish.png");
 
 	// 画像サイズ変更

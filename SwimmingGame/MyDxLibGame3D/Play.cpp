@@ -13,6 +13,7 @@
 // コンストラクタ
 Play::Play()
 	:startCount(0)
+	, mScore(0)
 	, mPlayBGM1(nullptr)
 	, mPlayBGM2(nullptr)
 	, mPlayBGM3(nullptr)
@@ -96,16 +97,19 @@ Play::~Play()
 SceneBase* Play::Update()
 {
 	mPlayBGM1->PlayBGM();
-	if (CheckHitKey(KEY_INPUT_SPACE))        // ↑押したら上固定カメラ
+	if (!mPlayBGM1->CheckBGM()) 
 	{
-		
+		mScore = timing->GetScore()->GetResult();
+
+		return new Result(mScore);
 	}
 
 	// シーン遷移条件(デバック用：右シフトキーを押すと遷移)
 	if (CheckHitKey(KEY_INPUT_RSHIFT))
 	{
-		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-		return new Result();
+		mScore = timing->GetScore()->GetResult();
+
+		return new Result(mScore);
 	}
 
 	time->Update();
