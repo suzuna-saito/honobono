@@ -1,6 +1,8 @@
 #pragma once
 #include "DxLib.h"
 
+class Score;
+
 /// <summary>
 /// タイミングゲージのクラス
 /// </summary>
@@ -25,6 +27,8 @@ public:
 	/// </summary>
 	void Draw();
 
+	// スコアを渡す
+	Score* GetScore() { return score; }
 	// Perfectのフラグ管理
 	bool PerfectFlag;
 	// Goodのフラグ管理
@@ -82,9 +86,13 @@ private:
 	// 半径の初期化
 	int radiusInit;
 	// 判定がパーフェクトになるゲージの色
-	int gageColor;
+	int NormalGageColor;
 	// 収縮するゲージの色
 	int	color;
+
+	// ボタンが押したときと通常時のパーフェクトエリアの色
+	int mGageColor;
+	int mPushGageColor;
 
 	//  リアクション
 	// リアクションが描画される位置にあるフレームの画像
@@ -113,16 +121,20 @@ private:
 	// Badリアクションの画像
 	int badImg;
 
-	// スコア
-	int score;
-	// スコアを借入れする変数
-	int scoreMax;
+	int mEffectImg;                        // 描画するエフェクト
+	int mPerfectEffectImg;                 // パーフェクトのエフェクト 
+	int mGoodEffectImg;                    // グッドのエフェクト
+	int mBadEffectImg;                     // バッドのエフェクト
+    double mEffectScale;                   // エフェクトの大きさ
+	double mEffectAngle;                   // エフェクトの回転角度
+	double mScalePlus;                     // 大きさの増加値
+	double mAngleRotate;                   // 回転させる度合い
+	bool mEffectFlag;                      // エフェクトを描画するか
+
 	// Score処理フラグ
 	bool ScoreFlag;
-	// スコアを描画する座標X
-	int scoreX;
-	// スコアを描画する座標Y
-	int scoreY;
+
+	class Score* score;
 
 	class Sound* mPerfectSound;
 	class Sound* mGoodSound;

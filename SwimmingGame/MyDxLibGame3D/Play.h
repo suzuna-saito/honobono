@@ -40,6 +40,9 @@ private:
     // 魚が動き始めるまでのカウント
     int startCount;
 
+    // スコアを保持する変数
+    int mScore;
+
     // 魚(モブ)
     FishManager* fishManager =  nullptr ;
     // プール
@@ -65,7 +68,6 @@ private:
     Sound* mPlayBGM1;
     Sound* mPlayBGM2;
     Sound* mPlayBGM3;
-
    
     // 飛び込んで水の入った時の音
     Sound* mWaterInSound;

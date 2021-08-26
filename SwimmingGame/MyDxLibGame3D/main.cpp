@@ -6,6 +6,9 @@
 #include "DxLib.h"
 #include "Common.h"
 #include "SceneManager.h"
+#include "EffekseerForDXLib.h"
+
+void InitializeEffekseer();
 
 //-----------------------------------------------------------------------------
 // @brief  メイン関数.
@@ -17,6 +20,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	{
 		return -1;	// エラーが起きたら直ちに終了
 	}
+
+	InitializeEffekseer();
 
 	//画面モードのセット
 	SetGraphMode(640, 480, 16);
@@ -35,6 +40,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		// 画面を初期化する
 		ClearDrawScreen();
 
+		Effekseer_Sync3DSetting();
+
 		// シーン管理更新
 		isRun = sceneManager->UpdateScene();
 
@@ -45,9 +52,33 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	// シーンの管理クラス削除
 	delete sceneManager;
 
+	// Effekseerの終了
+	Effkseer_End();
+
 	// ＤＸライブラリの後始末
 	DxLib_End();
 
 	// ソフトの終了
 	return 0;
+}
+
+/// <summary>
+/// Effekseerの初期化
+/// </summary>
+void InitializeEffekseer()
+{
+	// DXライブラリとEffekseerの初期化処理
+	if (Effekseer_Init(8000) == -1)
+	{
+		printf("Effekseer初期化に失敗！\n");			                              // エラーが起きたら直ちに終了
+	}
+
+	//---------------------------------------------------+
+	// Effekseer関連の初期化
+	//---------------------------------------------------+
+	SetUseDirect3DVersion(DX_DIRECT3D_11);                    // DirectX11を使用
+	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
+	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+	SetUseZBuffer3D(TRUE);                                    // ZBufferを使用
+	SetWriteZBuffer3D(TRUE);                                  // ZBufferへの書き込みを許可
 }
