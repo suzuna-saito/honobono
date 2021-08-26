@@ -29,6 +29,7 @@ Sound::~Sound()
 /// < param name = "_scene"> シーン取得 </param>
 void Sound::PlayBGM()
 {
+	//再生されていなかったら再生する
 	if (CheckSoundMem(mSoundHandle) != 1)
 	{
 		PlaySoundMem(mSoundHandle, DX_PLAYTYPE_LOOP, TRUE);
@@ -42,6 +43,7 @@ void Sound::PlayBGM()
 /// < param name = "_scene"> シーン取得 </param>
 void Sound::PlaySE()
 {
+	//再生されていなかったら再生する
 	if (CheckSoundMem(mSoundHandle) != 1)
 	{
 		PlaySoundMem(mSoundHandle, DX_PLAYTYPE_BACK, TRUE);

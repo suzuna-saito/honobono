@@ -95,7 +95,9 @@ Play::~Play()
 /// <return>シーンのポインタ</return>
 SceneBase* Play::Update()
 {
+	// BGMを再生する
 	mPlayBGM1->PlayBGM();
+
 	if (CheckHitKey(KEY_INPUT_SPACE))        // ↑押したら上固定カメラ
 	{
 		
