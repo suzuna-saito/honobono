@@ -23,12 +23,9 @@ Player::Player()
 {
 	// 画像データの読み込み
 	mPHandle = MV1LoadModel("data/model/fish/player.mv1");
-	//mFishTexture = LoadGraph("data/model/fish/Fish.png");
 
 	// 画像サイズ変更
 	MV1SetScale(mPHandle, FISH_SIZE);
-
-	//MV1SetTextureGraphHandle(mPHandle, 0, mFishTexture, FALSE);
 
 	// ジャンプを生成.
 	jump = new Jump();
@@ -41,7 +38,6 @@ Player::~Player()
 {
 	// 画像データの消去
 	MV1DeleteModel(mPHandle);
-	//DeleteGraph(mFishTexture);
 }
 
 //-----------------------------------------------------------------------------

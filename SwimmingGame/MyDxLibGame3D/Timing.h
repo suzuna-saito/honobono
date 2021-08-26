@@ -36,8 +36,7 @@ public:
 	void CSVRead();
 
 protected:
-	// 現在のリアクションを返す
-//	int mIsReaction;
+	
 
 private:
 	//  フラグ

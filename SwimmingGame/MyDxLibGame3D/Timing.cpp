@@ -186,7 +186,6 @@ void Timing::Draw()
 	// パーフェクト判定の位置となるゲージの描画
 	DrawCircle(gageCX, gageCY, gageRadius, white, TRUE);
 
-	//DrawCircle(gageCX + (1 * movebutton), gageCY, gageRadius, mGageColor, TRUE);
 
 	if (mEffectFlag)
 	{
@@ -248,7 +247,7 @@ void Timing::Draw()
 void Timing ::CSVRead()
 {
 	// ファイルポインターがNULLの時デバッグをやめる
-	if (filePointer == NULL)																			//filePointerが空の場合は
+	if (filePointer == NULL)														//filePointerが空の場合は
 	{
 		DebugBreak();																//デバッグ中止
 	}

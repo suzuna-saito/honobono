@@ -187,7 +187,6 @@
     <ClCompile Include="Timing.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="UIBase.cpp" />
-    <ClCompile Include="UIGoal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -217,7 +216,6 @@
     <ClInclude Include="Timing.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="UIBase.h" />
-    <ClInclude Include="UIGoal.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

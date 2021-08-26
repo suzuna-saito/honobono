@@ -23,7 +23,6 @@ public:
 
 public:
 	int mPHandle;                   // Player画像変数
-	//int mFishTexture;                // Playerテクスチャ
 
 	VECTOR mPos;			// ポジション.
 	VECTOR mVelocity;       // 移動力

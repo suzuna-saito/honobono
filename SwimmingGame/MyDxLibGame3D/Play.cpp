@@ -1,6 +1,5 @@
 #include "Play.h"
 #include "Player.h"
-#include "UIGoal.h"
 #include "HitChecker.h"
 #include "Pool.h"
 #include "FishManager.h"
@@ -24,10 +23,6 @@ Play::Play()
 
 	// プレイヤーを生成.
 	player = new Player();
-	// UI（ゴール）の生成
-	uiGoal = new UIGoal();
-	//// UI(花火)の生成
-	//new UIFireworks();
 	// 当たり判定を生成
 	hit = new HitChecker();
 
@@ -39,8 +34,6 @@ Play::Play()
 	
 	// リズムボタンUI生成
 	timing = new Timing();
-
-	//sound = new Sound();
 
 	// 背景の生成
 	backGround = new BackGround();
@@ -74,9 +67,6 @@ Play::~Play()
 	delete timing;
 	// 当たり判定の削除
 	delete(hit);
-	// UIの削除
-	delete(uiGoal);
-	//delete(uiFire);
 	// プレイヤーを削除.
 	delete(player);
 	// 背景の削除
@@ -149,15 +139,15 @@ SceneBase* Play::Update()
 void Play::Draw()
 {
 	// 背景の生成
-	//backGround->Draw();
-	// プール描画
-	pool->Draw();
+	backGround->Draw();
 	// 魚描画
 	fishManager->Draw();
-	// リズムボタンUI描画
-	timing->Draw();
 	// プレイヤー描画.
 	player->Draw();
+	// プール描画
+	pool->Draw();
+	// リズムボタンUI描画
+	timing->Draw();
 
 	
 	//それぞれの位置が分かりやすくなるように一本の線を表示（デバック用）

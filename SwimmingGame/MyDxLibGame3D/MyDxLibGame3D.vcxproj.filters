@@ -46,9 +46,6 @@
     <ClCompile Include="UIBase.cpp">
       <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
-    <ClCompile Include="UIGoal.cpp">
-      <Filter>ソース ファイル\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Fade.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
@@ -115,9 +112,6 @@
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="UIBase.h">
-      <Filter>ソース ファイル\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UIGoal.h">
       <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
     <ClInclude Include="Fade.h">
