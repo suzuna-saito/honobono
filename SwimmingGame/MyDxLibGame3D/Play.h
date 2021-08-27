@@ -14,6 +14,7 @@ class Result;
 class BackGround;
 class Time;
 class Sound;
+class Score;
 
 /// <summary>
 /// プレイシーンの生成、描画
@@ -42,6 +43,10 @@ private:
 
     // スコアを保持する変数
     int mScore;
+    // スコアの割合ポイントを持つ変数
+    int mScoreRadius;
+    // スコアフラグ
+    bool mScoreFlag;
 
     // 魚(モブ)
     FishManager* fishManager =  nullptr ;
@@ -73,5 +78,4 @@ private:
     Sound* mWaterInSound;
     // シンクロでちゃぷちゃぷする音
     Sound* mWaterOutSound;
-
 };

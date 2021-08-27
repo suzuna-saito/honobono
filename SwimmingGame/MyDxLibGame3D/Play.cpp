@@ -8,11 +8,14 @@
 #include "Result.h"
 #include "BackGround.h"
 #include "Sound.h"
+#include "Score.h"
 
 // コンストラクタ
 Play::Play()
 	:startCount(0)
 	, mScore(0)
+	, mScoreRadius(0)
+	, mScoreFlag(false)
 	, mPlayBGM1(nullptr)
 	, mPlayBGM2(nullptr)
 	, mPlayBGM3(nullptr)
@@ -89,17 +92,17 @@ SceneBase* Play::Update()
 	mPlayBGM1->PlayBGM();
 	if (!mPlayBGM1->CheckBGM()) 
 	{
-		mScore = timing->GetScore()->GetResult();
-
-		return new Result(mScore);
+		// リザルトにスコアを渡す
+		mScore = SceneBase::mScore->GetResult();
+		return new Result(&mScore);
 	}
 
 	// シーン遷移条件(デバック用：右シフトキーを押すと遷移)
 	if (CheckHitKey(KEY_INPUT_RSHIFT))
 	{
-		mScore = timing->GetScore()->GetResult();
-
-		return new Result(mScore);
+		// リザルトにスコアを渡す
+		mScore = SceneBase::mScore->GetResult();
+		return new Result(&mScore);
 	}
 
 	time->Update();
@@ -119,6 +122,15 @@ SceneBase* Play::Update()
 
 	// リズムボタンUI更新
 	timing->Update();
+	// スコアの割合をもらってくる
+	mScoreRadius = timing->GetRadius();
+	// スコアのフラグをもらう
+	mScoreFlag = timing->GetScoreFlag();
+
+	// スコアにフラグを渡す
+	SceneBase::mScore->SetScoreFlag(&mScoreFlag);
+	// スコアに割合を渡す
+	SceneBase::mScore->SetRadiusScore(&mScoreRadius);
 
 	// プレイヤー制御.
 	player->Update();
@@ -149,6 +161,7 @@ void Play::Draw()
 	// リズムボタンUI描画
 	timing->Draw();
 
+	SceneBase::mScore->Draw();
 	
 	//それぞれの位置が分かりやすくなるように一本の線を表示（デバック用）
 	int redColor = GetColor(255, 0, 0);				//真ん中の色

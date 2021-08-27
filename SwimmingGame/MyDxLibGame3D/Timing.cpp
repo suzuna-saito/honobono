@@ -2,7 +2,6 @@
 #include "Timing.h"
 #include "Input.h"
 #include "Sound.h"
-#include "Score.h"
 
 // コンストラクタ
 Timing::Timing()
@@ -42,6 +41,7 @@ Timing::Timing()
 	, mAngleRotate(15.0f * DX_PI_F / 180.0f)
 	, mScalePlus(0.02)
 	, mEffectImg(-1)
+	, mScoreRadius(0)
 {
 	// 画像読み込み
 	freamImg = LoadGraph("data/newUI/frame.png");
@@ -65,8 +65,6 @@ Timing::Timing()
 	mPerfectSound = new Sound("data/newSound/se/perfect.mp3");
 	mGoodSound = new Sound("data/newSound/se/good.mp3");
 	mBadSound = new Sound("data/newSound/se/bad.mp3");	
-
-	mScorePtr = new Score();
 }
 
 // デストラクタ
@@ -90,6 +88,9 @@ Timing::~Timing()
 void Timing::Update()
 {
 	UpdateKey();
+
+	// スコアに渡して戻ってきたらfalse
+	ScoreFlag = false;
 
 	// スペースキーを押したらタイミングフラグが「真」となる
 	if (Key[KEY_INPUT_SPACE] == 1)
@@ -137,22 +138,15 @@ void Timing::Update()
 		// リアクションカウントが最大値ではないとき
 		if (!(reactionCount < reactionCountMax))
 		{
-			// スコアの計算
-			// 半径の最大値から現在の半径を差を出し、その差にスコアくらいの数字を掛ける
-			int n = 0;
-			n = radiusInit - radius;
-			scoreMax = n * 10;
-			mScore = scoreMax + mScore;
-	
-			if (ScoreFlag)
-			{
-				int n;
-				n = radiusInit - radius;
-				mScorePtr->GetScore(&n);
-				ScoreFlag = false;
-			}
 			// それ以外の場合はタイミングフラグを「偽」とする
 			TimingFlag = false;
+		}
+		// スコアの計算
+			// 半径の最大値から現在の半径を差を出し、その差にスコアくらいの数字を掛ける
+		if (ScoreFlag)
+		{
+			// スコアに渡す割合を保持してもらう
+			mScoreRadius = radiusInit - radius;
 		}
 	}
 	// タイミングフラグが「偽」であるとき
@@ -237,8 +231,6 @@ void Timing::Draw()
 	{
 		// ゲージを表示しない
 	}
-
-	mScorePtr->Draw();
 
 	// スコアの画面を表示する
 	DrawFormatString(scoreX, scoreY, white, "score : %d", mScore);

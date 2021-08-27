@@ -1,8 +1,6 @@
 #pragma once
 #include "DxLib.h"
 
-class Score;
-
 /// <summary>
 /// タイミングゲージのクラス
 /// </summary>
@@ -28,7 +26,8 @@ public:
 	/// </summary>
 	void Draw();
 
-	Score* GetScore() { return mScorePtr; }
+	int GetRadius() { return mScoreRadius; }
+	bool GetScoreFlag() { return ScoreFlag; }
 
 	/// <summary>
 	/// CSVデータの読み込み
@@ -117,6 +116,7 @@ private:
 	// スコアを借入れする変数
 	int scoreMax;
 
+	int mScoreRadius;
 	int mEffectImg;       
 	int mPerfectEffectImg;
 	int mGoodEffectImg;   
@@ -141,9 +141,6 @@ private:
 	FILE* filePointer;
 	// データを格納
 	int csvData;
-
-
-	class Score* mScorePtr;
 
 	//  サウンド
 	// パーフェクトの時になる効果音

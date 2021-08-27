@@ -2,11 +2,12 @@
 #include "Title.h"
 #include "Camera.h"
 #include "Sound.h"
+#include "Score.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Result::Result(int _Score)
+Result::Result(int* _Score)
 	: i(0)
 	, mAlpha(0)
 	, mTextAlpha(0)
@@ -93,13 +94,11 @@ Result::Result(int _Score)
 	mCancelSE = new Sound("data/newSound/se/cancelSE.mp3");
 
 	// スコアをもらう＆描画用スコア計算
-	mTmpScore = _Score;
-	mRunkScore = _Score;
-	for (i = DIGIT_NUM - 1; i > 0; i--)
-	{
-		mScore[i] = mTmpScore % 10;
-		mTmpScore = (mTmpScore - (mTmpScore % 10)) / 10;
-	}
+	mRunkScore = *_Score;
+	// スコアにプレイ時のスコアを渡す
+	SceneBase::mScore->SetResultScore(_Score);
+	// スコアをリザルトの位置にセットし直す
+	SceneBase::mScore->SetResultPosition();
 }
 
 /// <summary>
@@ -224,13 +223,8 @@ void Result::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mTextAlpha);
 
 	// スコアを描画
-	SetFontSize(SCORE_FONT_SIZE);
-	DrawString(mScorePosX, mScorePosY, "SCORE:", mColor);
-	for (i = 0; i < DIGIT_NUM; i++)
-	{
-		DrawFormatString(NUM_POS + NUM_SPACE * i, mScorePosY, mColor, "%d", mScore[i]);
-	}
-
+	SceneBase::mScore->Draw();
+	// ランク決定
 	Runk();
 }
 

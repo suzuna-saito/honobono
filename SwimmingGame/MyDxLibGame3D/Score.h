@@ -15,8 +15,15 @@ public:
 	// スコアの計算
 	void Update();
 
+	// リザルト時のスコアの位置
+	void SetResultPosition();
+
 	// スコアの割合をもらう
-	void GetScore(int* _BaseScore);
+	void SetRadiusScore(int* _BaseScore);
+	// スコアフラグをもらう
+	void SetScoreFlag(bool* _ScoreFlag);
+	// プレイ時のスコアをもらう
+	void SetResultScore(int* _Score);
 
 	// リザルトにスコアを渡す
 	int GetResult() { return mScore; }
@@ -24,7 +31,7 @@ public:
 protected:
 
 	// 計算用
-	int i;
+	int i, j;
 	int tmp;
 
 	// 文字色
@@ -34,6 +41,12 @@ protected:
 	int mTmpScore;                       // 計算用
 	int mS[5];                           // 描画用スコア
 	int mScore;                          // スコア
+
+	int mScoreHandle;                    // スコアの文字画像
+	int mNumberHandle[10];               // 数字の画像
+	int NUMBER_NUM;                      // 数字の数
+
+	bool mScoreFlag;                     // スコアフラグ
 	
 	int FONT_SIZE;                       // 文字サイズ
 
