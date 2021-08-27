@@ -21,9 +21,8 @@ public:
 	void Update();			// 更新関数
 	void Draw();			// 描画関数
 
-private:
+public:
 	int mPHandle;                   // Player画像変数
-	int mFishTexture;                // Playerテクスチャ
 
 	VECTOR mPos;			// ポジション.
 	VECTOR mVelocity;       // 移動力

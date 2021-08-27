@@ -8,24 +8,24 @@
 #include "Input.h"
 #include "Jump.h"
 
+//定数
+const VECTOR BEFORE_DIVING_POS = VGet(0.0f, 23.0f, -20.0f);
+
 //-----------------------------------------------------------------------------
 // @brief  コンストラクタ.
 //-----------------------------------------------------------------------------
 Player::Player()
 	: mPHandle(-1)
 	, FISH_ROTATE(VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f))
-	, mPos(VGet(7.0f, 20.0f, -26.0f))
+	, mPos(BEFORE_DIVING_POS)
 	, mVelocity(VGet(0.0f, 0.0f, 0.0f))
 	, mAdvance(0.05f)
 {
 	// 画像データの読み込み
-	mPHandle = MV1LoadModel("data/model/fish/fish.mqo");
-	mFishTexture = LoadGraph("data/model/fish/Fish.png");
+	mPHandle = MV1LoadModel("data/model/fish/player.mv1");
 
 	// 画像サイズ変更
 	MV1SetScale(mPHandle, FISH_SIZE);
-
-	MV1SetTextureGraphHandle(mPHandle, 0, mFishTexture, FALSE);
 
 	// ジャンプを生成.
 	jump = new Jump();
@@ -38,7 +38,6 @@ Player::~Player()
 {
 	// 画像データの消去
 	MV1DeleteModel(mPHandle);
-	DeleteGraph(mFishTexture);
 }
 
 //-----------------------------------------------------------------------------
@@ -66,7 +65,6 @@ void Player::Update()
 		mVelocity = VGet(0.0f, 0.0f, mAdvance);
 		mPos = VAdd(mPos, mVelocity);
 	}
-
 }
 
 //-----------------------------------------------------------------------------

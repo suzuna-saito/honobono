@@ -1,6 +1,8 @@
 #pragma once
 #include "DxLib.h"
 
+class Score;
+
 /// <summary>
 /// タイミングゲージのクラス
 /// </summary>
@@ -26,19 +28,20 @@ public:
 	/// </summary>
 	void Draw();
 
+	Score* GetScore() { return mScorePtr; }
+
 	/// <summary>
 	/// CSVデータの読み込み
 	/// </summary>
 	void CSVRead();
 
+	void fps();
+
 protected:
-	// 現在のリアクションを返す
-//	int mIsReaction;
+	
 
 private:
 	//  フラグ
-	// タイミングゲージが収縮するフラグ管理
-	bool TimingShrinkFlag;
 	// タイミングゲージのクリック出来るかのフラグ管理
 	bool TimingFlag;
 	
@@ -65,12 +68,11 @@ private:
 	// 半径の初期化
 	int radiusInit;
 
-	//  
+	//  色
 	// 黒色
 	int	brack;
 	// 白色
 	int white;
-	
 
 	//  リアクション
 	// リアクションが描画される位置にあるフレームの画像
@@ -102,20 +104,35 @@ private:
 	int reactionCountMax;
 	// カウントを初期化
 	int countInit;
-	
-
+	int count = 0;
 
 	//  スコア
-	// 現在のスコア
-	int score;
-	// スコアを借入れする変数
-	int scoreMax;
 	// Score処理フラグ
 	bool ScoreFlag;
-	// スコアを描画する座標X
-	int scoreX;
-	// スコアを描画する座標Y
-	int scoreY;
+	// 
+	class Score* mScorePtr;
+
+
+	//  エフェクト
+	// エフェクト画像
+	int mEffectImg;       
+	// パーフェクトエフェクト画像
+	int mPerfectEffectImg;
+	// グッドエフェクト画像
+	int mGoodEffectImg;   
+	// バッドエフェクト画像
+	int mBadEffectImg;    
+	// エフェクトの大きさ
+	double mEffectScale;  
+	// エフェクトのアングル
+	double mEffectAngle;  
+	// エフェクトがだんだん大きくなる時にプラスする値
+	double mScalePlus;    
+	// エフェクトが開店する時にプラスする値
+	double mAngleRotate;  
+	// エフェクトを発生させるフラグ
+	bool mEffectFlag;
+
 
 	//  CSV
 	// CSVファイルを格納

@@ -1,34 +1,25 @@
-#pragma once
-#include "DxLib.h"
+#ifndef _FISH_H_
+#define _FISH_H_
 
-class Jump;
+#include "DxLib.h"
+#include"FishBase.h"
 
 /// <summary>
-/// Playerクラス
+/// 魚一匹分のクラス
 /// </summary>
-class Fish
+class Fish :public FishBase
 {
 public:
-	// コンストラクタ
-	Fish();
-	// デストラクタ
-	virtual ~Fish();
+	Fish(int _sourceModelHandle,
+		VECTOR _pos, VECTOR _rotate, VECTOR _dancePos);		// コンストラクタ
+	virtual ~Fish();										// デストラクタ
 
-	// 更新関数
-	void Update();
-	// 描画関数
-	void Draw();
+	void Updata();											// 更新関数
+
+	//アーティスティックスイミング開始時のセットポジション
+	void SetDancePos(const VECTOR _setPos);
 
 private:
-
-	int mMHandle;                   // Mob画像変数 
-	int MobFishTexture;             // Mobテクスチャ
-
-	VECTOR mMobPos[11];             // Mobの座標
-
-	const VECTOR FISH_MOB_ROTATE[11];    // Mobの回転角度
-	const int FISH_MOB_NUM;                  // 魚の数
-
-	 // ジャンプ
-	Jump* jump;
 };
+
+#endif // !_FISH_H_

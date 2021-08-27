@@ -1,9 +1,8 @@
 #include "Play.h"
 #include "Player.h"
-#include "UIGoal.h"
 #include "HitChecker.h"
 #include "Pool.h"
-#include "Fish.h"
+#include "FishManager.h"
 #include "Timing.h"
 #include "Camera.h"
 #include "Result.h"
@@ -13,6 +12,7 @@
 // コンストラクタ
 Play::Play()
 	:startCount(0)
+	, mScore(0)
 	, mPlayBGM1(nullptr)
 	, mPlayBGM2(nullptr)
 	, mPlayBGM3(nullptr)
@@ -23,70 +23,64 @@ Play::Play()
 
 	// プレイヤーを生成.
 	player = new Player();
-	// UI（ゴール）の生成
-	uiGoal = new UIGoal();
-	//// UI(花火)の生成
-	//new UIFireworks();
 	// 当たり判定を生成
 	hit = new HitChecker();
 
 	// プール生成
 	pool = new Pool();
 
-	// NPC分
-	for (int i = 0; i < 11;i++)
-	{
-		// 魚生成
-		fish = new Fish();
-	}
+	// 魚生成
+	fishManager = new FishManager();
 	
 	// リズムボタンUI生成
 	timing = new Timing();
 
-	//sound = new Sound();
-
 	// 背景の生成
 	backGround = new BackGround();
 	// 時間の生成
-	time = new Time();
-
+	mtime = new Time();
+	// カメラの生成
 	camera = new Camera();
 
 	camera->FixedCameraRightUpdate();
+	fishManager->CreatFish();
 
-	mPlayBGM1 = new Sound("data/newSound/bgm/bgm_1.mp3");
+	// サウンドのロード
+	mPlayBGM1 = new Sound("data/newSound/bgm/bgm_1.wav");
 	mPlayBGM2 = new Sound("data/newSound/bgm/bgm_2.mp3");
 	mPlayBGM3 = new Sound("data/newSound/bgm/bgm_3.mp3");
-
 	mWaterInSound = new Sound("data/newSound/se/in.mp3");
 	mWaterOutSound = new Sound("data/newSound/se/out.mp3");
+
+	// BGMを再生させる
+	mPlayBGM1->PlayBackBGM();
 }
 
 // デストラクタ
 Play::~Play()
 {
+	//魚たちの配列の削除
+	fishManager->DestroyFish();
+
+	// 魚削除
+	delete fishManager;
 	// プール削除
 	delete pool;
-	// 魚削除
-	delete fish;
 	// リズムボタンUI削除
 	delete timing;
 	// 当たり判定の削除
 	delete(hit);
-	// UIの削除
-	delete(uiGoal);
-	//delete(uiFire);
 	// プレイヤーを削除.
 	delete(player);
 	// 背景の削除
 	delete(backGround);
+	// サウンドの削除
 	mPlayBGM1->StopMusic();
 	mPlayBGM2->StopMusic();
 	mPlayBGM3->StopMusic();
 	delete mPlayBGM1;
 	delete mPlayBGM2;
 	delete mPlayBGM3;
-
 	delete mWaterInSound;
 	delete mWaterOutSound;
 }
@@ -95,24 +89,28 @@ Play::~Play()
 /// <return>シーンのポインタ</return>
 SceneBase* Play::Update()
 {
-	// BGMを再生する
-	mPlayBGM1->PlayBGM();
-
-	if (CheckHitKey(KEY_INPUT_SPACE))        // ↑押したら上固定カメラ
+	
+	
+	if (!mPlayBGM1->CheckBGM()) 
 	{
-		
+		mScore = timing->GetScore()->GetResult();
+		mPlayBGM1->StopMusic();
+		return new Result(mScore);
 	}
+	
+	
 
 	// シーン遷移条件(デバック用：右シフトキーを押すと遷移)
 	if (CheckHitKey(KEY_INPUT_RSHIFT))
 	{
-		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-		return new Result();
+		mScore = timing->GetScore()->GetResult();
+		mPlayBGM1->StopMusic();
+		return new Result(mScore);
 	}
+	
+	mtime->Update();
 
-	time->Update();
-
-	camera->DivingCameraUpdate(*time);
+	camera->DivingCameraUpdate(*mtime);
 	camera->CameraSet();
 
 	// カメラの更新（デバック用）
@@ -125,8 +123,7 @@ SceneBase* Play::Update()
 		camera->FixedCameraRightUpdate();
 	}
 
-	// リズムボタンUI更新
-	timing->Update();
+	
 
 	// プレイヤー制御.
 	player->Update();
@@ -136,8 +133,11 @@ SceneBase* Play::Update()
 	if (startCount >= 60)
 	{
 		// 魚の制御
-		fish->Update();
+		fishManager->Updata();
+		// リズムボタンUI更新
+		timing->Update();
 	}
+	
 	
 	// シーンが変更されていなかったら自分のポインタを返す
 	return this;
@@ -148,16 +148,32 @@ void Play::Draw()
 {
 	// 背景の生成
 	backGround->Draw();
-	// プール描画
-	pool->Draw();
 	// 魚描画
-	fish->Draw();
-	// リズムボタンUI描画
-	timing->Draw();
+	fishManager->Draw();
 	// プレイヤー描画.
 	player->Draw();
+	// プール描画
+	pool->Draw();
+	// リズムボタンUI描画
+	timing->Draw();
 
 
-	// 真ん中の位置が分かりやすくなるように一本の線を表示（デバック用）
-	DrawLine3D(VGet(0.0f, -25.0f, 0.0f), VGet(0.0f, 25.0f, 0.0f), GetColor(255, 0, 0));
+
+	//それぞれの位置が分かりやすくなるように一本の線を表示（デバック用）
+	int redColor = GetColor(255, 0, 0);				//真ん中の色
+	int greenColor = GetColor(0, 255, 0);			//左上の色
+	int yellowColor = GetColor(255, 255, 0);		//左下の色
+	int purpleColor = GetColor(128, 0, 128);		//右上の色
+	int lightBlueColor = GetColor(0, 255, 255);		//右下の色
+
+	//プールの真ん中
+	DrawLine3D(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, 15.0f, 0.0f), redColor);
+	//プールの左上端
+	DrawLine3D(VGet(-15.0f, 0.0f, 25.0f), VGet(-15.0f, 15.0f, 25.0f), greenColor);
+	//プールの左下端
+	DrawLine3D(VGet(-15.0f, 0.0f, -25.0f), VGet(-15.0f, 15.0f, -25.0f), yellowColor);
+	//プールの右上端
+	DrawLine3D(VGet(15.0f, 0.0f, 25.0f), VGet(15.0f, 15.0f, 25.0f), purpleColor);
+	//プールの右下端
+	DrawLine3D(VGet(15.0f, 0.0f, -25.0f), VGet(15.0f, 15.0f, -25.0f), lightBlueColor);
 }

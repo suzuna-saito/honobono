@@ -33,6 +33,8 @@ public:
 		title,
 		// ゲームプレイ
 		play,
+		// アーティスティックスイミング時
+		DanceGame,
 		// ゲームクリア
 		gameClear,
 		// ゲームオーバー
