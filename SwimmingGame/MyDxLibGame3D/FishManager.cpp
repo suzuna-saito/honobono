@@ -34,22 +34,22 @@
 /*
 * 上方向キーを押した時の視点での
 * 飛び込み前の魚たちの位置と配列
-*				4,3,2
+*				5,4,3
 *	-----------------------------
 *	|							|
 *	|							|
 *	|							|
 *	|							|
-* 5 |							|10
-* 6 |							|9
-* 7 |							|8
+* 6 |							|11
+* 7 |							|10
+* 8 |							|9
 *	|							|
 *	|							|
 *	|							|
 *	|							|
 *	|							|
 *	-----------------------------
-*			0,player,1
+*			0,player,2
 */
 
 
@@ -58,7 +58,9 @@
 /// </summary>
 FishManager::FishManager()
 	:mSourceModelHandle(-1)
+	, mPlayerModelHandle(-1)
 	, BEFORE_DIVING_POS{ VGet(-5.0f,18.0f,-22.0f)   //1
+						,VGet(0.0f, 23.0f, -20.0f)  //プレイヤー
 						,VGet(5.0f,11.0f,-22.0f)	//2
 						,VGet(5.0f,18.0f,22.0f)		//3
 						,VGet(0.0f,23.0f,20.0f)		//4
@@ -70,6 +72,7 @@ FishManager::FishManager()
 						,VGet(10.0f,23.0f,0.0f)	    //10
 						,VGet(12.0f,11.0f,5.0f) }	//11
 	, BEFORE_DIVING_ROTATE{	VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f)    //1
+							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //プレイヤー
 							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //2
 							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //3
 							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //4
@@ -84,7 +87,7 @@ FishManager::FishManager()
 						,VGet(0.0f,0.0f,5.0f),VGet(7.5f,0.0f,12.5f),VGet(-7.5f,0.0f,-12.5f)		//[2]、[3]、[4]
 						,VGet(-5.0f,0.0f,-10.0f),VGet(-7.5f,0.0f,10.0f),VGet(-7.5f,0.0f,-10.0f)	//[5]、[6]、[7]
 						,VGet(7.5f,0.0f,10.0f),VGet(-7.5f,0.0f,-10.0f),VGet(5.0f,0.0f,0.0f) }	//[8]、[9]、[10]
-	,DEBUG_SPHERE_COLOR{ whiteColor ,yellowColor ,lightBlueColor ,yellowGreenColor ,
+	,DEBUG_SPHERE_COLOR{ whiteColor ,0 ,yellowColor ,lightBlueColor ,yellowGreenColor ,
 							orangeColor ,redColor ,greenColor ,purpleColor ,brownColor ,
 								blueColor ,pinkColor }
 {
@@ -106,13 +109,26 @@ FishManager::~FishManager()
 /// </summary>
 void FishManager::CreatFish()
 {
+	// モブ
 	mSourceModelHandle = MV1LoadModel("data/model/fish/npc.mv1");
+	// プレイヤー
+	mPlayerModelHandle = MV1LoadModel("data/model/fish/player.mv1");
+	
 
 	for (int i = 0; i < FISH_NUM; i++)
 	{
-		//魚たちの生成
-		mFish[i] = new Fish(mSourceModelHandle,
-			BEFORE_DIVING_POS[i], BEFORE_DIVING_ROTATE[i], SET_DANCING_POS[i]);
+		if (i == 1)
+		{
+			// プレイヤーの作成
+			mFish[i] = new Fish(mPlayerModelHandle,
+				BEFORE_DIVING_POS[i], BEFORE_DIVING_ROTATE[i], SET_DANCING_POS[i]);
+		}
+		else
+		{
+			//魚たちの生成
+			mFish[i] = new Fish(mSourceModelHandle,
+				BEFORE_DIVING_POS[i], BEFORE_DIVING_ROTATE[i], SET_DANCING_POS[i]);
+		}
 	}
 
 }
@@ -128,6 +144,7 @@ void FishManager::DestroyFish()
 		mFish[i] = NULL;
 	}
 
+	MV1DeleteModel(mPlayerModelHandle);
 	MV1DeleteModel(mSourceModelHandle);
 }
 

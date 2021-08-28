@@ -1,5 +1,6 @@
 #include "Fish.h"
 #include "Common.h"
+#include "NpcJump.h"
 
 /// <summary>
 /// コンストラクタ
@@ -11,6 +12,8 @@ Fish::Fish(int _sourceModelHandle,
 	mPos = _pos;
 	mRotate = _rotate;
 	mSetDancePos = _dancePos;
+
+	mNpcJump = new NpcJump();
 }
 
 /// <summary>
@@ -26,6 +29,22 @@ Fish::~Fish()
 /// </summary>
 void Fish::Updata()
 {
+	if (mNpcJump->GetGroundNpc())
+	{
+		mNpcJump->SetJumpNpc(true);
+	}
+
+	// １回目、２回目、飛び込みいずれかのフラグがtrueだったら
+	if (mNpcJump->GetFirstNpc() || mNpcJump->GetSecondNpc() || mNpcJump->GetThirdNpc())
+	{
+		// ジャンプの更新をする
+		mNpcJump->NpcJumpUpdate(GetPos(), GetRotate());
+
+		// ポジションをセット
+		SetPos(mNpcJump->GetPosNpc());
+	}
+
+
 }
 
 /// <summary>

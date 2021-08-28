@@ -1,5 +1,4 @@
 #include "Play.h"
-#include "Player.h"
 #include "HitChecker.h"
 #include "Pool.h"
 #include "FishManager.h"
@@ -24,8 +23,6 @@ Play::Play()
 {
 	SetScene(play);
 
-	// プレイヤーを生成.
-	player = new Player();
 	// 当たり判定を生成
 	hit = new HitChecker();
 
@@ -70,8 +67,6 @@ Play::~Play()
 	delete timing;
 	// 当たり判定の削除
 	delete(hit);
-	// プレイヤーを削除.
-	delete(player);
 	// 背景の削除
 	delete(backGround);
 	mPlayBGM1->StopMusic();
@@ -132,8 +127,6 @@ SceneBase* Play::Update()
 	// スコアに割合を渡す
 	SceneBase::mScore->SetRadiusScore(&mScoreRadius);
 
-	// プレイヤー制御.
-	player->Update();
 
 	startCount++;
 
@@ -151,11 +144,9 @@ SceneBase* Play::Update()
 void Play::Draw()
 {
 	// 背景の生成
-	backGround->Draw();
+	//backGround->Draw();
 	// 魚描画
 	fishManager->Draw();
-	// プレイヤー描画.
-	player->Draw();
 	// プール描画
 	pool->Draw();
 	// リズムボタンUI描画

@@ -6,7 +6,6 @@ class FishManager;
 class Pool;
 class Timing;
 class BackGround;
-class Player;
 class UIGoal;
 class HitChecker;
 class Camera;
@@ -54,8 +53,6 @@ private:
     Pool* pool = nullptr;
     // リズムボタン
     Timing* timing = nullptr;
-    // 魚(プレイヤー)
-	Player* player;
 	// UI（ゴール
 	UIGoal* uiGoal;
 	// 当たり判定
