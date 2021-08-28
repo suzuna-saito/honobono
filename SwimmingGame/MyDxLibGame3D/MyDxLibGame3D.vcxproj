@@ -172,7 +172,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NpcJump.cpp" />
     <ClCompile Include="Play.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Pool.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="SceneBase.cpp">
@@ -202,7 +201,6 @@
     <ClInclude Include="Jump.h" />
     <ClInclude Include="NpcJump.h" />
     <ClInclude Include="Play.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Pool.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="SceneBase.h">
