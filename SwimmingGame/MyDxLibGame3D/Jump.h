@@ -2,7 +2,7 @@
 #include "DxLib.h"
 
 /// <summary>
-/// ジャンプ関係
+/// 飛び込みジャンプ
 /// </summary>
 class Jump
 {
@@ -10,30 +10,33 @@ public:
 	Jump();        // コンストラクタ
 	~Jump();       // デストラクタ
 
-	// プレイヤー関連 ------------------------------------------
 	/// <summary>
 	/// ジャンプ更新処理
 	/// </summary>
 	/// <param name="_pos">飛ぶオブジェクトのポジション</param>
-	void JumpUpdate(VECTOR _pos);
+	/// <param name="_rotate">飛ぶオブジェクトの向き</param>
+	void JumpUpdate(VECTOR _pos, VECTOR _rotate);
 
 private:
-	const float mGravity;   // 重力
+	const float mGravity;// 重力
 
-	float mInitPos;         // そのオブジェクトの初期位置
+	VECTOR mPos;         // ポジション
+	VECTOR mVelocity;    // 移動力.
 
-	VECTOR mPos;            // ポジション
-	VECTOR mVelocity;		// 移動力.
+	VECTOR mAdd;         // 加算値
+	VECTOR mSub;         // 減算値
 
-	float mJumpMax;         // y軸の最大値
+	float mJumpMax;      // y軸の最大値
 
-	bool mFirstJump;        // 1回目のジャンプをするか
-	bool mSecondJump;       // 2回目のジャンプをするか
-	bool mThirdJump;        // 飛び込みのジャンプをするか
+	bool mFirstJump;     // 1回目のジャンプをするか
+	bool mSecondJump;    // 2回目のジャンプをするか
+	bool mThirdJump;     // 飛び込みのジャンプをするか
 
-	bool mJumpUpNow;        // ジャンプアップしている
+	bool mJumpUpNow;     // ジャンプアップしている
 
-	bool mIsGround;         // 地面との接地判定
+	bool mIsGround;      // 地面との接地判定
+
+	VECTOR mInitPos;     // 初期位置
 
 	/// <summary>
 	/// ジャンプアップ処理
@@ -52,6 +55,9 @@ public:    // ゲッター、セッター
 
 	// ジャンプ中かどうかのフラグをセットする
 	void SetJump(bool _jump) { mJumpUpNow = _jump; }
+	// 地面と接地しているかどうか
+	bool GetGround() { return mIsGround; }
+
 
 	// ポジションをセット
 	void SetPos(VECTOR _pos) { mPos = _pos; }
@@ -65,6 +71,5 @@ public:    // ゲッター、セッター
 	// 3回目のジャンプフラグをゲット
 	bool GetThird() { return mThirdJump; }
 
-	// 接地判定をゲット
-	bool GetGround() { return mIsGround; }
 };
+

@@ -10,8 +10,7 @@
 
 // コンストラクタ
 Play::Play()
-	:startCount(0)
-	, mScore(0)
+	: mScore(0)
 	, mPlayBGM1(nullptr)
 	, mPlayBGM2(nullptr)
 	, mPlayBGM3(nullptr)
@@ -115,14 +114,8 @@ SceneBase* Play::Update()
 	// リズムボタンUI更新
 	timing->Update();
 
-
-	startCount++;
-
-	if (startCount >= 60)
-	{
-		// 魚の制御
-		fishManager->Updata();
-	}
+	// 魚の制御
+	fishManager->Updata();
 	
 	// シーンが変更されていなかったら自分のポインタを返す
 	return this;

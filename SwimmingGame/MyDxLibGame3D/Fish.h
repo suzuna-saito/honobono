@@ -4,7 +4,8 @@
 #include "DxLib.h"
 #include"FishBase.h"
 
-class NpcJump;
+class Jump;
+class Timing;
 
 /// <summary>
 /// 魚一匹分のクラス
@@ -21,7 +22,9 @@ public:
 	//アーティスティックスイミング開始時のセットポジション
 	void SetDancePos(const VECTOR _setPos);
 
-	NpcJump* mNpcJump;
+	Jump* mJump;
+
+	Timing* mTiming;
 
 private:
 };

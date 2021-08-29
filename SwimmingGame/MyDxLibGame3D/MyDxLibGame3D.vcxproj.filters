@@ -97,9 +97,6 @@
     <ClCompile Include="Score.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="NpcJump.cpp">
-      <Filter>ソース ファイル\Jump</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -164,9 +161,6 @@
     </ClInclude>
     <ClInclude Include="Score.h">
       <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="NpcJump.h">
-      <Filter>ソース ファイル\Jump</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

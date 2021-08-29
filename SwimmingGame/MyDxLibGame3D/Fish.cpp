@@ -1,6 +1,8 @@
 #include "Fish.h"
 #include "Common.h"
-#include "NpcJump.h"
+#include "Jump.h"
+#include "Input.h"
+#include "Timing.h"
 
 /// <summary>
 /// コンストラクタ
@@ -13,7 +15,9 @@ Fish::Fish(int _sourceModelHandle,
 	mRotate = _rotate;
 	mSetDancePos = _dancePos;
 
-	mNpcJump = new NpcJump();
+	mJump = new Jump();
+
+	mTiming = new Timing();
 }
 
 /// <summary>
@@ -29,22 +33,29 @@ Fish::~Fish()
 /// </summary>
 void Fish::Updata()
 {
-	if (mNpcJump->GetGroundNpc())
+	// １回目、２回目、飛び込みいずれかのフラグがtrueだったら(終わっていない状態だったら)
+	if (mJump->GetFirst() || mJump->GetSecond() || mJump->GetThird())
 	{
-		mNpcJump->SetJumpNpc(true);
-	}
+		// ボタンが押されたらジャンプする
+		// またはtimingゲージが縮小し終わったら勝手にジャンプする（ってしたい）
+		if ((Key[KEY_INPUT_SPACE] == 1 && mJump->GetGround())/*||
+			(mTiming->GetRadius() <= 1 && mJump->GetGround())*/)
+		{
+			// ジャンプ中かどうかのフラグをtrueにする
+			mJump->SetJump(true);
+		}
 
-	// １回目、２回目、飛び込みいずれかのフラグがtrueだったら
-	if (mNpcJump->GetFirstNpc() || mNpcJump->GetSecondNpc() || mNpcJump->GetThirdNpc())
-	{
 		// ジャンプの更新をする
-		mNpcJump->NpcJumpUpdate(GetPos(), GetRotate());
-
-		// ポジションをセット
-		SetPos(mNpcJump->GetPosNpc());
+		mJump->JumpUpdate(mPos, mRotate);
+		// ポジションの更新
+		mPos = mJump->GetPos();
 	}
-
-
+	///* 全てのジャンプが終わったらプレイヤーが0の所に行くまで直進させる
+	//else if (mPos.z <= 0.0f)
+	//{
+	//	mVelocity = VGet(0.0f, 0.0f, 0.2f);
+	//	mPos = VAdd(mPos, mVelocity);
+	//}*/
 }
 
 /// <summary>

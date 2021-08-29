@@ -152,5 +152,9 @@ private:
 	class Sound* mGoodSound;
 	// バッドの時になる効果音
 	class Sound* mBadSound;
+
+public:
+	// timingゲージのゲッター
+	int GetRadius() { return radius; }
 };
 
