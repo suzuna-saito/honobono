@@ -15,6 +15,10 @@ Fish::Fish(int _sourceModelHandle,
 	mRotate = _rotate;
 	mSetDancePos = _dancePos;
 
+	mVelocity = VGet(0.0f, 0.0f, 0.0f);
+
+	mJumpFlag = false;
+
 	mJump = new Jump();
 
 	mTiming = new Timing();
@@ -33,29 +37,45 @@ Fish::~Fish()
 /// </summary>
 void Fish::Updata()
 {
-	// １回目、２回目、飛び込みいずれかのフラグがtrueだったら(終わっていない状態だったら)
-	if (mJump->GetFirst() || mJump->GetSecond() || mJump->GetThird())
+	// 全てのジャンプが終わっていない状態で
+	// ボタンが押されたら、またはtimingゲージが縮小し終わったらジャンプする（ってしたい）
+	if (mJump->GetNowJump() != mJump->endJump &&
+		(Key[KEY_INPUT_SPACE] == 1 && mJump->GetIsGround())/*||
+		(mTiming->GetRadius() <= 1 && mJump->GetIsGround())*/)
 	{
-		// ボタンが押されたらジャンプする
-		// またはtimingゲージが縮小し終わったら勝手にジャンプする（ってしたい）
-		if ((Key[KEY_INPUT_SPACE] == 1 && mJump->GetGround())/*||
-			(mTiming->GetRadius() <= 1 && mJump->GetGround())*/)
-		{
-			// ジャンプ中かどうかのフラグをtrueにする
-			mJump->SetJump(true);
-		}
-
-		// ジャンプの更新をする
-		mJump->JumpUpdate(mPos, mRotate);
-		// ポジションの更新
-		mPos = mJump->GetPos();
+		// ジャンプの更新をするようにする
+		mJumpFlag = true;
 	}
-	///* 全てのジャンプが終わったらプレイヤーが0の所に行くまで直進させる
-	//else if (mPos.z <= 0.0f)
-	//{
-	//	mVelocity = VGet(0.0f, 0.0f, 0.2f);
-	//	mPos = VAdd(mPos, mVelocity);
-	//}*/
+
+	if (mJumpFlag)
+	{
+		//ジャンプの更新
+		mJump->JumpUpdate(mRotate);
+
+		// 今のジャンプが飛び込みじゃない、かつ、増加量が0になったら
+		if (mJump->GetNowJump() != mJump->thirdJump && mJump->GetGain() <= 0.0f)
+		{
+			// ジャンプパターンを更新する
+			mJump->JumpSetUpdate();
+			// ジャンプの更新を止める
+			mJumpFlag = false;
+		}
+		// 今のジャンプが飛び込みで、プールのところまでいったら
+		else if (mJump->GetNowJump() == mJump->thirdJump && mPos.y <= 2.0f)
+		{
+			// ジャンプパターンを更新する
+			mJump->JumpSetUpdate();
+
+			// 押し戻し…？
+			mPos.y = 2.0f;
+
+			// ジャンプの更新を止める
+			mJumpFlag = false;
+		}
+	}
+
+	// ポジションの更新
+	mPos = VAdd(mPos, mJump->GetVelocity());
 }
 
 /// <summary>

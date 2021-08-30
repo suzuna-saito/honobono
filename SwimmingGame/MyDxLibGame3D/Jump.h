@@ -13,63 +13,62 @@ public:
 	/// <summary>
 	/// ジャンプ更新処理
 	/// </summary>
-	/// <param name="_pos">飛ぶオブジェクトのポジション</param>
 	/// <param name="_rotate">飛ぶオブジェクトの向き</param>
-	void JumpUpdate(VECTOR _pos, VECTOR _rotate);
+	void JumpUpdate(VECTOR _rotate);
+	
+	/// <summary>
+	/// ジャンプパターンの更新処理
+	/// </summary>
+	/// <param name="_pos">止まる位置</param>
+	void JumpSetUpdate();
+
+	// ジャンプの種類
+	enum NowJump
+	{
+		// 1回目のジャンプ
+		firstJump,
+		// 2回目のジャンプ
+		secondJump,
+		// 飛び込みジャンプ
+		thirdJump,
+
+		// 全てのジャンプが終了した
+		endJump
+	};
 
 private:
-	const float mGravity;// 重力
 
-	VECTOR mPos;         // ポジション
 	VECTOR mVelocity;    // 移動力.
+	VECTOR mChange;      // 移動方向
 
-	VECTOR mAdd;         // 加算値
-	VECTOR mSub;         // 減算値
+	float mJumpMax;      // y軸の最大増加量
 
-	float mJumpMax;      // y軸の最大値
+	float mGain;         // 今の増加量
 
-	bool mFirstJump;     // 1回目のジャンプをするか
-	bool mSecondJump;    // 2回目のジャンプをするか
-	bool mThirdJump;     // 飛び込みのジャンプをするか
+	NowJump mNowJump;    // 今のジャンプ
 
-	bool mJumpUpNow;     // ジャンプアップしている
+	bool mJumpUp;        // 上がることが出来る
 
 	bool mIsGround;      // 地面との接地判定
+	
+	const float mGravity;// 重力
 
-	VECTOR mInitPos;     // 初期位置
-
 	/// <summary>
-	/// ジャンプアップ処理
+	/// ジャンプの処理
 	/// </summary>
-	void JumpUpUpdate();
-	/// <summary>
-	/// ジャンプダウン処理
-	/// </summary>
-	void JumpDownUpdate();
-	/// <summary>
-	/// 位置の更新処理
-	/// </summary>
-	void JumpPosUpdate();
+	void JumpNowUpdate();
 
 public:    // ゲッター、セッター
-
-	// ジャンプ中かどうかのフラグをセットする
-	void SetJump(bool _jump) { mJumpUpNow = _jump; }
 	// 地面と接地しているかどうか
-	bool GetGround() { return mIsGround; }
+	bool GetIsGround() { return mIsGround; }
 
+	// 移動力を返す
+	VECTOR GetVelocity() { return mVelocity; }
 
-	// ポジションをセット
-	void SetPos(VECTOR _pos) { mPos = _pos; }
-	// ポジションをゲット
-	VECTOR GetPos() { return mPos; }
+	// 増加量を返す
+	float GetGain() { return mGain; }
 
-	// 1回目のジャンプフラグをゲット
-	bool GetFirst() { return mFirstJump; }
-	// 2回目のジャンプフラグをゲット
-	bool GetSecond() { return mSecondJump; }
-	// 3回目のジャンプフラグをゲット
-	bool GetThird() { return mThirdJump; }
-
+	// 今なんのジャンプが行われているかを返す
+	NowJump GetNowJump() { return mNowJump; }
 };
 

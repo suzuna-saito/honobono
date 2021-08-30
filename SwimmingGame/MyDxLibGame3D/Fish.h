@@ -27,6 +27,8 @@ public:
 	Timing* mTiming;
 
 private:
+
+	bool mJumpFlag;      // ジャンプの更新をするかどうか
 };
 
 #endif // !_FISH_H_
