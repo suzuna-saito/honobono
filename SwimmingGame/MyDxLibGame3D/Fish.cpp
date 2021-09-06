@@ -1,6 +1,5 @@
 #include "Fish.h"
 #include "Common.h"
-#include "NpcJump.h"
 
 /// <summary>
 /// コンストラクタ
@@ -12,8 +11,6 @@ Fish::Fish(int _sourceModelHandle,
 	mPos = _pos;
 	mRotate = _rotate;
 	mSetDancePos = _dancePos;
-
-	mNpcJump = new NpcJump();
 }
 
 /// <summary>
@@ -29,22 +26,6 @@ Fish::~Fish()
 /// </summary>
 void Fish::Updata()
 {
-	if (mNpcJump->GetGroundNpc())
-	{
-		mNpcJump->SetJumpNpc(true);
-	}
-
-	// １回目、２回目、飛び込みいずれかのフラグがtrueだったら
-	if (mNpcJump->GetFirstNpc() || mNpcJump->GetSecondNpc() || mNpcJump->GetThirdNpc())
-	{
-		// ジャンプの更新をする
-		mNpcJump->NpcJumpUpdate(GetPos(), GetRotate());
-
-		// ポジションをセット
-		SetPos(mNpcJump->GetPosNpc());
-	}
-
-
 }
 
 /// <summary>
@@ -55,3 +36,70 @@ void Fish::SetDancePos(const VECTOR _setPos)
 {
 
 }
+
+///// <summary>
+///// 描画関数
+///// </summary>
+/*void Fish::Draw()
+{
+
+	// Mob座標のセット
+	for (int i = 0; i < FISH_MOB_NUM; i++)
+	{
+		MV1SetPosition(mMHandle, mMobPos[i]);
+		MV1SetRotationXYZ(mMHandle, FISH_MOB_ROTATE[i]);
+		// Mob画像の描画
+		MV1DrawModel(mMHandle);
+ 
+		//-------------------------------------------------
+	}	//どの配列がどの位置の魚を示しているのかのデバック
+	
+	
+	
+	
+	
+
+	
+	
+	
+
+	
+	
+	
+
+	
+	
+	
+	
+	
+
+	
+	
+	
+
+	
+	
+	
+
+	
+	
+	
+
+	
+	
+	
+
+	
+	
+	
+
+	
+	
+	
+
+	
+
+	
+	
+	
+*/

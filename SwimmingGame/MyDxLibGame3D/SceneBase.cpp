@@ -1,5 +1,4 @@
 #include "SceneBase.h"
-#include "Score.h"
 
 /// <summary>
 /// コンストラクタ
@@ -20,7 +19,6 @@ SceneBase::SceneBase()
 	//, mFadeFlag(false)
 	//, mChangeFlag(false)
 	, mShutDownFlag(false)
-	, mScore(new Score())
 {
 	mPointGraph = LoadGraph("data/Asset/mejirushi.png");
 }
@@ -30,7 +28,6 @@ SceneBase::SceneBase()
 /// </summary>
 SceneBase::~SceneBase()
 {
-	delete(mScore);
 }
 
 // 更新処理

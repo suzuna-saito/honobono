@@ -4,7 +4,7 @@
 #include"DxLib.h"
 
 //定数
-const int FISH_NUM = 12;    // 魚の数
+const int FISH_NUM = 11;    // 魚の数
 
 /// <summary>
 /// 魚のベース/処理クラスの前方宣言
@@ -31,7 +31,6 @@ private:
 	FishBase* mFish[FISH_NUM];		//魚たちの配列
 
 	int mSourceModelHandle;			//魚たちのモデルハンドル変数
-	int mPlayerModelHandle;         //プレイヤーのモデルハンドル変数
 
 	const VECTOR BEFORE_DIVING_POS[FISH_NUM];	//それぞれの魚たちの座標
 	const VECTOR BEFORE_DIVING_ROTATE[FISH_NUM];//それぞれの魚たちの向き

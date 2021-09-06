@@ -5,6 +5,8 @@
 class Effect
 {
 private:
+	VECTOR mEffectPos;
+
 	int mEffectHandle;
 	int mPlayingEffect;
 
@@ -17,6 +19,6 @@ public:
 
 	void StopEffect();
 
-	void PlayScaleEffect(VECTOR _EffectPos, VECTOR _Scale);
+	void PlayEffect();
 };
 

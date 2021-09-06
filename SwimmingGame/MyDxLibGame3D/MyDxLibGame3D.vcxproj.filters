@@ -46,6 +46,9 @@
     <ClCompile Include="UIBase.cpp">
       <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
+    <ClCompile Include="UIGoal.cpp">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClCompile>
     <ClCompile Include="Fade.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
@@ -69,6 +72,9 @@
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
@@ -94,12 +100,6 @@
     <ClCompile Include="FishManager.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Score.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="NpcJump.cpp">
-      <Filter>ソース ファイル\Jump</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -112,6 +112,9 @@
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="UIBase.h">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIGoal.h">
       <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
     <ClInclude Include="Fade.h">
@@ -138,6 +141,9 @@
     <ClInclude Include="Common.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
@@ -161,12 +167,6 @@
     </ClInclude>
     <ClInclude Include="FishManager.h">
       <Filter>ソース ファイル\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Score.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="NpcJump.h">
-      <Filter>ソース ファイル\Jump</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

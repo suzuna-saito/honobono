@@ -2,9 +2,10 @@
 
 Effect::Effect(const char* _SourceEffectHandle)
 	:mEffectHandle(-1)
+	,mEffectPos(VGet(0,0,0))
 	,mPlayingEffect(-1)
 {
-	mEffectHandle = LoadEffekseerEffect(_SourceEffectHandle, 1.0);
+	mEffectHandle = LoadEffekseerEffect(_SourceEffectHandle);
 }
 
 Effect::~Effect()
@@ -23,11 +24,11 @@ void Effect::StopEffect()
 	mPlayingEffect = IsEffekseer3DEffectPlaying(mPlayingEffect);
 }
 
-void Effect::PlayScaleEffect(VECTOR _EffectPos, VECTOR _Scale)
+void Effect::PlayEffect()
 {
-	mPlayingEffect = PlayEffekseer3DEffect(mEffectHandle);
+	mPlayingEffect = PlayEffekseer3DEffect(mEffectHandle, );
 
-	SetScalePlayingEffekseer3DEffect(mPlayingEffect, _Scale.x, _Scale.y, _Scale.z);
+	SetScalePlayingEffekseer3DEffect(mPlayingEffect,)
 
-	SetPosPlayingEffekseer3DEffect(mPlayingEffect, _EffectPos.x, _EffectPos.y, _EffectPos.z);
+	SetPosPlayingEffekseer3DEffect(mPlayingEffect, mEffectPos.x, mEffectPos.y, mEffectPos.z);
 }
