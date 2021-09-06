@@ -28,6 +28,10 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// スコアを取得
+	/// </summary>
+	/// <returns>現在のスコアを返す</returns>
 	Score* GetScore() { return mScorePtr; }
 
 	/// <summary>
@@ -35,81 +39,90 @@ public:
 	/// </summary>
 	void CSVRead();
 
-	void fps();
 
 protected:
 	
 
 private:
 	//  フラグ
+	// タイミングゲージを描画するフラグ管理
+	bool mTimingDrawFlag;
 	// タイミングゲージのクリック出来るかのフラグ管理
-	bool TimingFlag;
-	
-	// Perfectのフラグ管理
-	bool PerfectFlag;
-	// Goodのフラグ管理
-	bool GoodFlag;
-	// Badのフラグ管理
-	bool BadFlag;
+	bool mTimingFlag;
+	// Reactionのフラグ管理
+	bool mReactionFlag;
 
 	//  ゲージ
 	// ゲージの座標X
-	int gageX;
+	int mGageX;
 	// ゲージの座標Y
-	int gageY;
+	int mGageY;
 	// ゲージの中心座標X
-	int gageCX;
+	int mGageCX;
 	// ゲージの中心座標Y
-	int gageCY;
+	int mGageCY;
 	// 収縮するゲージの半径
-	int radius;
+	int mRadius;
 	// 判定がパーフェクトになるゲージの半径
-	int gageRadius;
+	int mGageRadius;
 	// 半径の初期化
-	int radiusInit;
+	int mRadiusInit;
 
 	//  色
 	// 黒色
-	int	brack;
+	int	mBrack;
 	// 白色
-	int white;
+	int mWhite;
 
 	//  リアクション
 	// リアクションが描画される位置にあるフレームの画像
-	int freamImg;
+	int mFreamImg;
 	// フレームの座標X
-	int freamX;
+	int mFreamX;
 	// フレームの座標Y
-	int freamY;
+	int mFreamY;
 	// リアクションの座標X
-	int reactionX;
+	int mReactionX;
 	// リアクションの座標Y
-	int reactionY;
-	// パーフェクトリアクションの画像
-	int perfectImg;
+	int mReactionY;
 	// パーフェクトの半径
-	int perfectRadius;
-	// グッドリアクションの画像
-	int goodImg;
-	// バッドリアクションの画像
-	int badImg;
+	int mPerfectRadius;
 	// バッドの半径
-	int badRadius;
+	int mBadRadius;
 
 
 	//  カウント
 	// リアクションを描画する時間をカウントする
-	int reactionCount;
+	int mReactionCount;
 	// リアクションを描画する時間の最大値
-	int reactionCountMax;
+	int mReactionCountMax;
 	// カウントを初期化
-	int countInit;
-	int count = 0;
+	int mCountInit;
+	// フレーム数のカウント
+	float mCount;
+	// カウント入れるやつ
+	float mCountPack;
+
+	//  CSV
+    // CSVファイルを格納
+	char mCsv[24] = "data/CSV/TestTiming.csv";
+	// ファイルのポインタ
+	FILE* mFilePointer;
+	// データを格納
+	char mCsvData;
+
+	float mNum;
+	char mBuffer[10];
+	float mCell[1][23];
+	int mColumnNum;
+	int mRawNum;
+	bool mEofFlag;
+	float mRhythm[23];
 
 	//  スコア
 	// Score処理フラグ
-	bool ScoreFlag;
-	// 
+	bool mScoreFlag;
+	// スコア
 	class Score* mScorePtr;
 
 
@@ -134,13 +147,6 @@ private:
 	bool mEffectFlag;
 
 
-	//  CSV
-	// CSVファイルを格納
-	char csv[24] = "data/CSV/TestTiming.csv";
-	// ファイルのポインタ
-	FILE* filePointer;
-	// データを格納
-	int csvData;
 
 
 	//  サウンド
@@ -150,5 +156,8 @@ private:
 	class Sound* mGoodSound;
 	// バッドの時になる効果音
 	class Sound* mBadSound;
+
+	int i = 0;
+
 };
 
