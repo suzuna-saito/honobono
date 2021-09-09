@@ -159,9 +159,6 @@
     <ClInclude Include="Result.h">
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Pool.h">
-      <Filter>ソース ファイル\HitCheck</Filter>
-    </ClInclude>
     <ClInclude Include="FishBase.h">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClInclude>
@@ -176,6 +173,9 @@
     </ClInclude>
     <ClInclude Include="Dance.h">
       <Filter>ソース ファイル\Dance</Filter>
+    </ClInclude>
+    <ClInclude Include="Pool.h">
+      <Filter>ソース ファイル\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

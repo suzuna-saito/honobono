@@ -25,6 +25,19 @@
 *			1,player,3
 */
 
+// 定数---------------------------------
+const float F_POS_Y = 27.5f;  // 魚のポジションｙ（一番高い台）
+const float F_POS_2Y = 22.5f; // 魚のポジションｙ（真ん中の台）
+const float F_POS_3Y = 16.0f; // 魚のポジションｙ（一番下の台）
+
+const float F_POS_X = 28.0f;  // 魚のポジションｚ（真ん中の台と一番下の台のｘ軸）
+const float F_POS_2X = 25.0f; // 魚のポジションｚ（一番上台のｘ軸）
+
+const float F_POS_Z = 47.0f;  // 魚のポジションｚ（真ん中の台と一番下の台のｚ軸）
+const float F_POS_2Z = 44.0f;  // 魚のポジションｚ（一番上台のｚ軸）
+
+const float F_INTERVAL = 5.0f; // 魚と魚の間隔
+//----------------------------------------
 
 /// <summary>
 /// コンストラクタ
@@ -32,18 +45,18 @@
 FishManager::FishManager()
 	:mSourceModelHandle(-1)
 	, mPlayerModelHandle(-1)
-	, BEFORE_DIVING_POS{ VGet(-5.0f,18.0f,-22.0f)   //1
-						,VGet(0.0f, 23.0f, -20.0f)  //プレイヤー
-						,VGet(5.0f,11.0f,-22.0f)	//2
-						,VGet(5.0f,18.0f,22.0f)		//3
-						,VGet(0.0f,23.0f,20.0f)		//4
-						,VGet(-5.0f,11.0f,22.0f)	//5
-						,VGet(-12.0f,18.0f,5.0f)	//6
-						,VGet(-10.0f,23.0f,0.0f)	//7
-						,VGet(-12.0f,11.0f,-5.0f)	//8
-						,VGet(12.0f,18.0f,-5.0f)    //9
-						,VGet(10.0f,23.0f,0.0f)	    //10
-						,VGet(12.0f,11.0f,5.0f) }	//11
+	, BEFORE_DIVING_POS{ VGet(-F_INTERVAL,F_POS_2Y,-F_POS_Z)   //1
+						,VGet(0.0f, F_POS_Y, -F_POS_2Z)  //プレイヤー
+						,VGet(F_INTERVAL,F_POS_3Y,-F_POS_Z)	//2
+						,VGet(F_INTERVAL,F_POS_2Y,F_POS_Z)		//3
+						,VGet(0.0f,F_POS_Y,F_POS_2Z)		//4
+						,VGet(-F_INTERVAL,F_POS_3Y,F_POS_Z)	//5
+						,VGet(-F_POS_X,F_POS_2Y,F_INTERVAL)	//6
+						,VGet(-F_POS_2X,F_POS_Y,0.0f)	//7
+						,VGet(-F_POS_X,F_POS_3Y,-F_INTERVAL)	//8
+						,VGet(F_POS_X,F_POS_2Y,-F_INTERVAL)    //9
+						,VGet(F_POS_2X,F_POS_Y,0.0f)	    //10
+						,VGet(F_POS_X,F_POS_3Y,F_INTERVAL) }	//11
 
 	, BEFORE_DIVING_ROTATE{	VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f)    //1
 							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //プレイヤー

@@ -8,21 +8,23 @@
 //  @brief 定数
 //------------------------------------------------------------
 const float CAMERA_NEAR = 0.1f;                                     // カメラの奥行(最小)
-const float CAMERA_FAR = 100.0f;                                    // カメラの奥行(最大)
+const float CAMERA_FAR = 1000.0f;                                    // カメラの奥行(最大)
 const float CAMERA_FAZE[4] = { 5.0f,10.0f,15.0f,20.0f };            // カメラ切り替え時間
 const VECTOR ORIGIN_CAMERA_POS = VGet(0.0f, 0.0f, 0.0f);            // カメラ原点位置
 const VECTOR ORIGIN_CAMERA_ANGLE = VGet(0.0f, 0.0f, 0.0f);          // カメラ原点角度
-const VECTOR PLAY_CAMERA_POS[4] = { VGet(20.0f, 30.0f, -30.0f),     // 一つ目のカメラ位置
-									VGet(1.0f, 28.0f, -24.0f),		// 二つ目のカメラ位置
-									VGet(0.0f, 5.0f, 18.0f),		// 三つ目のカメラ位置
-									VGet(12.0f, 5.0f, 24.0f) };		// 四つ目のカメラ位置
+const VECTOR PLAY_CAMERA_POS[4] = { VGet(20.0f, 32.0f, -50.0f),     // 一つ目のカメラ位置
+									VGet(1.0f, 32.0f, -48.0f),		// 二つ目のカメラ位置
+									VGet(0.0f, 7.0f, 18.0f),		// 三つ目のカメラ位置
+									VGet(12.0f, 7.0f, 24.0f) };		// 四つ目のカメラ位置
 const VECTOR PLAY_CAMERA_ANGLE[4] = { VGet(0.50f, -0.80f, 0.0f),    // 一つ目のカメラ角度
 									  VGet(0.50f, 0.0f, 0.0f),		// 二つ目のカメラ角度
 									  VGet(0.0f, 3.210f, 0.0f),		// 三つ目のカメラ角度
 									  VGet(0.0f, -2.50f, 0.0f) };	// 四つ目のカメラ角度
 
-const VECTOR FIXED_CAMERA_UP_POS = VGet(0.0f, 80.0f, -8.0f);      // 確認用カメラ（上固定）@saito
-const VECTOR FIXED_CAMERA_RIGHT_POS = VGet(53.0f, 18.0f, -10.0f);   // 確認用カメラ（右固定）@saito
+const VECTOR FIXED_CAMERA_UP_POS = VGet(0.0f, 140.0f, -0.0f);      // 確認用カメラ（上固定）@saito
+const VECTOR FIXED_CAMERA_RIGHT_POS = VGet(60.0f, 18.0f, -15.0f);   // 確認用カメラ（右固定）@saito
+const VECTOR FIXED_CAMERA_BACK_POS = VGet(0.0f, 34.0f, -50.0f);   // 確認用カメラ（後ろ固定）@saito
+
 //-----------------------------------------------------------------------------
 // @brief  コンストラクタ.
 //-----------------------------------------------------------------------------
@@ -111,14 +113,29 @@ void Camera::FixedCameraUpUpdate()
 /// <summary>
 /// 右からの固定カメラ（デバック用）@saito
 /// </summary>
-void Camera::FixedCameraRightUpdate()
+void Camera::FixedCameraRightUpdate(float _posZ)
 {
 	mPos = FIXED_CAMERA_RIGHT_POS;
-	mAngle = VGet(0.0f, -1.6f, 0.0f);
+	mPos.z = FIXED_CAMERA_RIGHT_POS.z + _posZ;
+	mAngle = VGet(0.0f, -1.57f, 0.0f);
 
 	// カメラ位置変更
 	SetCameraPositionAndAngle(mPos, mAngle.x, mAngle.y, mAngle.z);
 }
+/// <summary>
+/// 後ろからの固定カメラ（デバック用）@saito
+/// </summary>
+void Camera::FixedCameraBackUpdate(float _posZ, float _angleX)
+{
+	mPos = FIXED_CAMERA_BACK_POS;
+	mPos.z = FIXED_CAMERA_BACK_POS.z + _posZ;
+	mAngle = VGet(0.6f, 0.0f, 0.0f);
+	mAngle.x = mAngle.x + _angleX;
+
+	// カメラ位置変更
+	SetCameraPositionAndAngle(mPos, mAngle.x, mAngle.y, mAngle.z);
+}
+
 
 /// <summary>
 /// 描画確認用カメラ更新(自分で動かせるカメラを呼び出す)

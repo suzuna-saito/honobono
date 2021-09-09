@@ -34,7 +34,8 @@ public:
 
 	// 確認用カメラ @saito
 	void FixedCameraUpUpdate();
-	void FixedCameraRightUpdate();
+	void FixedCameraRightUpdate(float _posZ);
+	void FixedCameraBackUpdate(float _posZ, float _angleX);
 private:
 	int i;
 	float mTimeCount;     // カメラ更新時間

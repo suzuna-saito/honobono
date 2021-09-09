@@ -1,11 +1,20 @@
 #include "BackGround.h"
 
+// 定数-------------------------------
+const float WIDTH = 100.0f;    // 原点からの離れている長さ
+const float CEILING = 140.0f;  // 天井の高さ
+const float POS_Y = 70.0f;     // 壁のポジションｙ
+
+const float SIZE_X = 10.0f;    // サイズを変更する際のｘ（天井と床はｚ軸にも使われている）
+const float SIZE_Z = 7.0f;     // サイズを変更する際のｚ
+// ------------------------------------
+
 
 BackGround::BackGround()
-	: mPos{ VGet(0.0f, 70.0f, 0.0f),VGet(0.0f, 0.0f, 0.0f),VGet(35.0f, 35.0f, 0.0f)
-		  ,VGet(-35.0f, 35.0f, 0.0f),VGet(0.0f, 35.0f, 35.0f),VGet(0.0f, 35.0f, -35.0f) }
-	, mSize{ VGet(7.0f, 1.0f, 7.0f),VGet(7.0f, 1.0f, 7.0f),VGet(7.0f, 1.0f, 3.5f)
-		   ,VGet(7.0f, 1.0f, 3.5f),VGet(7.0f, 1.0f, 3.5f),VGet(7.0f, 1.0f, 3.5f) }
+	: mPos{ VGet(0.0f, CEILING, 0.0f),VGet(0.0f, 0.0f, 0.0f),VGet(WIDTH, POS_Y, 0.0f)
+		  ,VGet(-WIDTH, POS_Y, 0.0f),VGet(0.0f, POS_Y, WIDTH),VGet(0.0f, POS_Y, -WIDTH) }
+	, mSize{ VGet(SIZE_X, 1.0f, SIZE_X),VGet(SIZE_X, 1.0f, SIZE_X),VGet(SIZE_X, 1.0f, SIZE_Z)
+		   ,VGet(SIZE_X, 1.0f, SIZE_Z),VGet(SIZE_X, 1.0f, SIZE_Z),VGet(SIZE_X, 1.0f, SIZE_Z) }
 	, mRotate{ VGet(0.0f, 0.0f, 0.0f),VGet(0.0f, 0.0f, 0.0f)
 			 ,VGet(0.0f, 270.0f * DX_PI_F / 180.0f, 90.0f * DX_PI_F / 180.0f)
 			 ,VGet(0.0f, 270.0f * DX_PI_F / 180.0f, 90.0f * DX_PI_F / 180.0f)

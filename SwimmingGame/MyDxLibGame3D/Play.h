@@ -75,4 +75,12 @@ private:
     Sound* mWaterInSound;
     // シンクロでちゃぷちゃぷする音
     Sound* mWaterOutSound;
+
+
+    /////// デバック用 /////////
+    float test;
+    float test02;
+    float test03;
+
+    void CameraPosUpDate();
 };
