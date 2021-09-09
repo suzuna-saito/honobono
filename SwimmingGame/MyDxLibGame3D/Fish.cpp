@@ -1,6 +1,8 @@
 #include "Fish.h"
 #include "Common.h"
-#include "NpcJump.h"
+#include "Jump.h"
+#include"Input.h"
+#include"Dance.h"
 
 /// <summary>
 /// コンストラクタ
@@ -8,12 +10,15 @@
 Fish::Fish(int _sourceModelHandle,
 	VECTOR _pos, VECTOR _rotate, VECTOR _dancePos)
 	:FishBase(_sourceModelHandle)
+	, mJumpUpdataFlag(false)
+	, mJumpedInFlag(false)
 {
 	mPos = _pos;
 	mRotate = _rotate;
 	mSetDancePos = _dancePos;
 
-	mNpcJump = new NpcJump();
+	mJump = new Jump();
+	mDance = new Dance(mSetDancePos);
 }
 
 /// <summary>
@@ -29,29 +34,76 @@ Fish::~Fish()
 /// </summary>
 void Fish::Updata()
 {
-	if (mNpcJump->GetGroundNpc())
+	if (!mJumpedInFlag)
 	{
-		mNpcJump->SetJumpNpc(true);
+		//飛び込みの処理
+		JumpUpdata();
 	}
-
-	// １回目、２回目、飛び込みいずれかのフラグがtrueだったら
-	if (mNpcJump->GetFirstNpc() || mNpcJump->GetSecondNpc() || mNpcJump->GetThirdNpc())
+	else
 	{
-		// ジャンプの更新をする
-		mNpcJump->NpcJumpUpdate(GetPos(), GetRotate());
-
-		// ポジションをセット
-		SetPos(mNpcJump->GetPosNpc());
+		//アーティスティックスイミングの処理
+		DanceUpdata();
 	}
-
-
+	
 }
 
 /// <summary>
-/// アーティスティックスイミング開始時のセットポジション
+/// ジャンプの更新を入れた関数 : @saito
 /// </summary>
-/// <param name="_setPos">アーティスティックスイミング開始時のポジション</param>
-void Fish::SetDancePos(const VECTOR _setPos)
+void Fish::JumpUpdata()
 {
+	// 全てのジャンプが終わっていない状態で
+	// ボタンが押されたら、またはtimingゲージが縮小し終わったらジャンプする（ってしたい）
+	if (mJump->GetNowJump() != mJump->endJump &&
+		(Key[KEY_INPUT_SPACE] == 1 && mJump->GetIsGround())/*||
+		(mTiming->GetRadius() <= 1 && mJump->GetIsGround())*/)
+	{
+		// ジャンプの更新をするようにする
+		mJumpUpdataFlag = true;
+	}
 
+	if (mJumpUpdataFlag)
+	{
+		//ジャンプの更新
+		mJump->JumpUpdate(mRotate);
+
+		// 今のジャンプが飛び込みじゃない、かつ、増加量が0になったら
+		if (mJump->GetNowJump() != mJump->thirdJump && mJump->GetGain() <= 0.0f)
+		{
+			// ジャンプパターンを更新する
+			mJump->JumpSetUpdate();
+			// ジャンプの更新を止める
+			mJumpUpdataFlag = false;
+		}
+		// 今のジャンプが飛び込みで、プールのところまでいったら
+		else if (mJump->GetNowJump() == mJump->thirdJump && mPos.y <= 0.0f)
+		{
+			// ジャンプパターンを更新する
+			mJump->JumpSetUpdate();
+
+			// 押し戻し…？
+			mPos.y = 0.0f;
+
+			// ジャンプの更新を止める
+			mJumpUpdataFlag = false;
+
+			//ジャンプの更新処理が終わったことを示すためtrueにする
+			mJumpedInFlag = true;
+		}
+	}
+
+	// ポジションの更新
+	mPos = VAdd(mPos, mJump->GetVelocity());
+}
+
+/// <summary>
+/// アーティスティックスイミングの更新処理を入れた関数
+/// </summary>
+void Fish::DanceUpdata()
+{
+	if (mDance->SetDancePos(mSetDancePos, mPos, mRotate))
+	{
+		
+	}
+	
 }
