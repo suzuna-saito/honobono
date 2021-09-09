@@ -14,13 +14,13 @@ public:
 	/// ジャンプ更新処理
 	/// </summary>
 	/// <param name="_rotate">飛ぶオブジェクトの向き</param>
-	void JumpUpdate(VECTOR _rotate);
+	void JumpUpdata(VECTOR _rotate);
 	
 	/// <summary>
 	/// ジャンプパターンの更新処理
 	/// </summary>
 	/// <param name="_pos">止まる位置</param>
-	void JumpSetUpdate();
+	void JumpSetUpdata();
 
 	// ジャンプの種類
 	enum NowJump
@@ -56,7 +56,7 @@ private:
 	/// <summary>
 	/// ジャンプの処理
 	/// </summary>
-	void JumpNowUpdate();
+	void JumpNowUpdata();
 
 public:    // ゲッター、セッター
 	// 地面と接地しているかどうか

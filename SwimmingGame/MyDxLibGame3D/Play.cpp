@@ -7,6 +7,13 @@
 #include "Result.h"
 #include "BackGround.h"
 #include "Sound.h"
+#include "Promotion.h"
+
+//デバック用の定数---------------------------
+const float LINE_X = 32.0f; // 線の座標
+const float LINE_Y = 20.0f;
+const float LINE_Z = 51.0f;
+//-------------------------------------------
 
 // コンストラクタ
 Play::Play()
@@ -19,9 +26,6 @@ Play::Play()
 {
 	SetScene(play);
 
-	// 当たり判定を生成
-	hit = new HitChecker();
-
 	// プール生成
 	pool = new Pool();
 
@@ -33,12 +37,14 @@ Play::Play()
 
 	// 背景の生成
 	backGround = new BackGround();
+	// 広告の生成
+	promo = new Promotion();
+
 	// 時間の生成
 	time = new Time();
 
 	camera = new Camera();
 
-	camera->FixedCameraRightUpdate();
 	fishManager->CreatFish();
 
 	mPlayBGM1 = new Sound("data/newSound/bgm/bgm_1.mp3");
@@ -47,6 +53,12 @@ Play::Play()
 
 	mWaterInSound = new Sound("data/newSound/se/in.mp3");
 	mWaterOutSound = new Sound("data/newSound/se/out.mp3");
+
+
+	///// デバック用 //////
+	test = 0.0f;
+	test02 = 0.0f;
+	test03 = 0.0f;
 }
 
 // デストラクタ
@@ -61,10 +73,11 @@ Play::~Play()
 	delete pool;
 	// リズムボタンUI削除
 	delete timing;
-	// 当たり判定の削除
-	delete(hit);
 	// 背景の削除
 	delete(backGround);
+	// 広告の削除
+	delete promo;
+
 	mPlayBGM1->StopMusic();
 	mPlayBGM2->StopMusic();
 	mPlayBGM3->StopMusic();
@@ -108,7 +121,14 @@ SceneBase* Play::Update()
 	}
 	else if (CheckHitKey(KEY_INPUT_RIGHT))// →押したら右固定カメラ
 	{
-		camera->FixedCameraRightUpdate();
+		camera->FixedCameraRightUpdate(test02);
+		CameraPosUpDate();                // 引数（test02）の更新
+		
+	}
+	else if (CheckHitKey(KEY_INPUT_DOWN)) // ↓押したらプレイヤーの後ろ固定カメラ
+	{
+		camera->FixedCameraBackUpdate(test,test03);
+		CameraPosUpDate();                // 引数（test）の更新
 	}
 
 	// リズムボタンUI更新
@@ -125,7 +145,10 @@ SceneBase* Play::Update()
 void Play::Draw()
 {
 	// 背景の生成
-	//backGround->Draw();
+	backGround->Draw();
+	
+	// 広告の描画
+	//promo->Draw();
 	// 魚描画
 	fishManager->Draw();
 	// プール描画
@@ -142,13 +165,58 @@ void Play::Draw()
 	int lightBlueColor = GetColor(0, 255, 255);		//右下の色
 
 	//プールの真ん中
-	DrawLine3D(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, 15.0f, 0.0f), redColor);
+	DrawLine3D(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, LINE_Y, 0.0f), redColor);
 	//プールの左上端
-	DrawLine3D(VGet(-15.0f, 0.0f, 25.0f), VGet(-15.0f, 15.0f, 25.0f), greenColor);
+	DrawLine3D(VGet(-LINE_X, 0.0f, LINE_Z), VGet(-LINE_X, LINE_Y, LINE_Z), greenColor);
 	//プールの左下端
-	DrawLine3D(VGet(-15.0f, 0.0f, -25.0f), VGet(-15.0f, 15.0f, -25.0f), yellowColor);
+	DrawLine3D(VGet(-LINE_X, 0.0f, -LINE_Z), VGet(-LINE_X, LINE_Y, -LINE_Z), yellowColor);
 	//プールの右上端
-	DrawLine3D(VGet(15.0f, 0.0f, 25.0f), VGet(15.0f, 15.0f, 25.0f), purpleColor);
+	DrawLine3D(VGet(LINE_X, 0.0f, LINE_Z), VGet(LINE_X, LINE_Y, LINE_Z), purpleColor);
 	//プールの右下端
-	DrawLine3D(VGet(15.0f, 0.0f, -25.0f), VGet(15.0f, 15.0f, -25.0f), lightBlueColor);
+	DrawLine3D(VGet(LINE_X, 0.0f, -LINE_Z), VGet(LINE_X, LINE_Y, -LINE_Z), lightBlueColor);
+}
+
+
+
+/////////// デバック用 //////////////
+
+/// <summary>
+/// カメラの位置をずらす引数を更新
+/// </summary>
+void Play::CameraPosUpDate()
+{
+	switch ((int)GetCameraPosition().x)
+	{
+	case 60:
+		if ((CheckHitKey(KEY_INPUT_D)))       // dが押されたら右に進む
+		{
+			test02 += 0.5f;
+		}
+		else if ((CheckHitKey(KEY_INPUT_A))) // aが押されたら左に進む
+		{
+			test02 -= 0.5f;
+		}
+		break;
+
+	case 0:
+		if ((CheckHitKey(KEY_INPUT_W)))       // ｗが押されたら前に進む
+		{
+			test += 0.5f;
+		}
+		else if ((CheckHitKey(KEY_INPUT_S))) // ｓが押されたら後ろに下がる
+		{
+			test -= 0.5f;
+		}
+		if ((CheckHitKey(KEY_INPUT_Q)))      // qが押されたら下を向く
+		{
+			test03 += 0.01;
+		}
+		else if ((CheckHitKey(KEY_INPUT_E))) // eが押されたら上を向く
+		{
+			test03 -= 0.01;
+		}
+		break;
+	default:
+		break;
+	}
 }

@@ -92,7 +92,7 @@ void Timing::Update()
 	UpdateKey();
 
 	// スペースキーを押したらタイミングフラグが「真」となる
-	if (Key[KEY_INPUT_SPACE] == 1)
+	if (Key[KEY_INPUT_SPACE] == 1 || Button & (XINPUT_BUTTON_A)== 1)
 	{
 		TimingFlag = true;
 		ScoreFlag = true;

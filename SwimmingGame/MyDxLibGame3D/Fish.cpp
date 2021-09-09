@@ -20,7 +20,6 @@ Fish::Fish(int _sourceModelHandle,
 	mJumpFlag = false;
 
 	mJump = new Jump();
-
 	mTiming = new Timing();
 }
 
@@ -40,8 +39,9 @@ void Fish::Updata()
 	// 全てのジャンプが終わっていない状態で
 	// ボタンが押されたら、またはtimingゲージが縮小し終わったらジャンプする（ってしたい）
 	if (mJump->GetNowJump() != mJump->endJump &&
-		(Key[KEY_INPUT_SPACE] == 1 && mJump->GetIsGround())/*||
-		(mTiming->GetRadius() <= 1 && mJump->GetIsGround())*/)
+		(Button & (PAD_INPUT_A) == 1 && mJump->GetIsGround() ||
+		Key[KEY_INPUT_SPACE] == 1 && mJump->GetIsGround()/*||
+		(mTiming->GetRadius() <= 1 && mJump->GetIsGround())*/))
 	{
 		// ジャンプの更新をするようにする
 		mJumpFlag = true;
@@ -50,13 +50,13 @@ void Fish::Updata()
 	if (mJumpFlag)
 	{
 		//ジャンプの更新
-		mJump->JumpUpdate(mRotate);
+		mJump->JumpUpdata(mRotate);
 
 		// 今のジャンプが飛び込みじゃない、かつ、増加量が0になったら
 		if (mJump->GetNowJump() != mJump->thirdJump && mJump->GetGain() <= 0.0f)
 		{
 			// ジャンプパターンを更新する
-			mJump->JumpSetUpdate();
+			mJump->JumpSetUpdata();
 			// ジャンプの更新を止める
 			mJumpFlag = false;
 		}
@@ -64,7 +64,7 @@ void Fish::Updata()
 		else if (mJump->GetNowJump() == mJump->thirdJump && mPos.y <= 2.0f)
 		{
 			// ジャンプパターンを更新する
-			mJump->JumpSetUpdate();
+			mJump->JumpSetUpdata();
 
 			// 押し戻し…？
 			mPos.y = 2.0f;

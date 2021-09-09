@@ -13,6 +13,7 @@ class Result;
 class BackGround;
 class Time;
 class Sound;
+class Promotion;
 
 /// <summary>
 /// プレイシーンの生成、描画
@@ -45,10 +46,8 @@ private:
     Pool* pool = nullptr;
     // リズムボタン
     Timing* timing = nullptr;
-	// UI（ゴール
-	UIGoal* uiGoal;
-	// 当たり判定
-	HitChecker* hit;
+    // 広告
+    Promotion* promo;
     // バックグラウンド
     BackGround* backGround;
     // 時間の生成
@@ -68,4 +67,11 @@ private:
     // シンクロでちゃぷちゃぷする音
     Sound* mWaterOutSound;
 
+
+    /////// デバック用 /////////
+    float test;
+    float test02;
+    float test03;
+
+    void CameraPosUpDate();
 };

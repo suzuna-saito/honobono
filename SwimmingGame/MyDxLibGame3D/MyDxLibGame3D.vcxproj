@@ -172,6 +172,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Play.cpp" />
     <ClCompile Include="Pool.cpp" />
+    <ClCompile Include="Promotion.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="SceneBase.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -200,6 +201,7 @@
     <ClInclude Include="Jump.h" />
     <ClInclude Include="Play.h" />
     <ClInclude Include="Pool.h" />
+    <ClInclude Include="Promotion.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="SceneBase.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
