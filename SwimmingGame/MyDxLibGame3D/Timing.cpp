@@ -2,255 +2,322 @@
 #include "Timing.h"
 #include "Input.h"
 #include "Sound.h"
+#include "Score.h"
+#include <time.h>
 
-// コンストラクタ
+//-----------------------------------------------------------------------------
+// @brief  コンストラクタ.
+//-----------------------------------------------------------------------------
 Timing::Timing()
-	: TimingFlag(false)
-	, PerfectFlag(false)
-	, GoodFlag(false)
-	, BadFlag(false)
-	, ScoreFlag(false)
-	, gageX(50)
-	, gageY(350)
-	, gageCX(100)
-	, gageCY(400)
-	, freamX(490)
-	, freamY(180)
-	, radius(radiusInit)
-	, gageRadius(20)
-	, radiusInit(70)
-	, perfectRadius(5)
-	, badRadius(20)
-	, reactionX(520)
-	, reactionY(200)
-	, reactionCount(countInit)
-	, countInit(0)
-	, reactionCountMax(50)
-	, mScore(0)
-	, scoreMax(0)
-	, scoreX(800)
-	, scoreY(20)
+	: mTimingDrawFlag(false)
+	, mTimingFlag(false)
+	, mReactionFlag(true)
+	, mScoreFlag(false)
+	, mGageX(50)
+	, mGageY(350)
+	, mGageCX(100)
+	, mGageCY(400)
+	, mFreamX(490)
+	, mFreamY(180)
+	, mRadius(70)
+	, mGageRadius(20)
+	, mRadiusInit(70)
+	, mPerfectRadius(5)
+	, mBadRadius(20)
+	, mReactionX(520)
+	, mReactionY(200)
+	, mReactionCount(0)
+	, mCountInit(0)
+	, mReactionCountMax(50)
 	, mPerfectSound(nullptr)
 	, mGoodSound(nullptr)
 	, mBadSound(nullptr)
-	, filePointer(0)
-	, csvData(0)
+	, mCsvData(0)
+	, mFilePointer(NULL)
 	, mEffectAngle(0)
 	, mEffectScale(1)
 	, mEffectFlag(false)
 	, mAngleRotate(15.0f * DX_PI_F / 180.0f)
 	, mScalePlus(0.02)
 	, mEffectImg(-1)
-	, mScoreRadius(0)
+	, mCount(0.0f)
 {
 	// 画像読み込み
-	freamImg = LoadGraph("data/newUI/frame.png");
-	perfectImg = LoadGraph("data/newUI/perfect.png");
-	goodImg = LoadGraph("data/newUI/good.png");
-	badImg = LoadGraph("data/newUI/bad.png");
-	goodImg = LoadGraph("data/newUI/good.png");
-	badImg = LoadGraph("data/newUI/bad.png");
+	mFreamImg = LoadGraph("data/newUI/frame.png");
 	mPerfectEffectImg = LoadGraph("data/newUI/PerfectEffect.png");
 	mGoodEffectImg = LoadGraph("data/newUI/GoodEffect.png");
 	mBadEffectImg = LoadGraph("data/newUI/BadEffect.png");
 
 	// 色
-	 brack = GetColor(0, 0, 0);
-	 white = GetColor(255, 255, 255);
-
-	 NormalGageColor = GetColor(255, 255, 255);
-	 mPushGageColor = GetColor(0, 255, 255);
+	 mBrack = GetColor(0, 0, 0);
+	 mWhite = GetColor(255, 255, 255);
 
 	// サウンドのロード
 	mPerfectSound = new Sound("data/newSound/se/perfect.mp3");
 	mGoodSound = new Sound("data/newSound/se/good.mp3");
 	mBadSound = new Sound("data/newSound/se/bad.mp3");	
+
+	mScorePtr = new Score();
+
+	fopen_s(&mFilePointer, "data/csv/bgm_1.csv","r");
+	CSVRead();
 }
 
-// デストラクタ
+
+//-----------------------------------------------------------------------------
+// @brief  デストラクタ.
+//-----------------------------------------------------------------------------
 Timing::~Timing()
 {
-	// 画像データ削除
-	DeleteGraph(perfectImg);
-	DeleteGraph(goodImg);
-	DeleteGraph(badImg);
-
 	// サウンドデータの削除
 	delete mPerfectSound;
 	delete mGoodSound;
 	delete mBadSound;
-
-	// CSVデータの削除
-	delete csv;
 }
 
-// 更新
+
+//-----------------------------------------------------------------------------
+// @brief  更新.
+//-----------------------------------------------------------------------------
 void Timing::Update()
 {
+	// カウント
+	mCount++;
+	// 
+	mCountPack = mCount / 1000;
+
+	// 
+	if (mCountPack == mRhythm[i])
+	{
+		// タイミングゲージ描画フラグを「真」にする
+		mTimingDrawFlag = true;
+	}
+
+
 	UpdateKey();
-
-	// スコアに渡して戻ってきたらfalse
-	ScoreFlag = false;
-
-	// スペースキーを押したらタイミングフラグが「真」となる
-	if (Key[KEY_INPUT_SPACE] == 1)
+	// ゲージが描画されるフラグが立ったら
+	if (mTimingDrawFlag)
 	{
-		TimingFlag = true;
-		ScoreFlag = true;
-	}
-	// ボタンを押されタイミングフラグが「真」となったら
-	if (TimingFlag)
-	{
-		mGageColor = mPushGageColor;
-
-		// カウントをし続ける
-		reactionCount++;
-		// バッドの条件
-		if (radius - gageRadius > badRadius)
+		// スペースキーを押したらタイミングフラグ、スコアフラグが「真」となる
+		if (Key[KEY_INPUT_SPACE] == 1)
 		{
-			mEffectImg = mBadEffectImg;
-			mEffectFlag = true;
-			// バッドの効果音を流す
-			mBadSound->PlaySE();
-			// バッドフラグを「真」にする
-			BadFlag = true;
+			mTimingFlag = true;
+			mScoreFlag = true;
 		}
-		// グッドの条件
-		else if (radius - gageRadius >= perfectRadius && radius - gageRadius <= badRadius)
+		if (!mReactionFlag)
 		{
-			mEffectImg = mGoodEffectImg;
-			mEffectFlag = true;
-			// グッドの効果音を流す
-			mGoodSound->PlaySE();
-			// グッドフラグを「真」にする
-			GoodFlag = true;
+			// カウントをし続ける
+			mReactionCount++;
 		}
-		// パーフェクトの条件
-		else if (radius - gageRadius < perfectRadius)
+		if (mReactionFlag)
 		{
-			mEffectImg = mPerfectEffectImg;
-			mEffectFlag = true;
-			// パーフェクトの効果音を流す
-			mPerfectSound->PlaySE();
-			// パーフェクトフラグを「真」にする
-			PerfectFlag = true;
+			// ボタンを押されタイミングフラグが「真」となったら
+			if (mTimingFlag)
+			{
+				// バッドの条件
+				if (mRadius - mGageRadius > mBadRadius)
+				{
+					// エフェクト画像をバッドエフェクトにする
+					mEffectImg = mBadEffectImg;
+					// エフェクトフラグを「真」にする
+					mEffectFlag = true;
+					// バッドの効果音を流す
+					mBadSound->PlaySE();
+					// 他にリアクションを判定しない
+					mReactionFlag = false;
+				}
+				// グッドの条件
+				if (mRadius - mGageRadius >= mPerfectRadius && mRadius - mGageRadius <= mBadRadius)
+				{
+					// エフェクト画像をグッドエフェクトにする
+					mEffectImg = mGoodEffectImg;
+					// エフェクトフラグを「真」にする
+					mEffectFlag = true;
+					// グッドの効果音を流す
+					mGoodSound->PlaySE();
+					// 他にリアクションを判定しない
+					mReactionFlag = false;
+				}
+				// パーフェクトの条件
+				if (mRadius - mGageRadius < mPerfectRadius)
+				{
+					// エフェクト画像をパーフェクトエフェクトにする
+					mEffectImg = mPerfectEffectImg;
+					// エフェクトフラグを「真」にする
+					mEffectFlag = true;
+					// パーフェクトの効果音を流す
+					mPerfectSound->PlaySE();
+					// 他にリアクションを判定しない
+					mReactionFlag = false;
+				}
+			}
+			// タイミングフラグが「偽」であり、ゲージの半径が０になったら
+			else if (!mTimingFlag && mRadius == 0)
+			{
+				// エフェクト画像をバッドエフェクトにする
+				mEffectImg = mBadEffectImg;
+				// エフェクトフラグを「真」にする
+				mEffectFlag = true;
+				// バッドの効果音を流す
+				mBadSound->PlaySE();
+				// 他にリアクションを判定しない
+				mReactionFlag = false;
+			}
 		}
+		
 		// リアクションカウントが最大値ではないとき
-		if (!(reactionCount < reactionCountMax))
+		if (!(mReactionCount < mReactionCountMax))
 		{
-			// それ以外の場合はタイミングフラグを「偽」とする
-			TimingFlag = false;
+			// スコアの計算
+			if (mScoreFlag)
+			{
+				int n;
+				n = mRadiusInit - mRadius;
+				mScorePtr->GetScore(&n);
+				mScoreFlag = false;
+			}
 		}
-		// スコアの計算
-			// 半径の最大値から現在の半径を差を出し、その差にスコアくらいの数字を掛ける
-		if (ScoreFlag)
+		// リアクションカウントが最大値を超えたら
+		if (mReactionCount == mReactionCountMax)
 		{
-			// スコアに渡す割合を保持してもらう
-			mScoreRadius = radiusInit - radius;
+			// タイミングフラグを「偽」とする
+			mTimingFlag = false;
+			// タイミングゲージを描画しない
+			mTimingDrawFlag = false;
+			// 次のゲージ用
+			i++;
+			// リアクションを判定できるようにする
+			mReactionFlag = true;
+		}
+		// エフェクトのフラグが「真」のとき
+		if (mEffectFlag)
+		{
+			// エフェクトを大きくさせながら回転させる
+			mEffectScale += mScalePlus;
+			mEffectAngle += mAngleRotate;
 		}
 	}
-	// タイミングフラグが「偽」であるとき
-	if (!TimingFlag)
-	{
-		mGageColor = NormalGageColor;
-		// カウントを初期化する
-		reactionCount = countInit;
-		// フラグを「偽」にする
-		BadFlag = false;
-		GoodFlag = false;
-		PerfectFlag = false;
 
-		mEffectFlag = false;
+	// ゲージが描画されるフラグが「偽」であったら
+	if (!mTimingDrawFlag)
+	{
+		// 初期化
+		mRadius = mRadiusInit;
+		mReactionCount = mCountInit;
 		mEffectScale = 1;
-	}
 
-	if (mEffectFlag)
-	{
-		mEffectScale += mScalePlus;
-		mEffectAngle += mAngleRotate;
+		// フラグを「偽」にする
+		mTimingFlag = false;
+		mEffectFlag = false;
 	}
 }
 
-// 描画
+
+//-----------------------------------------------------------------------------
+// @brief  描画.
+//-----------------------------------------------------------------------------
 void Timing::Draw()
 {
-	// リアクション判定のフレームの描画
-	DrawGraph(freamX, freamY, freamImg, TRUE);
-
 	// パーフェクト判定の位置となるゲージの描画
-	DrawCircle(gageCX, gageCY, gageRadius, white, TRUE);
+	DrawCircle(mGageCX, mGageCY, mGageRadius, mWhite, TRUE);
 
-
+	// タイミングゲージを描画するフラグが「真」となったら
+	if (mTimingDrawFlag)
+	{
+		if (!mTimingFlag)
+		{
+			// 半径が０になるまで収縮
+			if (mRadius > 0)
+			{
+				// 収縮するゲージの描画
+				DrawCircle(mGageCX, mGageCY, mRadius--, mBrack, FALSE, 2);
+			}
+		}
+	}
+	
+	// エフェクトのフラグが「真」のとき
 	if (mEffectFlag)
 	{
-		DrawRotaGraph(gageCX, gageCY, mEffectScale, mEffectAngle, mEffectImg, true, false, false);
+		DrawRotaGraph(mGageCX, mGageCY, mEffectScale, mEffectAngle, mEffectImg, true, false, false);
 	}
-
-
-	// ボタンが押されていない場合ループし続ける
-	if(!TimingFlag)
-	{
-		// 半径が０になるまで収縮させる
-		if(radius > 0)
-		{
-			// 収縮するゲージの描画
-			DrawCircle(gageCX, gageCY, radius--, brack, FALSE);
-		}
-		else
-		{
-			// 半径の大きさを初期化
-			radius = radiusInit;
-		}
-	}
-	// ボタンが押されたら
-	if (TimingFlag)
-	{
-		// カウントが最大値になるまで描画
-		if (reactionCount < reactionCountMax)
-		{
-			// バッドフラグが立ったら描画する
-			if (BadFlag)
-			{
-				DrawGraph(reactionX, reactionY, badImg, TRUE);
-			}
-			// グッドフラグが立ったら描画する
-			if (GoodFlag)
-			{
-				DrawGraph(reactionX, reactionY, goodImg, TRUE);
-			}
-			// パーフェクトフラグが立ったら描画する
-			if (PerfectFlag)
-			{
-				DrawGraph(reactionX, reactionY, perfectImg, TRUE);
-			}
-			// ゲージを止める
-			DrawCircle(gageCX, gageCY, radius, brack, FALSE);
-		}
-	}
-	else
-	{
-		// ゲージを表示しない
-	}
-
-	// スコアの画面を表示する
-	DrawFormatString(scoreX, scoreY, white, "score : %d", mScore);
+	// 再生されている音楽の時間の確認（デバッグ用）
+	DrawFormatString(0, 30, mWhite, "Time:%f", mCountPack);
+	// スコアを描画
+	mScorePtr->Draw();
 }
 
+
+//-----------------------------------------------------------------------------
+// @brief  CSVデータの読み込み.
+//-----------------------------------------------------------------------------
 void Timing ::CSVRead()
 {
 	// ファイルポインターがNULLの時デバッグをやめる
-	if (filePointer == NULL)														//filePointerが空の場合は
+	if (mFilePointer == NULL)
 	{
-		DebugBreak();																//デバッグ中止
+		//デバッグ中止
+		DebugBreak();
 	}
-	// ファイルの中の数値を読み込む
-	while ((csvData = fgetc(filePointer)) != EOF)
-	{
-		// BGMが再生された時間とCSVの中の数値が同じ時に
-		//    ゲージがパーフェクトの位置にいるようにしたい
-		
-	}
+	//memset関数でメモリにbufferをセットし、sizeof演算子で要素数を決める
+	memset(mBuffer, 0, sizeof(mBuffer));
 
+	while (1)
+	{
+		while (1)
+		{
+			// fgetc関数でfilepointerから文字を読んでcsvDataに格納
+			mCsvData = fgetc(mFilePointer);
+			if (mCsvData == EOF)
+			{
+				// EndOfFileを検出して
+				mEofFlag = true;
+				// ループを抜ける
+				break;
+			}
+			//区切りか改行でなければ
+			if (mCsvData != ',' && mCsvData != '\n')
+			{
+				//strcat_s関数でbufferに連結し、const char関数で書き換える
+				strcat_s(mBuffer, (const char*)&mCsvData);
+			}
+			else
+			{
+				// atof関数でbufferをfloat型に直して、ローカル変数numに代入
+				mNum = atof(mBuffer);
+				mRhythm[mRawNum] = mNum;
+				////////////////////////////////
+				// numに目的の数字が入ったので何かする
+				// num番目のチップ画像のハンドルを取得
+				//cell[columnNum][rawNum] = num;
+				////////////////////////////////
+				// 
+				// bufferをリセット
+				memset(mBuffer, 0, sizeof(mBuffer));
+				// 区切りか改行なのでループを抜ける
+				break;
+			}
+		}
+		// 1マップ分になったら
+		if (mEofFlag)
+		{
+			// ループを抜ける
+			break;
+		}
+		// 区切りを検出したら
+		if (mCsvData == ',')
+		{
+			// 列の数を増やす
+			//columnNum++;
+		}
+		// 改行だったら
+		if (mCsvData == '\n')
+		{
+			// 行を増やす
+			mRawNum++;
+			// 列を0にする
+			mColumnNum = 0;
+		}
+	}
 	// ファイルを閉じる
-	fclose(filePointer);
+	fclose(mFilePointer);
 }
