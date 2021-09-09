@@ -84,7 +84,7 @@ Play::~Play()
 /// <return>シーンのポインタ</return>
 SceneBase* Play::Update()
 {
-	mPlayBGM1->PlayBGM();
+	mPlayBGM1->PlayBackBGM();
 	if (!mPlayBGM1->CheckBGM()) 
 	{
 		// リザルトにスコアを渡す
