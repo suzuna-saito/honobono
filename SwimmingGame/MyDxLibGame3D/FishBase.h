@@ -18,7 +18,7 @@ public:
 
 	virtual void Draw(int _debugColor);							// •`‰æŠÖ”
 
-	/*----‚»‚ê‚¼‚ê‚Ìsetter / getter*/
+	/*----‚»‚ê‚¼‚ê‚Ìsetter / getter -----*/
 
 	int GetModelHandle() { return mModelHandle; }				//ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹‚Ìæ“¾
 

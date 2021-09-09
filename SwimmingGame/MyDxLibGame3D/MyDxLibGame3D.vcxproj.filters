@@ -32,6 +32,9 @@
     <Filter Include="ソース ファイル\Camera\Time">
       <UniqueIdentifier>{84942244-4a17-4a41-8af2-bec97014a621}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Dance">
+      <UniqueIdentifier>{5ba4aaef-33e8-4997-82f4-2566286f0532}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneBase.cpp">
@@ -44,9 +47,6 @@
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="UIBase.cpp">
-      <Filter>ソース ファイル\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="UIGoal.cpp">
       <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
     <ClCompile Include="Fade.cpp">
@@ -73,9 +73,6 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -100,6 +97,15 @@
     <ClCompile Include="FishManager.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="Score.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="NpcJump.cpp">
+      <Filter>ソース ファイル\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="Dance.cpp">
+      <Filter>ソース ファイル\Dance</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -112,9 +118,6 @@
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="UIBase.h">
-      <Filter>ソース ファイル\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UIGoal.h">
       <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
     <ClInclude Include="Fade.h">
@@ -141,9 +144,6 @@
     <ClInclude Include="Common.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ソース ファイル\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
@@ -167,6 +167,15 @@
     </ClInclude>
     <ClInclude Include="FishManager.h">
       <Filter>ソース ファイル\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NpcJump.h">
+      <Filter>ソース ファイル\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="Dance.h">
+      <Filter>ソース ファイル\Dance</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include "SceneBase.h"
 
 class Camera;
+class Score;
 
 /// <summary>
 /// リザルトシーンの生成、描画
@@ -10,7 +11,7 @@ class Result : public SceneBase
 {
 public:
     /// コンストラクタ
-    Result();
+    Result(int* _Score);
     /// デストラクタ
     ~Result();
 
@@ -31,6 +32,10 @@ public:
 
 	// 魚の挙動
 	void FishMove();
+
+	// ランク決定＆ランクごとのモデルを描画
+	void Runk();
+
 
 private:
 	int i;
@@ -79,6 +84,30 @@ private:
 
 	const VECTOR MAX_SIZE;                // 魚の拡大縮小最大値
 	const VECTOR MIN_SIZE;                // 魚の拡大縮小最小値
+
+	int mColor;                           // 文字色
+	int mScorePosX, mScorePosY;           // スコア表示位置
+	int mScore[5];                        // スコア
+	int mTmpScore;                        // スコア計算用
+	int mRunkScore;                       // ランク用スコア保持
+
+
+	const int SCORE_FONT_SIZE;            // スコアの文字サイズ
+	const int NUM_POS;                    // スコアの数字位置
+	const int NUM_SPACE;                  // スコアの間隔
+	const int DIGIT_NUM;                  // 数字の桁数
+
+	int mRunkModel[3];                    // メダル
+	int mRunkTexture[3];                  // メダルのテクスチャ
+	VECTOR mRunkPos;                      // メダルの位置
+	VECTOR mRunkScale;                    // メダルの大きさ
+	VECTOR mRunkAngle;                    // メダルの角度
+
+	const int GOLD_SCORE;                 // 金メダルのスコア
+	const int SILVER_SCORE;               // 銀メダルのスコア
+	const int BRONZE_SCORE;               // 銅メダルのスコア
+	const int RUNK_NUM;                   // メダルの種類
+
 
     Camera* camera;
 

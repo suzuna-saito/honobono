@@ -4,6 +4,8 @@
 #include "DxLib.h"
 #include"FishBase.h"
 
+class Jump;
+
 /// <summary>
 /// 魚一匹分のクラス
 /// </summary>
@@ -16,10 +18,22 @@ public:
 
 	void Updata();											// 更新関数
 
-	//アーティスティックスイミング開始時のセットポジション
-	void SetDancePos(const VECTOR _setPos);
+	//ジャンプの更新処理をいれた関数
+	void JumpUpdata();
+
+	//アーティスティックスイミングの更新処理をいれた関数
+	void DanceUpdata();
+
+	Jump* mJump;             //ジャンプクラスを持った変数
+	class Dance* mDance;           //ダンスクラスを持った変数
 
 private:
+	bool mJumpUpdataFlag;    // ジャンプの更新をするかどうか
+	bool mJumpedInFlag;      // ジャンプの更新が終わったかどうかを判定する変数(終わった：true、終わっていない:false)
+
+	bool mSetDancePosFlag;   // mSetDancePosのポジションに魚がいるときはtrueにする、いないときはfalse
+
+	float mDeltaTime;
 };
 
 #endif // !_FISH_H_

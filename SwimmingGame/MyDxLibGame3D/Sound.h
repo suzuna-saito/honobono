@@ -27,6 +27,11 @@ public:
 	void PlayBGM();
 
 	/// <summary>
+	/// 一週流れるとやむ音楽(リズムゲーム用)
+	/// </summary>
+	void PlayBackBGM();
+
+	/// <summary>
 	/// 効果音を再生する
 	/// </summary>
 	/// < param name = "_scene"> シーン取得 </param>
@@ -40,10 +45,16 @@ public:
 	/// < param name = "_scene"> シーンベースからシーンを拝借 </param>
 	void StopMusic();
 
+	/// <summary>
+	/// 音楽が流れているかチェックする
+	/// </summary>
+	/// <returns>チェックした値を返す</returns>
+	int CheckBGM();
+
 private:
 
+	// サウンドを格納するハンドル
 	int mSoundHandle;
-
 	// 一回きりの音
 	bool mOnceSoundFlag;
 

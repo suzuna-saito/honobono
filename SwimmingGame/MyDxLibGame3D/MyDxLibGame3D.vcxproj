@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Dance.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Fish.cpp" />
     <ClCompile Include="FishBase.cpp" />
@@ -170,8 +171,8 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Jump.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NpcJump.cpp" />
     <ClCompile Include="Play.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Pool.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="SceneBase.cpp">
@@ -181,17 +182,18 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Timing.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="UIBase.cpp" />
-    <ClCompile Include="UIGoal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Dance.h" />
     <ClInclude Include="Fade.h" />
     <ClInclude Include="Fish.h" />
     <ClInclude Include="FishBase.h" />
@@ -199,8 +201,8 @@
     <ClInclude Include="Hitchecker.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Jump.h" />
+    <ClInclude Include="NpcJump.h" />
     <ClInclude Include="Play.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Pool.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="SceneBase.h">
@@ -210,12 +212,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Timing.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="UIBase.h" />
-    <ClInclude Include="UIGoal.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,4 @@
 #include "Play.h"
-#include "Player.h"
-#include "UIGoal.h"
 #include "HitChecker.h"
 #include "Pool.h"
 #include "FishManager.h"
@@ -9,10 +7,14 @@
 #include "Result.h"
 #include "BackGround.h"
 #include "Sound.h"
+#include "Score.h"
 
 // コンストラクタ
 Play::Play()
 	:startCount(0)
+	, mScore(0)
+	, mScoreRadius(0)
+	, mScoreFlag(false)
 	, mPlayBGM1(nullptr)
 	, mPlayBGM2(nullptr)
 	, mPlayBGM3(nullptr)
@@ -21,12 +23,6 @@ Play::Play()
 {
 	SetScene(play);
 
-	// プレイヤーを生成.
-	player = new Player();
-	// UI（ゴール）の生成
-	uiGoal = new UIGoal();
-	//// UI(花火)の生成
-	//new UIFireworks();
 	// 当たり判定を生成
 	hit = new HitChecker();
 
@@ -38,8 +34,6 @@ Play::Play()
 	
 	// リズムボタンUI生成
 	timing = new Timing();
-
-	//sound = new Sound();
 
 	// 背景の生成
 	backGround = new BackGround();
@@ -73,11 +67,6 @@ Play::~Play()
 	delete timing;
 	// 当たり判定の削除
 	delete(hit);
-	// UIの削除
-	delete(uiGoal);
-	//delete(uiFire);
-	// プレイヤーを削除.
-	delete(player);
 	// 背景の削除
 	delete(backGround);
 	mPlayBGM1->StopMusic();
@@ -96,16 +85,19 @@ Play::~Play()
 SceneBase* Play::Update()
 {
 	mPlayBGM1->PlayBGM();
-	if (CheckHitKey(KEY_INPUT_SPACE))        // ↑押したら上固定カメラ
+	if (!mPlayBGM1->CheckBGM()) 
 	{
-		
+		// リザルトにスコアを渡す
+		mScore = SceneBase::mScore->GetResult();
+		return new Result(&mScore);
 	}
 
 	// シーン遷移条件(デバック用：右シフトキーを押すと遷移)
 	if (CheckHitKey(KEY_INPUT_RSHIFT))
 	{
-		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-		return new Result();
+		// リザルトにスコアを渡す
+		mScore = SceneBase::mScore->GetResult();
+		return new Result(&mScore);
 	}
 
 	time->Update();
@@ -125,9 +117,16 @@ SceneBase* Play::Update()
 
 	// リズムボタンUI更新
 	timing->Update();
+	// スコアの割合をもらってくる
+	mScoreRadius = timing->GetRadius();
+	// スコアのフラグをもらう
+	mScoreFlag = timing->GetScoreFlag();
 
-	// プレイヤー制御.
-	player->Update();
+	// スコアにフラグを渡す
+	SceneBase::mScore->SetScoreFlag(&mScoreFlag);
+	// スコアに割合を渡す
+	SceneBase::mScore->SetRadiusScore(&mScoreRadius);
+
 
 	startCount++;
 
@@ -146,15 +145,14 @@ void Play::Draw()
 {
 	// 背景の生成
 	//backGround->Draw();
-	// プール描画
-	pool->Draw();
 	// 魚描画
 	fishManager->Draw();
+	// プール描画
+	pool->Draw();
 	// リズムボタンUI描画
 	timing->Draw();
-	// プレイヤー描画.
-	player->Draw();
 
+	SceneBase::mScore->Draw();
 	
 	//それぞれの位置が分かりやすくなるように一本の線を表示（デバック用）
 	int redColor = GetColor(255, 0, 0);				//真ん中の色
