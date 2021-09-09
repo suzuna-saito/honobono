@@ -1,18 +1,17 @@
-// ƒCƒ“ƒNƒ‹[ƒh
+ï»¿// ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
 #include "Timing.h"
 #include "Input.h"
 #include "Sound.h"
-#include "Score.h"
-#include <time.h>
 
 //-----------------------------------------------------------------------------
-// @brief  ƒRƒ“ƒXƒgƒ‰ƒNƒ^.
+// @brief  ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
 //-----------------------------------------------------------------------------
 Timing::Timing()
 	: mTimingDrawFlag(false)
 	, mTimingFlag(false)
 	, mReactionFlag(true)
 	, mScoreFlag(false)
+	, mScoreRadius(0)
 	, mGageX(50)
 	, mGageY(350)
 	, mGageCX(100)
@@ -42,22 +41,20 @@ Timing::Timing()
 	, mEffectImg(-1)
 	, mCount(0.0f)
 {
-	// ‰æ‘œ“Ç‚İ‚İ
+	// ç”»åƒèª­ã¿è¾¼ã¿
 	mFreamImg = LoadGraph("data/newUI/frame.png");
 	mPerfectEffectImg = LoadGraph("data/newUI/PerfectEffect.png");
 	mGoodEffectImg = LoadGraph("data/newUI/GoodEffect.png");
 	mBadEffectImg = LoadGraph("data/newUI/BadEffect.png");
 
-	// F
+	// è‰²
 	 mBrack = GetColor(0, 0, 0);
 	 mWhite = GetColor(255, 255, 255);
 
-	// ƒTƒEƒ“ƒh‚Ìƒ[ƒh
+	// ã‚µã‚¦ãƒ³ãƒ‰ã®ãƒ­ãƒ¼ãƒ‰
 	mPerfectSound = new Sound("data/newSound/se/perfect.mp3");
 	mGoodSound = new Sound("data/newSound/se/good.mp3");
 	mBadSound = new Sound("data/newSound/se/bad.mp3");	
-
-	mScorePtr = new Score();
 
 	fopen_s(&mFilePointer, "data/csv/bgm_1.csv","r");
 	CSVRead();
@@ -65,11 +62,11 @@ Timing::Timing()
 
 
 //-----------------------------------------------------------------------------
-// @brief  ƒfƒXƒgƒ‰ƒNƒ^.
+// @brief  ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
 //-----------------------------------------------------------------------------
 Timing::~Timing()
 {
-	// ƒTƒEƒ“ƒhƒf[ƒ^‚Ìíœ
+	// ã‚µã‚¦ãƒ³ãƒ‰ãƒ‡ãƒ¼ã‚¿ã®å‰Šé™¤
 	delete mPerfectSound;
 	delete mGoodSound;
 	delete mBadSound;
@@ -77,11 +74,11 @@ Timing::~Timing()
 
 
 //-----------------------------------------------------------------------------
-// @brief  XV.
+// @brief  æ›´æ–°.
 //-----------------------------------------------------------------------------
 void Timing::Update()
 {
-	// ƒJƒEƒ“ƒg
+	// ã‚«ã‚¦ãƒ³ãƒˆ
 	mCount++;
 	// 
 	mCountPack = mCount / 1000;
@@ -89,16 +86,19 @@ void Timing::Update()
 	// 
 	if (mCountPack == mRhythm[i])
 	{
-		// ƒ^ƒCƒ~ƒ“ƒOƒQ[ƒW•`‰æƒtƒ‰ƒO‚ğu^v‚É‚·‚é
+		// ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚²ãƒ¼ã‚¸æç”»ãƒ•ãƒ©ã‚°ã‚’ã€ŒçœŸã€ã«ã™ã‚‹
 		mTimingDrawFlag = true;
 	}
 
-
 	UpdateKey();
-	// ƒQ[ƒW‚ª•`‰æ‚³‚ê‚éƒtƒ‰ƒO‚ª—§‚Á‚½‚ç
+
+	// ã‚¹ã‚³ã‚¢ãƒ•ãƒ©ã‚°ã‚’ã€Œå½ã€ã«ã™ã‚‹
+	mScoreFlag = false;
+
+	// ã‚²ãƒ¼ã‚¸ãŒæç”»ã•ã‚Œã‚‹ãƒ•ãƒ©ã‚°ãŒç«‹ã£ãŸã‚‰
 	if (mTimingDrawFlag)
 	{
-		// ƒXƒy[ƒXƒL[‚ğ‰Ÿ‚µ‚½‚çƒ^ƒCƒ~ƒ“ƒOƒtƒ‰ƒOAƒXƒRƒAƒtƒ‰ƒO‚ªu^v‚Æ‚È‚é
+		// ã‚¹ãƒšãƒ¼ã‚¹ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã‚‰ã‚¿ã‚¤ãƒŸãƒ³ã‚°ãƒ•ãƒ©ã‚°ã€ã‚¹ã‚³ã‚¢ãƒ•ãƒ©ã‚°ãŒã€ŒçœŸã€ã¨ãªã‚‹
 		if (Key[KEY_INPUT_SPACE] == 1)
 		{
 			mTimingFlag = true;
@@ -106,107 +106,104 @@ void Timing::Update()
 		}
 		if (!mReactionFlag)
 		{
-			// ƒJƒEƒ“ƒg‚ğ‚µ‘±‚¯‚é
+			// ã‚«ã‚¦ãƒ³ãƒˆã‚’ã—ç¶šã‘ã‚‹
 			mReactionCount++;
 		}
 		if (mReactionFlag)
 		{
-			// ƒ{ƒ^ƒ“‚ğ‰Ÿ‚³‚êƒ^ƒCƒ~ƒ“ƒOƒtƒ‰ƒO‚ªu^v‚Æ‚È‚Á‚½‚ç
+			// ãƒœã‚¿ãƒ³ã‚’æŠ¼ã•ã‚Œã‚¿ã‚¤ãƒŸãƒ³ã‚°ãƒ•ãƒ©ã‚°ãŒã€ŒçœŸã€ã¨ãªã£ãŸã‚‰
 			if (mTimingFlag)
 			{
-				// ƒoƒbƒh‚ÌğŒ
+				// ãƒãƒƒãƒ‰ã®æ¡ä»¶
 				if (mRadius - mGageRadius > mBadRadius)
 				{
-					// ƒGƒtƒFƒNƒg‰æ‘œ‚ğƒoƒbƒhƒGƒtƒFƒNƒg‚É‚·‚é
+					// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”»åƒã‚’ãƒãƒƒãƒ‰ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã«ã™ã‚‹
 					mEffectImg = mBadEffectImg;
-					// ƒGƒtƒFƒNƒgƒtƒ‰ƒO‚ğu^v‚É‚·‚é
+					// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ•ãƒ©ã‚°ã‚’ã€ŒçœŸã€ã«ã™ã‚‹
 					mEffectFlag = true;
-					// ƒoƒbƒh‚ÌŒø‰Ê‰¹‚ğ—¬‚·
+					// ãƒãƒƒãƒ‰ã®åŠ¹æœéŸ³ã‚’æµã™
 					mBadSound->PlaySE();
-					// ‘¼‚ÉƒŠƒAƒNƒVƒ‡ƒ“‚ğ”»’è‚µ‚È‚¢
+					// ä»–ã«ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’åˆ¤å®šã—ãªã„
 					mReactionFlag = false;
 				}
-				// ƒOƒbƒh‚ÌğŒ
+				// ã‚°ãƒƒãƒ‰ã®æ¡ä»¶
 				if (mRadius - mGageRadius >= mPerfectRadius && mRadius - mGageRadius <= mBadRadius)
 				{
-					// ƒGƒtƒFƒNƒg‰æ‘œ‚ğƒOƒbƒhƒGƒtƒFƒNƒg‚É‚·‚é
+					// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”»åƒã‚’ã‚°ãƒƒãƒ‰ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã«ã™ã‚‹
 					mEffectImg = mGoodEffectImg;
-					// ƒGƒtƒFƒNƒgƒtƒ‰ƒO‚ğu^v‚É‚·‚é
+					// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ•ãƒ©ã‚°ã‚’ã€ŒçœŸã€ã«ã™ã‚‹
 					mEffectFlag = true;
-					// ƒOƒbƒh‚ÌŒø‰Ê‰¹‚ğ—¬‚·
+					// ã‚°ãƒƒãƒ‰ã®åŠ¹æœéŸ³ã‚’æµã™
 					mGoodSound->PlaySE();
-					// ‘¼‚ÉƒŠƒAƒNƒVƒ‡ƒ“‚ğ”»’è‚µ‚È‚¢
+					// ä»–ã«ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’åˆ¤å®šã—ãªã„
 					mReactionFlag = false;
 				}
-				// ƒp[ƒtƒFƒNƒg‚ÌğŒ
+				// ãƒ‘ãƒ¼ãƒ•ã‚§ã‚¯ãƒˆã®æ¡ä»¶
 				if (mRadius - mGageRadius < mPerfectRadius)
 				{
-					// ƒGƒtƒFƒNƒg‰æ‘œ‚ğƒp[ƒtƒFƒNƒgƒGƒtƒFƒNƒg‚É‚·‚é
+					// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”»åƒã‚’ãƒ‘ãƒ¼ãƒ•ã‚§ã‚¯ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã«ã™ã‚‹
 					mEffectImg = mPerfectEffectImg;
-					// ƒGƒtƒFƒNƒgƒtƒ‰ƒO‚ğu^v‚É‚·‚é
+					// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ•ãƒ©ã‚°ã‚’ã€ŒçœŸã€ã«ã™ã‚‹
 					mEffectFlag = true;
-					// ƒp[ƒtƒFƒNƒg‚ÌŒø‰Ê‰¹‚ğ—¬‚·
+					// ãƒ‘ãƒ¼ãƒ•ã‚§ã‚¯ãƒˆã®åŠ¹æœéŸ³ã‚’æµã™
 					mPerfectSound->PlaySE();
-					// ‘¼‚ÉƒŠƒAƒNƒVƒ‡ƒ“‚ğ”»’è‚µ‚È‚¢
+					// ä»–ã«ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’åˆ¤å®šã—ãªã„
 					mReactionFlag = false;
 				}
 			}
-			// ƒ^ƒCƒ~ƒ“ƒOƒtƒ‰ƒO‚ªu‹Uv‚Å‚ ‚èAƒQ[ƒW‚Ì”¼Œa‚ª‚O‚É‚È‚Á‚½‚ç
+			// ã‚¿ã‚¤ãƒŸãƒ³ã‚°ãƒ•ãƒ©ã‚°ãŒã€Œå½ã€ã§ã‚ã‚Šã€ã‚²ãƒ¼ã‚¸ã®åŠå¾„ãŒï¼ã«ãªã£ãŸã‚‰
 			else if (!mTimingFlag && mRadius == 0)
 			{
-				// ƒGƒtƒFƒNƒg‰æ‘œ‚ğƒoƒbƒhƒGƒtƒFƒNƒg‚É‚·‚é
+				// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”»åƒã‚’ãƒãƒƒãƒ‰ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã«ã™ã‚‹
 				mEffectImg = mBadEffectImg;
-				// ƒGƒtƒFƒNƒgƒtƒ‰ƒO‚ğu^v‚É‚·‚é
+				// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ•ãƒ©ã‚°ã‚’ã€ŒçœŸã€ã«ã™ã‚‹
 				mEffectFlag = true;
-				// ƒoƒbƒh‚ÌŒø‰Ê‰¹‚ğ—¬‚·
+				// ãƒãƒƒãƒ‰ã®åŠ¹æœéŸ³ã‚’æµã™
 				mBadSound->PlaySE();
-				// ‘¼‚ÉƒŠƒAƒNƒVƒ‡ƒ“‚ğ”»’è‚µ‚È‚¢
+				// ä»–ã«ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’åˆ¤å®šã—ãªã„
 				mReactionFlag = false;
 			}
 		}
 		
-		// ƒŠƒAƒNƒVƒ‡ƒ“ƒJƒEƒ“ƒg‚ªÅ‘å’l‚Å‚Í‚È‚¢‚Æ‚«
-		if (!(mReactionCount < mReactionCountMax))
+		// ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚«ã‚¦ãƒ³ãƒˆãŒæœ€å¤§å€¤ã§ã¯ãªã„ã¨ã
+		//if (!(mReactionCount < mReactionCountMax))
 		{
-			// ƒXƒRƒA‚ÌŒvZ
 			if (mScoreFlag)
 			{
-				int n;
-				n = mRadiusInit - mRadius;
-				mScorePtr->GetScore(&n);
-				mScoreFlag = false;
+				// 
+				mScoreRadius = mRadiusInit - mRadius;
 			}
 		}
-		// ƒŠƒAƒNƒVƒ‡ƒ“ƒJƒEƒ“ƒg‚ªÅ‘å’l‚ğ’´‚¦‚½‚ç
+		// ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚«ã‚¦ãƒ³ãƒˆãŒæœ€å¤§å€¤ã‚’è¶…ãˆãŸã‚‰
 		if (mReactionCount == mReactionCountMax)
 		{
-			// ƒ^ƒCƒ~ƒ“ƒOƒtƒ‰ƒO‚ğu‹Uv‚Æ‚·‚é
+			// ã‚¿ã‚¤ãƒŸãƒ³ã‚°ãƒ•ãƒ©ã‚°ã‚’ã€Œå½ã€ã¨ã™ã‚‹
 			mTimingFlag = false;
-			// ƒ^ƒCƒ~ƒ“ƒOƒQ[ƒW‚ğ•`‰æ‚µ‚È‚¢
+			// ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚²ãƒ¼ã‚¸ã‚’æç”»ã—ãªã„
 			mTimingDrawFlag = false;
-			// Ÿ‚ÌƒQ[ƒW—p
+			// æ¬¡ã®ã‚²ãƒ¼ã‚¸ç”¨
 			i++;
-			// ƒŠƒAƒNƒVƒ‡ƒ“‚ğ”»’è‚Å‚«‚é‚æ‚¤‚É‚·‚é
+			// ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’åˆ¤å®šã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹
 			mReactionFlag = true;
 		}
-		// ƒGƒtƒFƒNƒg‚Ìƒtƒ‰ƒO‚ªu^v‚Ì‚Æ‚«
+		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ãƒ•ãƒ©ã‚°ãŒã€ŒçœŸã€ã®ã¨ã
 		if (mEffectFlag)
 		{
-			// ƒGƒtƒFƒNƒg‚ğ‘å‚«‚­‚³‚¹‚È‚ª‚ç‰ñ“]‚³‚¹‚é
+			// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å¤§ããã•ã›ãªãŒã‚‰å›è»¢ã•ã›ã‚‹
 			mEffectScale += mScalePlus;
 			mEffectAngle += mAngleRotate;
 		}
 	}
 
-	// ƒQ[ƒW‚ª•`‰æ‚³‚ê‚éƒtƒ‰ƒO‚ªu‹Uv‚Å‚ ‚Á‚½‚ç
+	// ã‚²ãƒ¼ã‚¸ãŒæç”»ã•ã‚Œã‚‹ãƒ•ãƒ©ã‚°ãŒã€Œå½ã€ã§ã‚ã£ãŸã‚‰
 	if (!mTimingDrawFlag)
 	{
-		// ‰Šú‰»
+		// åˆæœŸåŒ–
 		mRadius = mRadiusInit;
 		mReactionCount = mCountInit;
 		mEffectScale = 1;
 
-		// ƒtƒ‰ƒO‚ğu‹Uv‚É‚·‚é
+		// ãƒ•ãƒ©ã‚°ã‚’ã€Œå½ã€ã«ã™ã‚‹
 		mTimingFlag = false;
 		mEffectFlag = false;
 	}
@@ -214,110 +211,108 @@ void Timing::Update()
 
 
 //-----------------------------------------------------------------------------
-// @brief  •`‰æ.
+// @brief  æç”».
 //-----------------------------------------------------------------------------
 void Timing::Draw()
 {
-	// ƒp[ƒtƒFƒNƒg”»’è‚ÌˆÊ’u‚Æ‚È‚éƒQ[ƒW‚Ì•`‰æ
+	// ãƒ‘ãƒ¼ãƒ•ã‚§ã‚¯ãƒˆåˆ¤å®šã®ä½ç½®ã¨ãªã‚‹ã‚²ãƒ¼ã‚¸ã®æç”»
 	DrawCircle(mGageCX, mGageCY, mGageRadius, mWhite, TRUE);
 
-	// ƒ^ƒCƒ~ƒ“ƒOƒQ[ƒW‚ğ•`‰æ‚·‚éƒtƒ‰ƒO‚ªu^v‚Æ‚È‚Á‚½‚ç
+	// ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚²ãƒ¼ã‚¸ã‚’æç”»ã™ã‚‹ãƒ•ãƒ©ã‚°ãŒã€ŒçœŸã€ã¨ãªã£ãŸã‚‰
 	if (mTimingDrawFlag)
 	{
 		if (!mTimingFlag)
 		{
-			// ”¼Œa‚ª‚O‚É‚È‚é‚Ü‚Åûk
+			// åŠå¾„ãŒï¼ã«ãªã‚‹ã¾ã§åç¸®
 			if (mRadius > 0)
 			{
-				// ûk‚·‚éƒQ[ƒW‚Ì•`‰æ
+				// åç¸®ã™ã‚‹ã‚²ãƒ¼ã‚¸ã®æç”»
 				DrawCircle(mGageCX, mGageCY, mRadius--, mBrack, FALSE, 2);
 			}
 		}
 	}
 	
-	// ƒGƒtƒFƒNƒg‚Ìƒtƒ‰ƒO‚ªu^v‚Ì‚Æ‚«
+	// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ãƒ•ãƒ©ã‚°ãŒã€ŒçœŸã€ã®ã¨ã
 	if (mEffectFlag)
 	{
 		DrawRotaGraph(mGageCX, mGageCY, mEffectScale, mEffectAngle, mEffectImg, true, false, false);
 	}
-	// Ä¶‚³‚ê‚Ä‚¢‚é‰¹Šy‚ÌŠÔ‚ÌŠm”FiƒfƒoƒbƒO—pj
+	// å†ç”Ÿã•ã‚Œã¦ã„ã‚‹éŸ³æ¥½ã®æ™‚é–“ã®ç¢ºèªï¼ˆãƒ‡ãƒãƒƒã‚°ç”¨ï¼‰
 	DrawFormatString(0, 30, mWhite, "Time:%f", mCountPack);
-	// ƒXƒRƒA‚ğ•`‰æ
-	mScorePtr->Draw();
 }
 
 
 //-----------------------------------------------------------------------------
-// @brief  CSVƒf[ƒ^‚Ì“Ç‚İ‚İ.
+// @brief  CSVãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿.
 //-----------------------------------------------------------------------------
 void Timing ::CSVRead()
 {
-	// ƒtƒ@ƒCƒ‹ƒ|ƒCƒ“ƒ^[‚ªNULL‚ÌƒfƒoƒbƒO‚ğ‚â‚ß‚é
+	// ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿ãƒ¼ãŒNULLã®æ™‚ãƒ‡ãƒãƒƒã‚°ã‚’ã‚„ã‚ã‚‹
 	if (mFilePointer == NULL)
 	{
-		//ƒfƒoƒbƒO’†~
+		//ãƒ‡ãƒãƒƒã‚°ä¸­æ­¢
 		DebugBreak();
 	}
-	//memsetŠÖ”‚Åƒƒ‚ƒŠ‚Ébuffer‚ğƒZƒbƒg‚µAsizeof‰‰Zq‚Å—v‘f”‚ğŒˆ‚ß‚é
+	//memseté–¢æ•°ã§ãƒ¡ãƒ¢ãƒªã«bufferã‚’ã‚»ãƒƒãƒˆã—ã€sizeofæ¼”ç®—å­ã§è¦ç´ æ•°ã‚’æ±ºã‚ã‚‹
 	memset(mBuffer, 0, sizeof(mBuffer));
 
 	while (1)
 	{
 		while (1)
 		{
-			// fgetcŠÖ”‚Åfilepointer‚©‚ç•¶š‚ğ“Ç‚ñ‚ÅcsvData‚ÉŠi”[
+			// fgetcé–¢æ•°ã§filepointerã‹ã‚‰æ–‡å­—ã‚’èª­ã‚“ã§csvDataã«æ ¼ç´
 			mCsvData = fgetc(mFilePointer);
 			if (mCsvData == EOF)
 			{
-				// EndOfFile‚ğŒŸo‚µ‚Ä
+				// EndOfFileã‚’æ¤œå‡ºã—ã¦
 				mEofFlag = true;
-				// ƒ‹[ƒv‚ğ”²‚¯‚é
+				// ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
 				break;
 			}
-			//‹æØ‚è‚©‰üs‚Å‚È‚¯‚ê‚Î
+			//åŒºåˆ‡ã‚Šã‹æ”¹è¡Œã§ãªã‘ã‚Œã°
 			if (mCsvData != ',' && mCsvData != '\n')
 			{
-				//strcat_sŠÖ”‚Åbuffer‚É˜AŒ‹‚µAconst charŠÖ”‚Å‘‚«Š·‚¦‚é
+				//strcat_sé–¢æ•°ã§bufferã«é€£çµã—ã€const charé–¢æ•°ã§æ›¸ãæ›ãˆã‚‹
 				strcat_s(mBuffer, (const char*)&mCsvData);
 			}
 			else
 			{
-				// atofŠÖ”‚Åbuffer‚ğfloatŒ^‚É’¼‚µ‚ÄAƒ[ƒJƒ‹•Ï”num‚É‘ã“ü
+				// atofé–¢æ•°ã§bufferã‚’floatå‹ã«ç›´ã—ã¦ã€ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°numã«ä»£å…¥
 				mNum = atof(mBuffer);
 				mRhythm[mRawNum] = mNum;
 				////////////////////////////////
-				// num‚É–Ú“I‚Ì”š‚ª“ü‚Á‚½‚Ì‚Å‰½‚©‚·‚é
-				// num”Ô–Ú‚Ìƒ`ƒbƒv‰æ‘œ‚Ìƒnƒ“ƒhƒ‹‚ğæ“¾
+				// numã«ç›®çš„ã®æ•°å­—ãŒå…¥ã£ãŸã®ã§ä½•ã‹ã™ã‚‹
+				// numç•ªç›®ã®ãƒãƒƒãƒ—ç”»åƒã®ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾—
 				//cell[columnNum][rawNum] = num;
 				////////////////////////////////
 				// 
-				// buffer‚ğƒŠƒZƒbƒg
+				// bufferã‚’ãƒªã‚»ãƒƒãƒˆ
 				memset(mBuffer, 0, sizeof(mBuffer));
-				// ‹æØ‚è‚©‰üs‚È‚Ì‚Åƒ‹[ƒv‚ğ”²‚¯‚é
+				// åŒºåˆ‡ã‚Šã‹æ”¹è¡Œãªã®ã§ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
 				break;
 			}
 		}
-		// 1ƒ}ƒbƒv•ª‚É‚È‚Á‚½‚ç
+		// 1ãƒãƒƒãƒ—åˆ†ã«ãªã£ãŸã‚‰
 		if (mEofFlag)
 		{
-			// ƒ‹[ƒv‚ğ”²‚¯‚é
+			// ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
 			break;
 		}
-		// ‹æØ‚è‚ğŒŸo‚µ‚½‚ç
+		// åŒºåˆ‡ã‚Šã‚’æ¤œå‡ºã—ãŸã‚‰
 		if (mCsvData == ',')
 		{
-			// —ñ‚Ì”‚ğ‘‚â‚·
+			// åˆ—ã®æ•°ã‚’å¢—ã‚„ã™
 			//columnNum++;
 		}
-		// ‰üs‚¾‚Á‚½‚ç
+		// æ”¹è¡Œã ã£ãŸã‚‰
 		if (mCsvData == '\n')
 		{
-			// s‚ğ‘‚â‚·
+			// è¡Œã‚’å¢—ã‚„ã™
 			mRawNum++;
-			// —ñ‚ğ0‚É‚·‚é
+			// åˆ—ã‚’0ã«ã™ã‚‹
 			mColumnNum = 0;
 		}
 	}
-	// ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
+	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
 	fclose(mFilePointer);
 }

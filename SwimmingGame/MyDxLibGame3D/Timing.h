@@ -32,7 +32,8 @@ public:
 	/// スコアを取得
 	/// </summary>
 	/// <returns>現在のスコアを返す</returns>
-	Score* GetScore() { return mScorePtr; }
+	int GetRadius() { return mScoreRadius; }
+	bool GetScoreFlag() { return mScoreFlag; }
 
 	/// <summary>
 	/// CSVデータの読み込み
@@ -123,7 +124,7 @@ private:
 	// Score処理フラグ
 	bool mScoreFlag;
 	// スコア
-	class Score* mScorePtr;
+	int mScoreRadius;
 
 
 	//  エフェクト
