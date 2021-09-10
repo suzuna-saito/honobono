@@ -9,6 +9,7 @@ const float SIZE_X = 10.0f;    // サイズを変更する際のｘ（天井と床はｚ軸にも使わ
 const float SIZE_Z = 7.0f;     // サイズを変更する際のｚ
 // ------------------------------------
 
+
 BackGround::BackGround()
 	: mPos{ VGet(0.0f, CEILING, 0.0f),VGet(0.0f, 0.0f, 0.0f),VGet(WIDTH, POS_Y, 0.0f)
 		  ,VGet(-WIDTH, POS_Y, 0.0f),VGet(0.0f, POS_Y, WIDTH),VGet(0.0f, POS_Y, -WIDTH) }
@@ -46,7 +47,7 @@ BackGround::~BackGround()
 
 void BackGround::Draw()
 {
-	for (i = 1; i < WALL_NUM; i++)
+	for (i = 0; i < WALL_NUM; i++)
 	{
 		MV1SetScale(mModelHandle[i], mSize[i]);
 		MV1SetRotationXYZ(mModelHandle[i], mRotate[i]);

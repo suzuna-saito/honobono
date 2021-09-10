@@ -1,17 +1,17 @@
 #pragma once
 #include "SceneBase.h"
-#include "Score.h"
 
 class Camera;
+class Score;
 
 /// <summary>
 /// リザルトシーンの生成、描画
 /// </summary>
-class Result : public SceneBase, public Score
+class Result : public SceneBase
 {
 public:
     /// コンストラクタ
-    Result(int _Score);
+    Result(int* _Score);
     /// デストラクタ
     ~Result();
 

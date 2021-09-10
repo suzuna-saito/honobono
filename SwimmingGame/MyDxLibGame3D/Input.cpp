@@ -19,7 +19,7 @@ int UpdateKey()
             Button++;
         }
         else                // ‰Ÿ‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î
-        {             
+        {
             Key[i] = 0;     // 0‚É‚·‚é
             Button = 0;
         }

@@ -1,6 +1,8 @@
 #ifndef _SOUND_H_
 #define _SOUND_H_
 #include <DxLib.h>
+#include <sys/timeb.h>
+#include <time.h>
 /*
 * 名前の変更や追加・削除は行っても大丈夫です
 */
@@ -23,7 +25,6 @@ public:
 	/// <summary>
 	/// シーンごとで音楽を再生する
 	/// </summary>
-/// < param name = "_scene"> シーン取得 </param>
 	void PlayBGM();
 
 	/// <summary>
@@ -34,21 +35,17 @@ public:
 	/// <summary>
 	/// 効果音を再生する
 	/// </summary>
-	/// < param name = "_scene"> シーン取得 </param>
 	void PlaySE();
-
 
 
 	/// <summary>
 	/// 再生している音楽を止める
 	/// </summary>
-	/// < param name = "_scene"> シーンベースからシーンを拝借 </param>
 	void StopMusic();
 
 	/// <summary>
 	/// 音楽が流れているかチェックする
 	/// </summary>
-	/// <returns>チェックした値を返す</returns>
 	int CheckBGM();
 
 private:

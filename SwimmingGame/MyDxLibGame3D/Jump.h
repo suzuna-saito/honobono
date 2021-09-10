@@ -14,13 +14,13 @@ public:
 	/// ジャンプ更新処理
 	/// </summary>
 	/// <param name="_rotate">飛ぶオブジェクトの向き</param>
-	void JumpUpdata(VECTOR _rotate);
-	
+	void JumpUpdate(VECTOR _rotate);
+
 	/// <summary>
 	/// ジャンプパターンの更新処理
 	/// </summary>
 	/// <param name="_pos">止まる位置</param>
-	void JumpSetUpdata();
+	void JumpSetUpdate();
 
 	// ジャンプの種類
 	enum NowJump
@@ -50,13 +50,13 @@ private:
 	bool mJumpUp;        // 上がることが出来る
 
 	bool mIsGround;      // 地面との接地判定
-	
+
 	const float mGravity;// 重力
 
 	/// <summary>
 	/// ジャンプの処理
 	/// </summary>
-	void JumpNowUpdata();
+	void JumpNowUpdate();
 
 public:    // ゲッター、セッター
 	// 地面と接地しているかどうか
@@ -71,4 +71,3 @@ public:    // ゲッター、セッター
 	// 今なんのジャンプが行われているかを返す
 	NowJump GetNowJump() { return mNowJump; }
 };
-

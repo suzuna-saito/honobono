@@ -1,264 +1,318 @@
-// ƒCƒ“ƒNƒ‹[ƒh
+ï»¿// ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
 #include "Timing.h"
 #include "Input.h"
 #include "Sound.h"
-#include "Score.h"
 
-// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+//-----------------------------------------------------------------------------
+// @brief  ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
+//-----------------------------------------------------------------------------
 Timing::Timing()
-	: TimingFlag(false)
-	, PerfectFlag(false)
-	, GoodFlag(false)
-	, BadFlag(false)
-	, ScoreFlag(false)
-	, gageX(50)
-	, gageY(350)
-	, gageCX(100)
-	, gageCY(400)
-	, freamX(490)
-	, freamY(180)
-	, radius(radiusInit)
-	, gageRadius(20)
-	, radiusInit(70)
-	, perfectRadius(5)
-	, badRadius(20)
-	, reactionX(520)
-	, reactionY(200)
-	, reactionCount(countInit)
-	, countInit(0)
-	, reactionCountMax(50)
-	, mScore(0)
-	, scoreMax(0)
-	, scoreX(800)
-	, scoreY(20)
+	: mTimingDrawFlag(false)
+	, mTimingFlag(false)
+	, mReactionFlag(true)
+	, mScoreFlag(false)
+	, mScoreRadius(0)
+	, mGageX(50)
+	, mGageY(350)
+	, mGageCX(100)
+	, mGageCY(400)
+	, mFreamX(490)
+	, mFreamY(180)
+	, mRadius(70)
+	, mGageRadius(20)
+	, mRadiusInit(70)
+	, mPerfectRadius(5)
+	, mBadRadius(20)
+	, mReactionX(520)
+	, mReactionY(200)
+	, mReactionCount(0)
+	, mCountInit(0)
+	, mReactionCountMax(50)
 	, mPerfectSound(nullptr)
 	, mGoodSound(nullptr)
 	, mBadSound(nullptr)
-	, filePointer(0)
-	, csvData(0)
+	, mCsvData(0)
+	, mFilePointer(NULL)
 	, mEffectAngle(0)
 	, mEffectScale(1)
 	, mEffectFlag(false)
 	, mAngleRotate(15.0f * DX_PI_F / 180.0f)
 	, mScalePlus(0.02)
 	, mEffectImg(-1)
+	, mCount(0.0f)
 {
-	// ‰æ‘œ“Ç‚İ‚İ
-	freamImg = LoadGraph("data/newUI/frame.png");
-	perfectImg = LoadGraph("data/newUI/perfect.png");
-	goodImg = LoadGraph("data/newUI/good.png");
-	badImg = LoadGraph("data/newUI/bad.png");
-	goodImg = LoadGraph("data/newUI/good.png");
-	badImg = LoadGraph("data/newUI/bad.png");
+	// ç”»åƒèª­ã¿è¾¼ã¿
+	mFreamImg = LoadGraph("data/newUI/frame.png");
 	mPerfectEffectImg = LoadGraph("data/newUI/PerfectEffect.png");
 	mGoodEffectImg = LoadGraph("data/newUI/GoodEffect.png");
 	mBadEffectImg = LoadGraph("data/newUI/BadEffect.png");
 
-	// F
-	 brack = GetColor(0, 0, 0);
-	 white = GetColor(255, 255, 255);
+	// è‰²
+	 mBrack = GetColor(0, 0, 0);
+	 mWhite = GetColor(255, 255, 255);
 
-	 NormalGageColor = GetColor(255, 255, 255);
-	 mPushGageColor = GetColor(0, 255, 255);
-
-	// ƒTƒEƒ“ƒh‚Ìƒ[ƒh
+	// ã‚µã‚¦ãƒ³ãƒ‰ã®ãƒ­ãƒ¼ãƒ‰
 	mPerfectSound = new Sound("data/newSound/se/perfect.mp3");
 	mGoodSound = new Sound("data/newSound/se/good.mp3");
 	mBadSound = new Sound("data/newSound/se/bad.mp3");	
 
-	mScorePtr = new Score();
+	fopen_s(&mFilePointer, "data/csv/bgm_1.csv","r");
+	CSVRead();
 }
 
-// ƒfƒXƒgƒ‰ƒNƒ^
+
+//-----------------------------------------------------------------------------
+// @brief  ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿.
+//-----------------------------------------------------------------------------
 Timing::~Timing()
 {
-	// ‰æ‘œƒf[ƒ^íœ
-	DeleteGraph(perfectImg);
-	DeleteGraph(goodImg);
-	DeleteGraph(badImg);
-
-	// ƒTƒEƒ“ƒhƒf[ƒ^‚Ìíœ
+	// ã‚µã‚¦ãƒ³ãƒ‰ãƒ‡ãƒ¼ã‚¿ã®å‰Šé™¤
 	delete mPerfectSound;
 	delete mGoodSound;
 	delete mBadSound;
-
-	// CSVƒf[ƒ^‚Ìíœ
-	delete csv;
 }
 
-// XV
+
+//-----------------------------------------------------------------------------
+// @brief  æ›´æ–°.
+//-----------------------------------------------------------------------------
 void Timing::Update()
 {
+	// ã‚«ã‚¦ãƒ³ãƒˆ
+	mCount++;
+	// 
+	mCountPack = mCount / 1000;
+
+	// 
+	if (mCountPack == mRhythm[i])
+	{
+		// ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚²ãƒ¼ã‚¸æç”»ãƒ•ãƒ©ã‚°ã‚’ã€ŒçœŸã€ã«ã™ã‚‹
+		mTimingDrawFlag = true;
+	}
+
 	UpdateKey();
 
-	// ƒXƒy[ƒXƒL[‚ğ‰Ÿ‚µ‚½‚çƒ^ƒCƒ~ƒ“ƒOƒtƒ‰ƒO‚ªu^v‚Æ‚È‚é
-	if (Key[KEY_INPUT_SPACE] == 1 || Button & (XINPUT_BUTTON_A)== 1)
-	{
-		TimingFlag = true;
-		ScoreFlag = true;
-	}
-	// ƒ{ƒ^ƒ“‚ğ‰Ÿ‚³‚êƒ^ƒCƒ~ƒ“ƒOƒtƒ‰ƒO‚ªu^v‚Æ‚È‚Á‚½‚ç
-	if (TimingFlag)
-	{
-		mGageColor = mPushGageColor;
+	// ã‚¹ã‚³ã‚¢ãƒ•ãƒ©ã‚°ã‚’ã€Œå½ã€ã«ã™ã‚‹
+	mScoreFlag = false;
 
-		// ƒJƒEƒ“ƒg‚ğ‚µ‘±‚¯‚é
-		reactionCount++;
-		// ƒoƒbƒh‚ÌğŒ
-		if (radius - gageRadius > badRadius)
+	// ã‚²ãƒ¼ã‚¸ãŒæç”»ã•ã‚Œã‚‹ãƒ•ãƒ©ã‚°ãŒç«‹ã£ãŸã‚‰
+	if (mTimingDrawFlag)
+	{
+		// ã‚¹ãƒšãƒ¼ã‚¹ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã‚‰ã‚¿ã‚¤ãƒŸãƒ³ã‚°ãƒ•ãƒ©ã‚°ã€ã‚¹ã‚³ã‚¢ãƒ•ãƒ©ã‚°ãŒã€ŒçœŸã€ã¨ãªã‚‹
+		if (Key[KEY_INPUT_SPACE] == 1)
 		{
-			mEffectImg = mBadEffectImg;
-			mEffectFlag = true;
-			// ƒoƒbƒh‚ÌŒø‰Ê‰¹‚ğ—¬‚·
-			mBadSound->PlaySE();
-			// ƒoƒbƒhƒtƒ‰ƒO‚ğu^v‚É‚·‚é
-			BadFlag = true;
+			mTimingFlag = true;
+			mScoreFlag = true;
 		}
-		// ƒOƒbƒh‚ÌğŒ
-		else if (radius - gageRadius >= perfectRadius && radius - gageRadius <= badRadius)
+		if (!mReactionFlag)
 		{
-			mEffectImg = mGoodEffectImg;
-			mEffectFlag = true;
-			// ƒOƒbƒh‚ÌŒø‰Ê‰¹‚ğ—¬‚·
-			mGoodSound->PlaySE();
-			// ƒOƒbƒhƒtƒ‰ƒO‚ğu^v‚É‚·‚é
-			GoodFlag = true;
+			// ã‚«ã‚¦ãƒ³ãƒˆã‚’ã—ç¶šã‘ã‚‹
+			mReactionCount++;
 		}
-		// ƒp[ƒtƒFƒNƒg‚ÌğŒ
-		else if (radius - gageRadius < perfectRadius)
+		if (mReactionFlag)
 		{
-			mEffectImg = mPerfectEffectImg;
-			mEffectFlag = true;
-			// ƒp[ƒtƒFƒNƒg‚ÌŒø‰Ê‰¹‚ğ—¬‚·
-			mPerfectSound->PlaySE();
-			// ƒp[ƒtƒFƒNƒgƒtƒ‰ƒO‚ğu^v‚É‚·‚é
-			PerfectFlag = true;
-		}
-		// ƒŠƒAƒNƒVƒ‡ƒ“ƒJƒEƒ“ƒg‚ªÅ‘å’l‚Å‚Í‚È‚¢‚Æ‚«
-		if (!(reactionCount < reactionCountMax))
-		{
-			// ƒXƒRƒA‚ÌŒvZ
-			// ”¼Œa‚ÌÅ‘å’l‚©‚çŒ»İ‚Ì”¼Œa‚ğ·‚ğo‚µA‚»‚Ì·‚ÉƒXƒRƒA‚­‚ç‚¢‚Ì”š‚ğŠ|‚¯‚é
-			int n = 0;
-			n = radiusInit - radius;
-			scoreMax = n * 10;
-			mScore = scoreMax + mScore;
-	
-			if (ScoreFlag)
+			// ãƒœã‚¿ãƒ³ã‚’æŠ¼ã•ã‚Œã‚¿ã‚¤ãƒŸãƒ³ã‚°ãƒ•ãƒ©ã‚°ãŒã€ŒçœŸã€ã¨ãªã£ãŸã‚‰
+			if (mTimingFlag)
 			{
-				int n;
-				n = radiusInit - radius;
-				mScorePtr->GetScore(&n);
-				ScoreFlag = false;
+				// ãƒãƒƒãƒ‰ã®æ¡ä»¶
+				if (mRadius - mGageRadius > mBadRadius)
+				{
+					// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”»åƒã‚’ãƒãƒƒãƒ‰ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã«ã™ã‚‹
+					mEffectImg = mBadEffectImg;
+					// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ•ãƒ©ã‚°ã‚’ã€ŒçœŸã€ã«ã™ã‚‹
+					mEffectFlag = true;
+					// ãƒãƒƒãƒ‰ã®åŠ¹æœéŸ³ã‚’æµã™
+					mBadSound->PlaySE();
+					// ä»–ã«ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’åˆ¤å®šã—ãªã„
+					mReactionFlag = false;
+				}
+				// ã‚°ãƒƒãƒ‰ã®æ¡ä»¶
+				if (mRadius - mGageRadius >= mPerfectRadius && mRadius - mGageRadius <= mBadRadius)
+				{
+					// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”»åƒã‚’ã‚°ãƒƒãƒ‰ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã«ã™ã‚‹
+					mEffectImg = mGoodEffectImg;
+					// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ•ãƒ©ã‚°ã‚’ã€ŒçœŸã€ã«ã™ã‚‹
+					mEffectFlag = true;
+					// ã‚°ãƒƒãƒ‰ã®åŠ¹æœéŸ³ã‚’æµã™
+					mGoodSound->PlaySE();
+					// ä»–ã«ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’åˆ¤å®šã—ãªã„
+					mReactionFlag = false;
+				}
+				// ãƒ‘ãƒ¼ãƒ•ã‚§ã‚¯ãƒˆã®æ¡ä»¶
+				if (mRadius - mGageRadius < mPerfectRadius)
+				{
+					// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”»åƒã‚’ãƒ‘ãƒ¼ãƒ•ã‚§ã‚¯ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã«ã™ã‚‹
+					mEffectImg = mPerfectEffectImg;
+					// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ•ãƒ©ã‚°ã‚’ã€ŒçœŸã€ã«ã™ã‚‹
+					mEffectFlag = true;
+					// ãƒ‘ãƒ¼ãƒ•ã‚§ã‚¯ãƒˆã®åŠ¹æœéŸ³ã‚’æµã™
+					mPerfectSound->PlaySE();
+					// ä»–ã«ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’åˆ¤å®šã—ãªã„
+					mReactionFlag = false;
+				}
 			}
-			// ‚»‚êˆÈŠO‚Ìê‡‚Íƒ^ƒCƒ~ƒ“ƒOƒtƒ‰ƒO‚ğu‹Uv‚Æ‚·‚é
-			TimingFlag = false;
+			// ã‚¿ã‚¤ãƒŸãƒ³ã‚°ãƒ•ãƒ©ã‚°ãŒã€Œå½ã€ã§ã‚ã‚Šã€ã‚²ãƒ¼ã‚¸ã®åŠå¾„ãŒï¼ã«ãªã£ãŸã‚‰
+			else if (!mTimingFlag && mRadius == 0)
+			{
+				// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”»åƒã‚’ãƒãƒƒãƒ‰ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã«ã™ã‚‹
+				mEffectImg = mBadEffectImg;
+				// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ•ãƒ©ã‚°ã‚’ã€ŒçœŸã€ã«ã™ã‚‹
+				mEffectFlag = true;
+				// ãƒãƒƒãƒ‰ã®åŠ¹æœéŸ³ã‚’æµã™
+				mBadSound->PlaySE();
+				// ä»–ã«ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’åˆ¤å®šã—ãªã„
+				mReactionFlag = false;
+			}
+		}
+		
+		// ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚«ã‚¦ãƒ³ãƒˆãŒæœ€å¤§å€¤ã§ã¯ãªã„ã¨ã
+		//if (!(mReactionCount < mReactionCountMax))
+		{
+			if (mScoreFlag)
+			{
+				// 
+				mScoreRadius = mRadiusInit - mRadius;
+			}
+		}
+		// ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚«ã‚¦ãƒ³ãƒˆãŒæœ€å¤§å€¤ã‚’è¶…ãˆãŸã‚‰
+		if (mReactionCount == mReactionCountMax)
+		{
+			// ã‚¿ã‚¤ãƒŸãƒ³ã‚°ãƒ•ãƒ©ã‚°ã‚’ã€Œå½ã€ã¨ã™ã‚‹
+			mTimingFlag = false;
+			// ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚²ãƒ¼ã‚¸ã‚’æç”»ã—ãªã„
+			mTimingDrawFlag = false;
+			// æ¬¡ã®ã‚²ãƒ¼ã‚¸ç”¨
+			i++;
+			// ãƒªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’åˆ¤å®šã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹
+			mReactionFlag = true;
+		}
+		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ãƒ•ãƒ©ã‚°ãŒã€ŒçœŸã€ã®ã¨ã
+		if (mEffectFlag)
+		{
+			// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å¤§ããã•ã›ãªãŒã‚‰å›è»¢ã•ã›ã‚‹
+			mEffectScale += mScalePlus;
+			mEffectAngle += mAngleRotate;
 		}
 	}
-	// ƒ^ƒCƒ~ƒ“ƒOƒtƒ‰ƒO‚ªu‹Uv‚Å‚ ‚é‚Æ‚«
-	if (!TimingFlag)
-	{
-		mGageColor = NormalGageColor;
-		// ƒJƒEƒ“ƒg‚ğ‰Šú‰»‚·‚é
-		reactionCount = countInit;
-		// ƒtƒ‰ƒO‚ğu‹Uv‚É‚·‚é
-		BadFlag = false;
-		GoodFlag = false;
-		PerfectFlag = false;
 
-		mEffectFlag = false;
+	// ã‚²ãƒ¼ã‚¸ãŒæç”»ã•ã‚Œã‚‹ãƒ•ãƒ©ã‚°ãŒã€Œå½ã€ã§ã‚ã£ãŸã‚‰
+	if (!mTimingDrawFlag)
+	{
+		// åˆæœŸåŒ–
+		mRadius = mRadiusInit;
+		mReactionCount = mCountInit;
 		mEffectScale = 1;
-	}
 
-	if (mEffectFlag)
-	{
-		mEffectScale += mScalePlus;
-		mEffectAngle += mAngleRotate;
+		// ãƒ•ãƒ©ã‚°ã‚’ã€Œå½ã€ã«ã™ã‚‹
+		mTimingFlag = false;
+		mEffectFlag = false;
 	}
 }
 
-// •`‰æ
+
+//-----------------------------------------------------------------------------
+// @brief  æç”».
+//-----------------------------------------------------------------------------
 void Timing::Draw()
 {
-	// ƒŠƒAƒNƒVƒ‡ƒ“”»’è‚ÌƒtƒŒ[ƒ€‚Ì•`‰æ
-	DrawGraph(freamX, freamY, freamImg, TRUE);
+	// ãƒ‘ãƒ¼ãƒ•ã‚§ã‚¯ãƒˆåˆ¤å®šã®ä½ç½®ã¨ãªã‚‹ã‚²ãƒ¼ã‚¸ã®æç”»
+	DrawCircle(mGageCX, mGageCY, mGageRadius, mWhite, TRUE);
 
-	// ƒp[ƒtƒFƒNƒg”»’è‚ÌˆÊ’u‚Æ‚È‚éƒQ[ƒW‚Ì•`‰æ
-	DrawCircle(gageCX, gageCY, gageRadius, white, TRUE);
-
-
+	// ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚²ãƒ¼ã‚¸ã‚’æç”»ã™ã‚‹ãƒ•ãƒ©ã‚°ãŒã€ŒçœŸã€ã¨ãªã£ãŸã‚‰
+	if (mTimingDrawFlag)
+	{
+		if (!mTimingFlag)
+		{
+			// åŠå¾„ãŒï¼ã«ãªã‚‹ã¾ã§åç¸®
+			if (mRadius > 0)
+			{
+				// åç¸®ã™ã‚‹ã‚²ãƒ¼ã‚¸ã®æç”»
+				DrawCircle(mGageCX, mGageCY, mRadius--, mBrack, FALSE, 2);
+			}
+		}
+	}
+	
+	// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ãƒ•ãƒ©ã‚°ãŒã€ŒçœŸã€ã®ã¨ã
 	if (mEffectFlag)
 	{
-		DrawRotaGraph(gageCX, gageCY, mEffectScale, mEffectAngle, mEffectImg, true, false, false);
+		DrawRotaGraph(mGageCX, mGageCY, mEffectScale, mEffectAngle, mEffectImg, true, false, false);
 	}
-
-
-	// ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚È‚¢ê‡ƒ‹[ƒv‚µ‘±‚¯‚é
-	if(!TimingFlag)
-	{
-		// ”¼Œa‚ª‚O‚É‚È‚é‚Ü‚Åûk‚³‚¹‚é
-		if(radius > 0)
-		{
-			// ûk‚·‚éƒQ[ƒW‚Ì•`‰æ
-			DrawCircle(gageCX, gageCY, radius--, brack, FALSE);
-		}
-		else
-		{
-			// ”¼Œa‚Ì‘å‚«‚³‚ğ‰Šú‰»
-			radius = radiusInit;
-		}
-	}
-	// ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚ç
-	if (TimingFlag)
-	{
-		// ƒJƒEƒ“ƒg‚ªÅ‘å’l‚É‚È‚é‚Ü‚Å•`‰æ
-		if (reactionCount < reactionCountMax)
-		{
-			// ƒoƒbƒhƒtƒ‰ƒO‚ª—§‚Á‚½‚ç•`‰æ‚·‚é
-			if (BadFlag)
-			{
-				DrawGraph(reactionX, reactionY, badImg, TRUE);
-			}
-			// ƒOƒbƒhƒtƒ‰ƒO‚ª—§‚Á‚½‚ç•`‰æ‚·‚é
-			if (GoodFlag)
-			{
-				DrawGraph(reactionX, reactionY, goodImg, TRUE);
-			}
-			// ƒp[ƒtƒFƒNƒgƒtƒ‰ƒO‚ª—§‚Á‚½‚ç•`‰æ‚·‚é
-			if (PerfectFlag)
-			{
-				DrawGraph(reactionX, reactionY, perfectImg, TRUE);
-			}
-			// ƒQ[ƒW‚ğ~‚ß‚é
-			DrawCircle(gageCX, gageCY, radius, brack, FALSE);
-		}
-	}
-	else
-	{
-		// ƒQ[ƒW‚ğ•\¦‚µ‚È‚¢
-	}
-
-	mScorePtr->Draw();
-
-	// ƒXƒRƒA‚Ì‰æ–Ê‚ğ•\¦‚·‚é
-	DrawFormatString(scoreX, scoreY, white, "score : %d", mScore);
+	// å†ç”Ÿã•ã‚Œã¦ã„ã‚‹éŸ³æ¥½ã®æ™‚é–“ã®ç¢ºèªï¼ˆãƒ‡ãƒãƒƒã‚°ç”¨ï¼‰
+	DrawFormatString(0, 30, mWhite, "Time:%f", mCountPack);
 }
 
+
+//-----------------------------------------------------------------------------
+// @brief  CSVãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿.
+//-----------------------------------------------------------------------------
 void Timing ::CSVRead()
 {
-	// ƒtƒ@ƒCƒ‹ƒ|ƒCƒ“ƒ^[‚ªNULL‚ÌƒfƒoƒbƒO‚ğ‚â‚ß‚é
-	if (filePointer == NULL)														//filePointer‚ª‹ó‚Ìê‡‚Í
+	// ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿ãƒ¼ãŒNULLã®æ™‚ãƒ‡ãƒãƒƒã‚°ã‚’ã‚„ã‚ã‚‹
+	if (mFilePointer == NULL)
 	{
-		DebugBreak();																//ƒfƒoƒbƒO’†~
+		//ãƒ‡ãƒãƒƒã‚°ä¸­æ­¢
+		DebugBreak();
 	}
-	// ƒtƒ@ƒCƒ‹‚Ì’†‚Ì”’l‚ğ“Ç‚İ‚Ş
-	while ((csvData = fgetc(filePointer)) != EOF)
-	{
-		// BGM‚ªÄ¶‚³‚ê‚½ŠÔ‚ÆCSV‚Ì’†‚Ì”’l‚ª“¯‚¶‚É
-		//    ƒQ[ƒW‚ªƒp[ƒtƒFƒNƒg‚ÌˆÊ’u‚É‚¢‚é‚æ‚¤‚É‚µ‚½‚¢
-		
-	}
+	//memseté–¢æ•°ã§ãƒ¡ãƒ¢ãƒªã«bufferã‚’ã‚»ãƒƒãƒˆã—ã€sizeofæ¼”ç®—å­ã§è¦ç´ æ•°ã‚’æ±ºã‚ã‚‹
+	memset(mBuffer, 0, sizeof(mBuffer));
 
-	// ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
-	fclose(filePointer);
+	while (1)
+	{
+		while (1)
+		{
+			// fgetcé–¢æ•°ã§filepointerã‹ã‚‰æ–‡å­—ã‚’èª­ã‚“ã§csvDataã«æ ¼ç´
+			mCsvData = fgetc(mFilePointer);
+			if (mCsvData == EOF)
+			{
+				// EndOfFileã‚’æ¤œå‡ºã—ã¦
+				mEofFlag = true;
+				// ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
+				break;
+			}
+			//åŒºåˆ‡ã‚Šã‹æ”¹è¡Œã§ãªã‘ã‚Œã°
+			if (mCsvData != ',' && mCsvData != '\n')
+			{
+				//strcat_sé–¢æ•°ã§bufferã«é€£çµã—ã€const charé–¢æ•°ã§æ›¸ãæ›ãˆã‚‹
+				strcat_s(mBuffer, (const char*)&mCsvData);
+			}
+			else
+			{
+				// atofé–¢æ•°ã§bufferã‚’floatå‹ã«ç›´ã—ã¦ã€ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°numã«ä»£å…¥
+				mNum = atof(mBuffer);
+				mRhythm[mRawNum] = mNum;
+				////////////////////////////////
+				// numã«ç›®çš„ã®æ•°å­—ãŒå…¥ã£ãŸã®ã§ä½•ã‹ã™ã‚‹
+				// numç•ªç›®ã®ãƒãƒƒãƒ—ç”»åƒã®ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾—
+				//cell[columnNum][rawNum] = num;
+				////////////////////////////////
+				// 
+				// bufferã‚’ãƒªã‚»ãƒƒãƒˆ
+				memset(mBuffer, 0, sizeof(mBuffer));
+				// åŒºåˆ‡ã‚Šã‹æ”¹è¡Œãªã®ã§ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
+				break;
+			}
+		}
+		// 1ãƒãƒƒãƒ—åˆ†ã«ãªã£ãŸã‚‰
+		if (mEofFlag)
+		{
+			// ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
+			break;
+		}
+		// åŒºåˆ‡ã‚Šã‚’æ¤œå‡ºã—ãŸã‚‰
+		if (mCsvData == ',')
+		{
+			// åˆ—ã®æ•°ã‚’å¢—ã‚„ã™
+			//columnNum++;
+		}
+		// æ”¹è¡Œã ã£ãŸã‚‰
+		if (mCsvData == '\n')
+		{
+			// è¡Œã‚’å¢—ã‚„ã™
+			mRawNum++;
+			// åˆ—ã‚’0ã«ã™ã‚‹
+			mColumnNum = 0;
+		}
+	}
+	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
+	fclose(mFilePointer);
 }

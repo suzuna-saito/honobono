@@ -4,8 +4,8 @@
 //定数
 //----------------------
 const float JUMP_Y = 0.3f;          // ジャンプした時のY軸の加算値
-const float JUMP_Z = 0.15f;         // ジャンプした時のz軸の加算値
-const float JUMP_X = 0.1f;         // ジャンプした時のx軸の加算値
+const float JUMP_Z = 0.25f;         // ジャンプした時のz軸の加算値
+const float JUMP_X = 0.15f;         // ジャンプした時のx軸の加算値
 
 const float FIRST_MAX = 3.0f;        // 1回目ジャンプの最大ジャンプ力
 const float SECOND_MAX = 5.0f;       // 2回目ジャンプの最大ジャンプ力
@@ -25,7 +25,6 @@ Jump::Jump()
 	, mChange(VGet(0.0f, 0.0f, 0.0f))
 {
 }
-
 //-----------------------------------------------------------------------------
 // @brief  デストラクタ.
 //-----------------------------------------------------------------------------
@@ -36,24 +35,24 @@ Jump::~Jump()
 //-----------------------------------------------------------------------------
 // @brief  ジャンプ更新.
 //-----------------------------------------------------------------------------
-void Jump::JumpUpdata(VECTOR _rotate)
+void Jump::JumpUpdate(VECTOR _rotate)
 {
 	// 魚の向きによって飛び込む方向を換える
 	switch ((int)_rotate.y)
 	{
-	case (int)(90.0f * DX_PI_F / 180.0f):
+	case (int)(90.0f * DX_PI_F / 180.0f) :
 		mChange.z = JUMP_Z;
 		break;
 
-	case(int)(-90.0f * DX_PI_F / 180.0f):
+	case(int)(-90.0f * DX_PI_F / 180.0f) :
 		mChange.z = -JUMP_Z;
 		break;
 
-	case(int)(180.0f * DX_PI_F / 180.0f):
+	case(int)(180.0f * DX_PI_F / 180.0f) :
 		mChange.x = JUMP_X;
 		break;
 
-	case(int)(0.0f, 0.0f, 0.0f):
+	case(int)(0.0f, 0.0f, 0.0f) :
 		mChange.x = -JUMP_X;
 		break;
 
@@ -62,13 +61,13 @@ void Jump::JumpUpdata(VECTOR _rotate)
 	}
 
 	// ジャンプの更新
-	JumpNowUpdata();
+	JumpNowUpdate();
 }
 
 //-----------------------------------------------------------------------------
 // @brief  ジャンプの更新.
 //-----------------------------------------------------------------------------
-void Jump::JumpNowUpdata()
+void Jump::JumpNowUpdate()
 {
 	// 一定の高さに行くまでジャンプを上げていく
 	if (mJumpUp)
@@ -84,14 +83,13 @@ void Jump::JumpNowUpdata()
 			mVelocity = VAdd(VGet(0.0f, JUMP_Y, 0.0f), mChange);
 		}
 
-
 		// 設定した最大値より増加した量が上に行ったら
 		if (mGain >= mJumpMax)
 		{
 			mJumpUp = false;       // もう上がらないのでfalseにする
 		}
 	}
-	if(!mJumpUp) // 下げていく
+	if (!mJumpUp) // 下げていく
 	{
 		if (mNowJump != thirdJump) // 飛び込み以外だったらY軸だけ下げていく
 		{
@@ -110,7 +108,7 @@ void Jump::JumpNowUpdata()
 //-----------------------------------------------------------------------------
 // @brief  ジャンプタイプの更新.
 //-----------------------------------------------------------------------------
-void Jump::JumpSetUpdata()
+void Jump::JumpSetUpdate()
 {
 	mVelocity = VGet(0.0f, 0.0f, 0.0f);   // 移動力を初期値に戻す
 	mIsGround = true;                     // 地面との接地判定

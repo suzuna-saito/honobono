@@ -7,7 +7,7 @@
 #include "Result.h"
 #include "BackGround.h"
 #include "Sound.h"
-#include "Promotion.h"
+#include "Score.h"
 
 //デバック用の定数---------------------------
 const float LINE_X = 32.0f; // 線の座標
@@ -15,9 +15,13 @@ const float LINE_Y = 20.0f;
 const float LINE_Z = 51.0f;
 //-------------------------------------------
 
+
 // コンストラクタ
 Play::Play()
-	: mScore(0)
+	:startCount(0)
+	, mScore(0)
+	, mScoreRadius(0)
+	, mScoreFlag(false)
 	, mPlayBGM1(nullptr)
 	, mPlayBGM2(nullptr)
 	, mPlayBGM3(nullptr)
@@ -25,6 +29,9 @@ Play::Play()
 	,mWaterOutSound(nullptr)
 {
 	SetScene(play);
+
+	// 当たり判定を生成
+	hit = new HitChecker();
 
 	// プール生成
 	pool = new Pool();
@@ -37,9 +44,6 @@ Play::Play()
 
 	// 背景の生成
 	backGround = new BackGround();
-	// 広告の生成
-	promo = new Promotion();
-
 	// 時間の生成
 	time = new Time();
 
@@ -47,13 +51,14 @@ Play::Play()
 
 	fishManager->CreatFish();
 
-	mPlayBGM1 = new Sound("data/newSound/bgm/bgm_1.mp3");
+	mPlayBGM1 = new Sound("data/newSound/bgm/bgm_1.wav");
 	mPlayBGM2 = new Sound("data/newSound/bgm/bgm_2.mp3");
 	mPlayBGM3 = new Sound("data/newSound/bgm/bgm_3.mp3");
 
 	mWaterInSound = new Sound("data/newSound/se/in.mp3");
 	mWaterOutSound = new Sound("data/newSound/se/out.mp3");
 
+	mPlayBGM1->PlayBackBGM();
 
 	///// デバック用 //////
 	test = 0.0f;
@@ -73,11 +78,10 @@ Play::~Play()
 	delete pool;
 	// リズムボタンUI削除
 	delete timing;
+	// 当たり判定の削除
+	delete(hit);
 	// 背景の削除
 	delete(backGround);
-	// 広告の削除
-	delete promo;
-
 	mPlayBGM1->StopMusic();
 	mPlayBGM2->StopMusic();
 	mPlayBGM3->StopMusic();
@@ -93,20 +97,19 @@ Play::~Play()
 /// <return>シーンのポインタ</return>
 SceneBase* Play::Update()
 {
-	mPlayBGM1->PlayBGM();
 	if (!mPlayBGM1->CheckBGM()) 
 	{
-		mScore = timing->GetScore()->GetResult();
-
-		return new Result(mScore);
+		// リザルトにスコアを渡す
+		mScore = SceneBase::mScore->GetResult();
+		return new Result(&mScore);
 	}
 
 	// シーン遷移条件(デバック用：右シフトキーを押すと遷移)
 	if (CheckHitKey(KEY_INPUT_RSHIFT))
 	{
-		mScore = timing->GetScore()->GetResult();
-
-		return new Result(mScore);
+		// リザルトにスコアを渡す
+		mScore = SceneBase::mScore->GetResult();
+		return new Result(&mScore);
 	}
 
 	time->Update();
@@ -123,19 +126,33 @@ SceneBase* Play::Update()
 	{
 		camera->FixedCameraRightUpdate(test02);
 		CameraPosUpDate();                // 引数（test02）の更新
-		
 	}
 	else if (CheckHitKey(KEY_INPUT_DOWN)) // ↓押したらプレイヤーの後ろ固定カメラ
 	{
-		camera->FixedCameraBackUpdate(test,test03);
+		camera->FixedCameraBackUpdate(test, test03);
 		CameraPosUpDate();                // 引数（test）の更新
 	}
 
 	// リズムボタンUI更新
 	timing->Update();
+	// スコアの割合をもらってくる
+	mScoreRadius = timing->GetRadius();
+	// スコアのフラグをもらう
+	mScoreFlag = timing->GetScoreFlag();
 
-	// 魚の制御
-	fishManager->Updata();
+	// スコアにフラグを渡す
+	SceneBase::mScore->SetScoreFlag(&mScoreFlag);
+	// スコアに割合を渡す
+	SceneBase::mScore->SetRadiusScore(&mScoreRadius);
+
+
+	startCount++;
+
+	if (startCount >= 60)
+	{
+		// 魚の制御
+		fishManager->Updata();
+	}
 	
 	// シーンが変更されていなかったら自分のポインタを返す
 	return this;
@@ -146,9 +163,6 @@ void Play::Draw()
 {
 	// 背景の生成
 	backGround->Draw();
-	
-	// 広告の描画
-	//promo->Draw();
 	// 魚描画
 	fishManager->Draw();
 	// プール描画
@@ -156,6 +170,7 @@ void Play::Draw()
 	// リズムボタンUI描画
 	timing->Draw();
 
+	SceneBase::mScore->Draw();
 	
 	//それぞれの位置が分かりやすくなるように一本の線を表示（デバック用）
 	int redColor = GetColor(255, 0, 0);				//真ん中の色

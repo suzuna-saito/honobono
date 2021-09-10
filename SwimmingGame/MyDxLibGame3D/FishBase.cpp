@@ -20,6 +20,7 @@ FishBase::FishBase(int _sourceModelHandle)
 	// 画像データの読み込み
 	mModelHandle = MV1DuplicateModel(_sourceModelHandle);
 
+	//モデルが入っていないかったとき
 	if (mModelHandle < 0)
 	{
 		printfDx("モデルデータ読み込みに失敗. sourceID : %d", _sourceModelHandle);

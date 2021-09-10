@@ -28,122 +28,127 @@ public:
 	/// </summary>
 	void Draw();
 
-	Score* GetScore() { return mScorePtr; }
+	/// <summary>
+	/// スコアを取得
+	/// </summary>
+	/// <returns>現在のスコアを返す</returns>
+	int GetRadius() { return mScoreRadius; }
+	bool GetScoreFlag() { return mScoreFlag; }
 
 	/// <summary>
 	/// CSVデータの読み込み
 	/// </summary>
 	void CSVRead();
 
+
 protected:
 	
 
 private:
 	//  フラグ
-	// タイミングゲージが収縮するフラグ管理
-	bool TimingShrinkFlag;
+	// タイミングゲージを描画するフラグ管理
+	bool mTimingDrawFlag;
 	// タイミングゲージのクリック出来るかのフラグ管理
-	bool TimingFlag;
-	
-	// Perfectのフラグ管理
-	bool PerfectFlag;
-	// Goodのフラグ管理
-	bool GoodFlag;
-	// Badのフラグ管理
-	bool BadFlag;
+	bool mTimingFlag;
+	// Reactionのフラグ管理
+	bool mReactionFlag;
 
 	//  ゲージ
 	// ゲージの座標X
-	int gageX;
+	int mGageX;
 	// ゲージの座標Y
-	int gageY;
+	int mGageY;
 	// ゲージの中心座標X
-	int gageCX;
+	int mGageCX;
 	// ゲージの中心座標Y
-	int gageCY;
+	int mGageCY;
 	// 収縮するゲージの半径
-	int radius;
+	int mRadius;
 	// 判定がパーフェクトになるゲージの半径
-	int gageRadius;
+	int mGageRadius;
 	// 半径の初期化
-	int radiusInit;
+	int mRadiusInit;
 
-	int NormalGageColor;
-	//  
+	//  色
 	// 黒色
-	int	brack;
+	int	mBrack;
 	// 白色
-	int white;
-	
-	int mGageColor;
-	int mPushGageColor;
+	int mWhite;
 
 	//  リアクション
 	// リアクションが描画される位置にあるフレームの画像
-	int freamImg;
+	int mFreamImg;
 	// フレームの座標X
-	int freamX;
+	int mFreamX;
 	// フレームの座標Y
-	int freamY;
+	int mFreamY;
 	// リアクションの座標X
-	int reactionX;
+	int mReactionX;
 	// リアクションの座標Y
-	int reactionY;
-	// パーフェクトリアクションの画像
-	int perfectImg;
+	int mReactionY;
 	// パーフェクトの半径
-	int perfectRadius;
-	// グッドリアクションの画像
-	int goodImg;
-	// バッドリアクションの画像
-	int badImg;
+	int mPerfectRadius;
 	// バッドの半径
-	int badRadius;
+	int mBadRadius;
 
 
 	//  カウント
 	// リアクションを描画する時間をカウントする
-	int reactionCount;
+	int mReactionCount;
 	// リアクションを描画する時間の最大値
-	int reactionCountMax;
+	int mReactionCountMax;
 	// カウントを初期化
-	int countInit;
-	
-
-
-	//  スコア
-	// 現在のスコア
-	int mScore;
-	// スコアを借入れする変数
-	int scoreMax;
-
-	int mEffectImg;       
-	int mPerfectEffectImg;
-	int mGoodEffectImg;   
-	int mBadEffectImg;    
-	double mEffectScale;  
-	double mEffectAngle;  
-	double mScalePlus;    
-	double mAngleRotate;  
-	bool mEffectFlag;
-
-	// Score処理フラグ
-	bool ScoreFlag;
-	// スコアを描画する座標X
-	int scoreX;
-	// スコアを描画する座標Y
-	int scoreY;
+	int mCountInit;
+	// フレーム数のカウント
+	float mCount;
+	// カウント入れるやつ
+	float mCountPack;
 
 	//  CSV
-	// CSVファイルを格納
-	char csv[24] = "data/CSV/TestTiming.csv";
+    // CSVファイルを格納
+	char mCsv[24] = "data/CSV/TestTiming.csv";
 	// ファイルのポインタ
-	FILE* filePointer;
+	FILE* mFilePointer;
 	// データを格納
-	int csvData;
+	char mCsvData;
+
+	float mNum;
+	char mBuffer[10];
+	float mCell[1][23];
+	int mColumnNum;
+	int mRawNum;
+	bool mEofFlag;
+	float mRhythm[23];
+
+	//  スコア
+	// Score処理フラグ
+	bool mScoreFlag;
+	// スコア
+	int mScoreRadius;
 
 
-	class Score* mScorePtr;
+	//  エフェクト
+	// エフェクト画像
+	int mEffectImg;       
+	// パーフェクトエフェクト画像
+	int mPerfectEffectImg;
+	// グッドエフェクト画像
+	int mGoodEffectImg;   
+	// バッドエフェクト画像
+	int mBadEffectImg;    
+	// エフェクトの大きさ
+	double mEffectScale;  
+	// エフェクトのアングル
+	double mEffectAngle;  
+	// エフェクトがだんだん大きくなる時にプラスする値
+	double mScalePlus;    
+	// エフェクトが開店する時にプラスする値
+	double mAngleRotate;  
+	// エフェクトを発生させるフラグ
+	bool mEffectFlag;
+
+
+
 
 	//  サウンド
 	// パーフェクトの時になる効果音
@@ -153,8 +158,7 @@ private:
 	// バッドの時になる効果音
 	class Sound* mBadSound;
 
-public:
-	// timingゲージのゲッター
-	int GetRadius() { return radius; }
+	int i = 0;
+
 };
 

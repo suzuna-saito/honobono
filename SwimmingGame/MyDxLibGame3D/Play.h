@@ -13,7 +13,7 @@ class Result;
 class BackGround;
 class Time;
 class Sound;
-class Promotion;
+class Score;
 
 /// <summary>
 /// プレイシーンの生成、描画
@@ -37,8 +37,15 @@ public:
     void Draw()override;
 
 private:
+    // 魚が動き始めるまでのカウント
+    int startCount;
+
     // スコアを保持する変数
     int mScore;
+    // スコアの割合ポイントを持つ変数
+    int mScoreRadius;
+    // スコアフラグ
+    bool mScoreFlag;
 
     // 魚(モブ)
     FishManager* fishManager =  nullptr ;
@@ -46,8 +53,10 @@ private:
     Pool* pool = nullptr;
     // リズムボタン
     Timing* timing = nullptr;
-    // 広告
-    Promotion* promo;
+	// UI（ゴール
+	UIGoal* uiGoal;
+	// 当たり判定
+	HitChecker* hit;
     // バックグラウンド
     BackGround* backGround;
     // 時間の生成

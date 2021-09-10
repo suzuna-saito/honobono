@@ -3,55 +3,27 @@
 #include"Fish.h"
 #include"Common.h"
 
-
-////ŠeMbb‚ÌŒü‚¢‚Ä‚¢‚é•ûŒü
-//: FISH_MOB_ROTATE{ VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)    //1
-//				,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //2
-//				,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //3
-//				,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //4
-//				,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //5
-//				,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)    //6
-//				,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)    //7
-//				,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)    //8
-//				,VGet(0.0f, 0.0f,0.0f)    //9
-//				,VGet(0.0f,0.0f,0.0f)     //10
-//				,VGet(0.0f,0.0f,0.0f)     //11
-//}
-////ŠeMobFish‚Ì”ò‚Ñ‚İˆÊ’u
-//, mMobPos{ VGet(1.5f,15.0f,-28.0f)     //1
-//				,VGet(12.0f,9.0f,-28.0f)	//2
-//				,VGet(-7.0f,20.0f,26.0f)	//3
-//				,VGet(-2.0f,15.0f,28.0f)	//4
-//				,VGet(-12.0f,9.0f,29.0f)	//5
-//				,VGet(-16.0f,20.0f,-7.0f)	//6
-//				,VGet(-17.0f,15.0f,-2.0f)	//7
-//				,VGet(-17.0f,9.0f,-12.0f)	//8
-//				,VGet(16.0f,20.0f,7.0f)     //9
-//				,VGet(17.0f,15.0f,2.0f)	    //10
-//				,VGet(17.0f,9.0f,12.0f)	    //11
-//}
-
 /*
 * ã•ûŒüƒL[‚ğ‰Ÿ‚µ‚½‚Ì‹“_‚Å‚Ì
 * ”ò‚Ñ‚İ‘O‚Ì‹›‚½‚¿‚ÌˆÊ’u‚Æ”z—ñ
-*				5,4,3
+* (‹Lq‚Í0ƒXƒ^[ƒg‚Å‚Í‚ ‚è‚Ü‚¹‚ñ)
+*				6,5,4
 *	-----------------------------
 *	|							|
 *	|							|
 *	|							|
 *	|							|
-* 6 |							|11
-* 7 |							|10
-* 8 |							|9
+* 7 |							|12
+* 8 |							|11
+* 9 |							|10
 *	|							|
 *	|							|
 *	|							|
 *	|							|
 *	|							|
 *	-----------------------------
-*			0,player,2
+*			1,player,3
 */
-
 
 // ’è”---------------------------------
 const float F_POS_Y = 27.5f;  // ‹›‚Ìƒ|ƒWƒVƒ‡ƒ“‚™iˆê”Ô‚‚¢‘äj
@@ -65,6 +37,7 @@ const float F_POS_Z = 47.0f;  // ‹›‚Ìƒ|ƒWƒVƒ‡ƒ“‚ši^‚ñ’†‚Ì‘ä‚Æˆê”Ô‰º‚Ì‘ä‚Ì‚š²
 const float F_POS_2Z = 44.0f;  // ‹›‚Ìƒ|ƒWƒVƒ‡ƒ“‚šiˆê”Ôã‘ä‚Ì‚š²j
 
 const float F_INTERVAL = 5.0f; // ‹›‚Æ‹›‚ÌŠÔŠu
+//----------------------------------------
 
 /// <summary>
 /// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
@@ -84,6 +57,7 @@ FishManager::FishManager()
 						,VGet(F_POS_X,F_POS_2Y,-F_INTERVAL)    //9
 						,VGet(F_POS_2X,F_POS_Y,0.0f)	    //10
 						,VGet(F_POS_X,F_POS_3Y,F_INTERVAL) }	//11
+
 	, BEFORE_DIVING_ROTATE{	VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f)    //1
 							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //ƒvƒŒƒCƒ„[
 							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //2
@@ -96,10 +70,11 @@ FishManager::FishManager()
 							,VGet(0.0f, 0.0f,0.0f)    //9
 							,VGet(0.0f,0.0f,0.0f)     //10
 							,VGet(0.0f,0.0f,0.0f) }   //11
-	,SET_DANCING_POS{	VGet(-7.5f,0.0f,-12.5f),VGet(7.5f,0.0f,-12.5f)							//[0]A[1]
-						,VGet(0.0f,0.0f,5.0f),VGet(7.5f,0.0f,12.5f),VGet(-7.5f,0.0f,-12.5f)		//[2]A[3]A[4]
-						,VGet(-5.0f,0.0f,-10.0f),VGet(-7.5f,0.0f,10.0f),VGet(-7.5f,0.0f,-10.0f)	//[5]A[6]A[7]
-						,VGet(7.5f,0.0f,10.0f),VGet(-7.5f,0.0f,-10.0f),VGet(5.0f,0.0f,0.0f) }	//[8]A[9]A[10]
+
+	,SET_DANCING_POS{	VGet(-7.5f,2.0f,15.0f),VGet(0.0f,2.0f,7.5f),VGet(7.5f,2.0f,15.0f)   	//1AƒvƒŒƒCƒ„[A3
+						,VGet(7.5f,2.0f,-15.0f),VGet(0.0f,2.0f,-7.5f),VGet(-7.5f,2.0f,-15.0f)	//4A5A6
+						,VGet(10.0f,2.0f,-7.5f),VGet(5.0f,2.0f,0.0f),VGet(10.0f,2.0f,7.5f)	    //7A8A9
+						,VGet(-10.0f,2.0f,-7.5f),VGet(-5.0f,2.0f,0.0f),VGet(-10.0f,2.0f,7.5f) }	//10A11A12
 	,DEBUG_SPHERE_COLOR{ whiteColor ,0 ,yellowColor ,lightBlueColor ,yellowGreenColor ,
 							orangeColor ,redColor ,greenColor ,purpleColor ,brownColor ,
 								blueColor ,pinkColor }
