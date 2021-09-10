@@ -51,13 +51,14 @@ Play::Play()
 
 	fishManager->CreatFish();
 
-	mPlayBGM1 = new Sound("data/newSound/bgm/bgm_1.mp3");
+	mPlayBGM1 = new Sound("data/newSound/bgm/bgm_1.wav");
 	mPlayBGM2 = new Sound("data/newSound/bgm/bgm_2.mp3");
 	mPlayBGM3 = new Sound("data/newSound/bgm/bgm_3.mp3");
 
 	mWaterInSound = new Sound("data/newSound/se/in.mp3");
 	mWaterOutSound = new Sound("data/newSound/se/out.mp3");
 
+	mPlayBGM1->PlayBackBGM();
 
 	///// デバック用 //////
 	test = 0.0f;
@@ -96,7 +97,6 @@ Play::~Play()
 /// <return>シーンのポインタ</return>
 SceneBase* Play::Update()
 {
-	mPlayBGM1->PlayBackBGM();
 	if (!mPlayBGM1->CheckBGM()) 
 	{
 		// リザルトにスコアを渡す
