@@ -13,6 +13,10 @@
 const float LINE_X = 32.0f; // 線の座標
 const float LINE_Y = 20.0f;
 const float LINE_Z = 51.0f;
+
+//ダンスで集合してから音楽を流すまでのフレームカウント
+const int WAIT_DANCE_TIME_COUNT = 50;
+
 //-------------------------------------------
 
 
@@ -27,6 +31,7 @@ Play::Play()
 	, mPlayBGM3(nullptr)
 	, mWaterInSound(nullptr)
 	,mWaterOutSound(nullptr)
+	, mWaitDanceCount(WAIT_DANCE_TIME_COUNT)
 {
 	SetScene(play);
 
@@ -58,6 +63,9 @@ Play::Play()
 	mWaterInSound = new Sound("data/newSound/se/in.mp3");
 	mWaterOutSound = new Sound("data/newSound/se/out.mp3");
 
+	//アーティスティックスイミング時の音楽のコンストラクタ
+	mDancePlaySE = new Sound("data/newsound/bgm/BGM_3.mp3");
+
 	mPlayBGM1->PlayBackBGM();
 
 	///// デバック用 //////
@@ -85,9 +93,16 @@ Play::~Play()
 	mPlayBGM1->StopMusic();
 	mPlayBGM2->StopMusic();
 	mPlayBGM3->StopMusic();
+
+	//音楽の停止
+	mDancePlaySE->StopMusic();
+
 	delete mPlayBGM1;
 	delete mPlayBGM2;
 	delete mPlayBGM3;
+
+	//メモリの削除
+	delete mDancePlaySE;
 
 	delete mWaterInSound;
 	delete mWaterOutSound;
@@ -97,7 +112,8 @@ Play::~Play()
 /// <return>シーンのポインタ</return>
 SceneBase* Play::Update()
 {
-	if (!mPlayBGM1->CheckBGM()) 
+	if (!mPlayBGM1->CheckBGM()
+		&& !mDancePlaySE->CheckBGM())
 	{
 		// リザルトにスコアを渡す
 		mScore = SceneBase::mScore->GetResult();
@@ -147,11 +163,28 @@ SceneBase* Play::Update()
 
 
 	startCount++;
-
 	if (startCount >= 60)
 	{
 		// 魚の制御
 		fishManager->Updata();
+
+		//andou
+		//ダンスを始めてもいいかのフラグがtrueだったとき
+   		if (fishManager->GetStopFlag())
+		{
+			//ダンスを始めるまでのカウントを引いていく
+			mWaitDanceCount--;
+
+			//カウントが０以下になったら
+			if (mWaitDanceCount <= 0)
+			{
+				//飛び込む前に流れていた音楽を止める
+				mPlayBGM1->StopMusic();
+				//ダンス時の音楽を流す
+				mDancePlaySE->PlayBackBGM();
+			}
+		}
+
 	}
 	
 	// シーンが変更されていなかったら自分のポインタを返す

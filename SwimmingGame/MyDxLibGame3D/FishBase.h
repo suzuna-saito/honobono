@@ -33,19 +33,22 @@ public:
 	//アーティスティックスイミング開始時の座標のgetter
 	const VECTOR& GetDancePos()const { return mSetDancePos; }
 
+	//ダンス集合時のポジションにいるときのフラグのgetter
+	const bool GetSetDancePosFlag() { return mSetDancePosFlag; }
+
 protected:
 
 	int		mModelHandle;		// モデルハンドル変数 
 	int		mModelFishTexture;	// モデルテクスチャ変数
 
 	VECTOR	mPos;				// 座標
-
 	VECTOR	mVelocity;			// 移動速度
-
 	VECTOR	mRotate;			// モデルが向いている角度
-
 	VECTOR	mSetDancePos;		//シンクロ時最も多いポジション
-};
 
+	bool mSetDancePosFlag;   // mSetDancePosのポジションに魚がいるときはtrueにする、いないときはfalse
+
+	bool mMoveFlag;   //もし動いてもいいときはtrue、動いてほしくないときはfalse
+};
 
 #endif // !_FISHBASE_H_

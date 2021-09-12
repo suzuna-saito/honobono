@@ -31,8 +31,6 @@ private:
 	bool mJumpUpdataFlag;    // ジャンプの更新をするかどうか
 	bool mJumpedInFlag;      // ジャンプの更新が終わったかどうかを判定する変数(終わった：true、終わっていない:false)
 
-	bool mSetDancePosFlag;   // mSetDancePosのポジションに魚がいるときはtrueにする、いないときはfalse
-
 	float mDeltaTime;
 };
 

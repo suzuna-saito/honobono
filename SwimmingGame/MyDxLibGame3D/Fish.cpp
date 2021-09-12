@@ -34,6 +34,12 @@ Fish::~Fish()
 /// </summary>
 void Fish::Updata()
 {
+	if (mMoveFlag)
+	{
+		// ポジションの更新
+		mPos = VAdd(mPos, mVelocity);
+	}
+
 	if (!mJumpedInFlag)
 	{
 		//飛び込みの処理
@@ -92,8 +98,7 @@ void Fish::JumpUpdata()
 		}
 	}
 
-	// ポジションの更新
-	mPos = VAdd(mPos, mJump->GetVelocity());
+	mVelocity = mJump->GetVelocity();
 }
 
 /// <summary>
@@ -101,9 +106,17 @@ void Fish::JumpUpdata()
 /// </summary>
 void Fish::DanceUpdata()
 {
-	if (mDance->SetDancePos(mSetDancePos, mPos, mRotate))
+	//もし魚が移動をし終わったとき
+	if (mDance->GetStopSetPosFlag())
 	{
-		
+		mMoveFlag = false;
+		mSetDancePosFlag = true;
 	}
-	
+	//移動し終わっていないとき
+	else
+	{
+		mMoveFlag = true;
+		mVelocity = mDance->MoveTargetPos(mSetDancePos, mPos, mRotate);
+		mSetDancePosFlag = false;
+	}
 }

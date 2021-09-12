@@ -45,3 +45,8 @@ const int brownColor = GetColor(153, 51, 0);
 const int blueColor = GetColor(0, 0, 255);
 const int pinkColor = GetColor(255, 153, 204);
 //-------------------------------------------------
+
+const float SET_DANCE_POS_VELOCITY = 0.5f;    //ダンス集合時の移動量
+const float SET_DANCE_POS_RANGE = 0.25f;      //ダンス集合時の停止範囲
+
+const VECTOR ZERO_VECTOR = VGet(0.0f, 0.0f, 0.0f);   //XYZに0が入っている定数

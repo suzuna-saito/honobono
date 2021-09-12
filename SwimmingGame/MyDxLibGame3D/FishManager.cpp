@@ -2,6 +2,7 @@
 #include"FishBase.h"
 #include"Fish.h"
 #include"Common.h"
+#include"Dance.h"
 
 /*
 * ã•ûŒüƒL[‚ğ‰Ÿ‚µ‚½‚Ì‹“_‚Å‚Ì
@@ -37,6 +38,8 @@ const float F_POS_Z = 47.0f;  // ‹›‚Ìƒ|ƒWƒVƒ‡ƒ“‚ši^‚ñ’†‚Ì‘ä‚Æˆê”Ô‰º‚Ì‘ä‚Ì‚š²
 const float F_POS_2Z = 44.0f;  // ‹›‚Ìƒ|ƒWƒVƒ‡ƒ“‚šiˆê”Ôã‘ä‚Ì‚š²j
 
 const float F_INTERVAL = 5.0f; // ‹›‚Æ‹›‚ÌŠÔŠu
+
+const float F_SET_POSITION_Y = 5.5f;
 //----------------------------------------
 
 /// <summary>
@@ -71,13 +74,14 @@ FishManager::FishManager()
 							,VGet(0.0f,0.0f,0.0f)     //10
 							,VGet(0.0f,0.0f,0.0f) }   //11
 
-	,SET_DANCING_POS{	VGet(-7.5f,2.0f,15.0f),VGet(0.0f,2.0f,7.5f),VGet(7.5f,2.0f,15.0f)   	//1AƒvƒŒƒCƒ„[A3
-						,VGet(7.5f,2.0f,-15.0f),VGet(0.0f,2.0f,-7.5f),VGet(-7.5f,2.0f,-15.0f)	//4A5A6
-						,VGet(10.0f,2.0f,-7.5f),VGet(5.0f,2.0f,0.0f),VGet(10.0f,2.0f,7.5f)	    //7A8A9
-						,VGet(-10.0f,2.0f,-7.5f),VGet(-5.0f,2.0f,0.0f),VGet(-10.0f,2.0f,7.5f) }	//10A11A12
+	,SET_DANCING_POS{	VGet(-10.0f,F_SET_POSITION_Y,20.0f),VGet(0.0f,F_SET_POSITION_Y,10.0f),VGet(10.0f,F_SET_POSITION_Y,20.0f)   	//1AƒvƒŒƒCƒ„[A3
+						,VGet(10.0f,F_SET_POSITION_Y,-20.0f),VGet(0.0f,F_SET_POSITION_Y,-10.0f),VGet(-10.f,F_SET_POSITION_Y,-20.0f)	//4A5A6
+						,VGet(20.0f,F_SET_POSITION_Y,-12.5f),VGet(10.0f,F_SET_POSITION_Y,0.0f),VGet(20.0f,F_SET_POSITION_Y,12.5f)	    //7A8A9
+						,VGet(-20.0f,F_SET_POSITION_Y,-12.5f),VGet(-10.0f,F_SET_POSITION_Y,0.0f),VGet(-20.0f,F_SET_POSITION_Y, 12.5f) }	//10A11A12
 	,DEBUG_SPHERE_COLOR{ whiteColor ,0 ,yellowColor ,lightBlueColor ,yellowGreenColor ,
 							orangeColor ,redColor ,greenColor ,purpleColor ,brownColor ,
 								blueColor ,pinkColor }
+	, mDanceStartFlag(false)
 {
 	for (int i = 0; i < FISH_NUM; i++)
 	{
@@ -118,7 +122,6 @@ void FishManager::CreatFish()
 				BEFORE_DIVING_POS[i], BEFORE_DIVING_ROTATE[i], SET_DANCING_POS[i]);
 		}
 	}
-
 }
 
 /// <summary>
@@ -148,6 +151,9 @@ void FishManager::Updata()
 			mFish[i]->Updata();
 		}
 	}
+
+	//ƒvƒŒƒCƒ„[‚ªƒ_ƒ“ƒXW‡‚Ìƒ|ƒWƒVƒ‡ƒ“‚É‚Â‚¢‚½‚Æ‚«‚Éflag‚ğæ“¾‚·‚é
+	mDanceStartFlag = mFish[1]->GetSetDancePosFlag();
 }
 
 /// <summary>

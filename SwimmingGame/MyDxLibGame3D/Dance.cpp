@@ -1,11 +1,5 @@
 #include "Dance.h"
-
-//-------------------------------------------------
-// 定数
-//--------------------------------------------------
-const float SET_DANCE_POS_VELOCITY = 0.5f;    //ダンス集合時の移動量
-const float SET_DANCE_POS_RANGE = 0.25f;      //ダンス集合時の停止範囲
-const VECTOR ZERO_VECTOR = VGet(0.0f, 0.0f, 0.0f);   //XYZに0が入っている定数
+#include"Common.h"
 
 /// <summary>
 /// コンストラクタ
@@ -14,6 +8,7 @@ Dance::Dance(const VECTOR _setPos)
 	: mRotate(ZERO_VECTOR)
 	, mVelocity(ZERO_VECTOR)
 	, mStopRange(ZERO_VECTOR)
+	, mStopFlag(false)
 {
 	mSetDancePos = _setPos;
 }
@@ -35,7 +30,9 @@ void Dance::Updata()
 /// </summary>
 /// <param name="_mSetPos">ダンス集合時のポジション</param>
 /// <param name="_mNowPos">モデルの現在のポジション</param>
-bool Dance::SetDancePos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotate)
+/// <param name="_Rotate">魚が向いている方向のベクトル</param>
+/// <returns>動いているときはfalse、動いていないときはtrueを返す</returns>
+VECTOR Dance::MoveTargetPos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotate)
 {
 	//移動ベクトルの計算
 	VECTOR posToSetPos = VSub(_SetPos, _NowPos);
@@ -59,11 +56,12 @@ bool Dance::SetDancePos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotate)
 	//大きい時に移動させる
 	if (mPosSize > mStopRadiusSize)
 	{
-		_NowPos = VAdd(_NowPos, mVelocity);
-		return false;
+		mStopFlag = false;
+		return mVelocity;
 	}
-	else if (mPosSize < mStopRadiusSize)
+	else if (mPosSize <= mStopRadiusSize)
 	{
-		return true;
+		mStopFlag = true;
+		return mVelocity;
 	}
 }

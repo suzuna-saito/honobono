@@ -16,6 +16,8 @@ FishBase::FishBase(int _sourceModelHandle)
 	, mRotate(VGet(0.0f, 0.0f, 0.0f))
 	, mSetDancePos(VGet(0.0f, 0.0f, 0.0f))
 	, mVelocity(VGet(0.0f, 0.0f, 0.0f))
+	, mSetDancePosFlag(false)
+	, mMoveFlag(true)
 {
 	// ‰æ‘œƒf[ƒ^‚Ì“Ç‚İ‚İ
 	mModelHandle = MV1DuplicateModel(_sourceModelHandle);
