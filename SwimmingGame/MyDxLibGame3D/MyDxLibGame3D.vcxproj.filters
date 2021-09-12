@@ -32,9 +32,6 @@
     <Filter Include="ソース ファイル\Camera\Time">
       <UniqueIdentifier>{84942244-4a17-4a41-8af2-bec97014a621}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Dance">
-      <UniqueIdentifier>{5ba4aaef-33e8-4997-82f4-2566286f0532}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneBase.cpp">
@@ -103,9 +100,6 @@
     <ClCompile Include="NpcJump.cpp">
       <Filter>ソース ファイル\Jump</Filter>
     </ClCompile>
-    <ClCompile Include="Dance.cpp">
-      <Filter>ソース ファイル\Dance</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -170,9 +164,6 @@
     </ClInclude>
     <ClInclude Include="NpcJump.h">
       <Filter>ソース ファイル\Jump</Filter>
-    </ClInclude>
-    <ClInclude Include="Dance.h">
-      <Filter>ソース ファイル\Dance</Filter>
     </ClInclude>
     <ClInclude Include="Pool.h">
       <Filter>ソース ファイル\GameObject</Filter>

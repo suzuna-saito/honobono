@@ -2,7 +2,6 @@
 #include "Common.h"
 #include "Jump.h"
 #include"Input.h"
-#include"Dance.h"
 
 /// <summary>
 /// コンストラクタ
@@ -17,8 +16,9 @@ Fish::Fish(int _sourceModelHandle,
 	mRotate = _rotate;
 	mSetDancePos = _dancePos;
 
+	mMoveState = NotMove;
+
 	mJump = new Jump();
-	mDance = new Dance(mSetDancePos);
 }
 
 /// <summary>
@@ -34,9 +34,10 @@ Fish::~Fish()
 /// </summary>
 void Fish::Updata()
 {
-	if (mMoveFlag)
+	//動いているときに
+	if (mMoveState == NowMove)
 	{
-		// ポジションの更新
+		// ポジションの更新をする
 		mPos = VAdd(mPos, mVelocity);
 	}
 
@@ -50,7 +51,6 @@ void Fish::Updata()
 		//アーティスティックスイミングの処理
 		DanceUpdata();
 	}
-	
 }
 
 /// <summary>
@@ -98,25 +98,82 @@ void Fish::JumpUpdata()
 		}
 	}
 
+	mMoveState = NowMove;
 	mVelocity = mJump->GetVelocity();
 }
 
+
 /// <summary>
-/// アーティスティックスイミングの更新処理を入れた関数
+/// アーティスティックスイミング時の更新処理を入れた関数
 /// </summary>
 void Fish::DanceUpdata()
 {
-	//もし魚が移動をし終わったとき
-	if (mDance->GetStopSetPosFlag())
+	mVelocity = MoveTargetPos(mSetDancePos, mPos, mRotate);
+}
+
+
+//andou
+/// <summary>
+///  目標の座標まで移動する関数
+/// </summary>
+/// <param name="_mSetPos">ダンス集合時のポジション</param>
+/// <param name="_mNowPos">モデルの現在のポジション</param>
+/// <param name="_Rotate">魚が向いている方向のベクトル</param>
+/// <returns>動いているときはfalse、動いていないときはtrueを返す</returns>
+VECTOR Fish::MoveTargetPos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotate)
+{
+	//移動ベクトルの計算
+	VECTOR posToSetPos = VSub(_SetPos, _NowPos);
+	VECTOR normPosToSetPos = VNorm(posToSetPos);
+	mVelocity = VScale(normPosToSetPos, SET_DANCE_POS_VELOCITY);
+
+	//止まるとき
+	if (CheckStopped(_SetPos, _NowPos))
 	{
-		mMoveFlag = false;
-		mSetDancePosFlag = true;
+		mMoveState = NotMove;
+		return mVelocity;
 	}
-	//移動し終わっていないとき
 	else
 	{
-		mMoveFlag = true;
-		mVelocity = mDance->MoveTargetPos(mSetDancePos, mPos, mRotate);
-		mSetDancePosFlag = false;
+		mMoveState = NowMove;
+		return mVelocity;
+	}
+}
+
+
+/// <summary>
+/// 移動したときに指定の位置に着いたかどうか
+/// </summary>
+/// <param name="_targetPos">指定した位置</param>
+/// <param name="_nowPos">今のモデルの位置</param>
+/// <returns>止まっていい時はtrue、止まってはいけない時はfalse</returns>
+bool Fish::CheckStopped(const VECTOR _targetPos, const VECTOR _nowPos)
+{
+	VECTOR posToSetPos = VSub(_targetPos, _nowPos);
+	VECTOR normPosToSetPos = VNorm(posToSetPos);
+
+	/*-----------モデルを止めるために停止範囲の距離の計算----------*/
+
+	//mPosからmSetDancePosまでの距離の計算
+	float PosSize = VSquareSize(posToSetPos);
+
+	VECTOR StopRange = VScale(normPosToSetPos, SET_DANCE_POS_RANGE);
+
+	//mSetDancePosからmStoprangeまでの距離の計算
+	VECTOR normSetPosToPos = VNorm(VSub(_nowPos, _targetPos));
+	StopRange = VScale(normSetPosToPos, SET_DANCE_POS_RANGE);
+
+	float mStopRadiusSize = VSquareSize(StopRange);
+
+	//mSetPosからmPosまでのベクトルの長さ(値は2乗)が
+	//mSetPosからmStopRadiusまでのベクトルの長さ(値は2乗)より
+	//大きい時に移動させる
+	if (PosSize > mStopRadiusSize)
+	{
+		return false;
+	}
+	else if (PosSize <= mStopRadiusSize)
+	{
+		return true;
 	}
 }

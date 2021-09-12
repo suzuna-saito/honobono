@@ -24,10 +24,20 @@ public:
 	//アーティスティックスイミングの更新処理をいれた関数
 	void DanceUpdata();
 
+	/// <summary>
+	/// 目標の座標まで動く関数
+	/// </summary>
+	VECTOR MoveTargetPos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotate);
+
+	/// <summary>
+	/// 止まっているときにtrue、止まっていないときにはfalseを返す
+	/// </summary>
+	bool CheckStopped(const VECTOR _targetPos, const VECTOR _nowPos);
+
 	Jump* mJump;             //ジャンプクラスを持った変数
-	class Dance* mDance;           //ダンスクラスを持った変数
 
 private:
+
 	bool mJumpUpdataFlag;    // ジャンプの更新をするかどうか
 	bool mJumpedInFlag;      // ジャンプの更新が終わったかどうかを判定する変数(終わった：true、終わっていない:false)
 

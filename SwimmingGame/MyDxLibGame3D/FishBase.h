@@ -36,6 +36,13 @@ public:
 	//ダンス集合時のポジションにいるときのフラグのgetter
 	const bool GetSetDancePosFlag() { return mSetDancePosFlag; }
 
+	enum MoveState
+	{
+		NowMove,            //今動いている
+		NotMove,            //動いていない
+	};
+
+
 protected:
 
 	int		mModelHandle;		// モデルハンドル変数 
@@ -48,7 +55,7 @@ protected:
 
 	bool mSetDancePosFlag;   // mSetDancePosのポジションに魚がいるときはtrueにする、いないときはfalse
 
-	bool mMoveFlag;   //もし動いてもいいときはtrue、動いてほしくないときはfalse
+	MoveState mMoveState;     //移動しているかどうかのステータス
 };
 
 #endif // !_FISHBASE_H_

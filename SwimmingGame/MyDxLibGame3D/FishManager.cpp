@@ -2,7 +2,6 @@
 #include"FishBase.h"
 #include"Fish.h"
 #include"Common.h"
-#include"Dance.h"
 
 /*
 * ã•ûŒüƒL[‚ğ‰Ÿ‚µ‚½‚Ì‹“_‚Å‚Ì
