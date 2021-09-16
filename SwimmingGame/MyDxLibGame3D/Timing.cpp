@@ -2,6 +2,7 @@
 #include "Timing.h"
 #include "Input.h"
 #include "Sound.h"
+#include "Time.h"
 
 //-----------------------------------------------------------------------------
 // @brief  コンストラクタ.
@@ -12,17 +13,19 @@ Timing::Timing()
 	, mReactionFlag(true)
 	, mScoreFlag(false)
 	, mScoreRadius(0)
+	, mBadFlag(false)
 	, mGageX(50)
 	, mGageY(350)
 	, mGageCX(100)
 	, mGageCY(400)
 	, mFreamX(490)
 	, mFreamY(180)
-	, mRadius(70)
+	, mRadius(0)
 	, mGageRadius(20)
-	, mRadiusInit(70)
-	, mPerfectRadius(5)
-	, mBadRadius(20)
+	, mRadiusInit(0)
+	, mMaxRadius(75)
+	, mPerfectRadius(69)
+	, mBadRadius(56)
 	, mReactionX(520)
 	, mReactionY(200)
 	, mReactionCount(0)
@@ -39,10 +42,21 @@ Timing::Timing()
 	, mAngleRotate(15.0f * DX_PI_F / 180.0f)
 	, mScalePlus(0.02)
 	, mEffectImg(-1)
-	, mCount(0.0f)
+	, mJudgeImg(-1)
+	, mCount(0)
+	, mBasePoint(99)
+	, mBaseTime(1)
+	, mRandomTime(0)
+	, mRandomFlag(true)
+	, mTimeCount(0)
+	, mNotesStartTime(150)
+	, mNotesEndTime(4600)
 {
 	// 画像読み込み
 	mFreamImg = LoadGraph("data/newUI/frame.png");
+	mPerfectImg = LoadGraph("data/newUI/Perfect.png");
+	mGoodImg = LoadGraph("data/newUI/Good.png");
+	mBadImg = LoadGraph("data/newUI/Bad.png");
 	mPerfectEffectImg = LoadGraph("data/newUI/PerfectEffect.png");
 	mGoodEffectImg = LoadGraph("data/newUI/GoodEffect.png");
 	mBadEffectImg = LoadGraph("data/newUI/BadEffect.png");
@@ -66,6 +80,14 @@ Timing::Timing()
 //-----------------------------------------------------------------------------
 Timing::~Timing()
 {
+	DeleteGraph(mFreamImg);
+	DeleteGraph(mPerfectImg);
+	DeleteGraph(mGoodImg);
+	DeleteGraph(mBadImg);
+	DeleteGraph(mPerfectEffectImg);
+	DeleteGraph(mGoodEffectImg);
+	DeleteGraph(mBadEffectImg);
+
 	// サウンドデータの削除
 	delete mPerfectSound;
 	delete mGoodSound;
@@ -79,12 +101,27 @@ Timing::~Timing()
 void Timing::Update()
 {
 	// カウント
-	mCount++;
-	// 
-	mCountPack = mCount / 1000;
+	// 急に始まらないようスタート時間まで待ってからスタート
+	if (mTimeCount > mNotesStartTime)
+	{
+		// 円が出現するまでの時間をカウント
+		mCount++;
+	}
 
-	// 
-	if (mCountPack == mRhythm[i])
+	// 曲の経過時間をカウント
+	mTimeCount++;
+
+	// 次のノーツを格納するときが来たら
+	if (mRandomFlag)
+	{
+		// Randomに次の時間を格納する
+		mRandomTime = GetRand(mBasePoint) + mBaseTime;
+		// ノーツを格納しないにする
+		mRandomFlag = false;
+	}
+
+	// カウントがRandomに入れたカウントに来たとき、曲が終わっていなければ
+	if (mCount == mRandomTime && mTimeCount < mNotesEndTime)
 	{
 		// タイミングゲージ描画フラグを「真」にする
 		mTimingDrawFlag = true;
@@ -115,19 +152,23 @@ void Timing::Update()
 			if (mTimingFlag)
 			{
 				// バッドの条件
-				if (mRadius - mGageRadius > mBadRadius)
+				if (mRadius < mBadRadius)
 				{
+					// バッドになった
+					mBadFlag = true;
 					// エフェクト画像をバッドエフェクトにする
 					mEffectImg = mBadEffectImg;
 					// エフェクトフラグを「真」にする
 					mEffectFlag = true;
 					// バッドの効果音を流す
 					mBadSound->PlaySE();
+					// 判定画像の変数にバッドの画像を格納
+					mJudgeImg = mBadImg;
 					// 他にリアクションを判定しない
 					mReactionFlag = false;
 				}
 				// グッドの条件
-				if (mRadius - mGageRadius >= mPerfectRadius && mRadius - mGageRadius <= mBadRadius)
+				if (mRadius < mPerfectRadius && mRadius >= mBadRadius)
 				{
 					// エフェクト画像をグッドエフェクトにする
 					mEffectImg = mGoodEffectImg;
@@ -135,11 +176,13 @@ void Timing::Update()
 					mEffectFlag = true;
 					// グッドの効果音を流す
 					mGoodSound->PlaySE();
+					// 判定画像の変数にグッドの画像を格納
+					mJudgeImg = mGoodImg;
 					// 他にリアクションを判定しない
 					mReactionFlag = false;
 				}
 				// パーフェクトの条件
-				if (mRadius - mGageRadius < mPerfectRadius)
+				if (mRadius >= mPerfectRadius)
 				{
 					// エフェクト画像をパーフェクトエフェクトにする
 					mEffectImg = mPerfectEffectImg;
@@ -147,19 +190,25 @@ void Timing::Update()
 					mEffectFlag = true;
 					// パーフェクトの効果音を流す
 					mPerfectSound->PlaySE();
+					// 判定画像の変数にパーフェクトの画像を格納
+					mJudgeImg = mPerfectImg;
 					// 他にリアクションを判定しない
 					mReactionFlag = false;
 				}
 			}
 			// タイミングフラグが「偽」であり、ゲージの半径が０になったら
-			else if (!mTimingFlag && mRadius == 0)
+			else if (!mTimingFlag && mRadius >= mMaxRadius)
 			{
+				// バッドになった
+				mBadFlag = true;
 				// エフェクト画像をバッドエフェクトにする
 				mEffectImg = mBadEffectImg;
 				// エフェクトフラグを「真」にする
 				mEffectFlag = true;
 				// バッドの効果音を流す
 				mBadSound->PlaySE();
+				// 判定画像の変数にバッドの画像を格納
+				mJudgeImg = mBadImg;
 				// 他にリアクションを判定しない
 				mReactionFlag = false;
 			}
@@ -167,13 +216,25 @@ void Timing::Update()
 		
 		// リアクションカウントが最大値ではないとき
 		//if (!(mReactionCount < mReactionCountMax))
+		//{
+
+		// スコアを入れられるなら
+		if (mScoreFlag)
 		{
-			if (mScoreFlag)
+			// バッドだったら
+			if (mBadFlag)
 			{
-				// 
-				mScoreRadius = mRadiusInit - mRadius;
+				// スコアの割合を0にする
+				mScoreRadius = 0;
+			}
+			// そうじゃなければ
+			else
+			{
+				// スコアの割合を半径分の割合にする
+				mScoreRadius = mRadius;
 			}
 		}
+		//}
 		// リアクションカウントが最大値を超えたら
 		if (mReactionCount == mReactionCountMax)
 		{
@@ -185,6 +246,12 @@ void Timing::Update()
 			i++;
 			// リアクションを判定できるようにする
 			mReactionFlag = true;
+			// 判定はバッドではない
+			mBadFlag = false;
+			// ノーツの次時間を格納できる
+			mRandomFlag = true;
+			// ノーツまでのカウントを初期化
+			mCount = mCountInit;
 		}
 		// エフェクトのフラグが「真」のとき
 		if (mEffectFlag)
@@ -216,29 +283,38 @@ void Timing::Update()
 void Timing::Draw()
 {
 	// パーフェクト判定の位置となるゲージの描画
-	DrawCircle(mGageCX, mGageCY, mGageRadius, mWhite, TRUE);
+	DrawRotaGraph(mGageCX, mGageCY, 1 , 0, mFreamImg, true, false, false);
 
 	// タイミングゲージを描画するフラグが「真」となったら
 	if (mTimingDrawFlag)
 	{
 		if (!mTimingFlag)
 		{
-			// 半径が０になるまで収縮
-			if (mRadius > 0)
+			// 半径が75になるまで拡大
+			if (mRadius < mMaxRadius)
 			{
-				// 収縮するゲージの描画
-				DrawCircle(mGageCX, mGageCY, mRadius--, mBrack, FALSE, 2);
+				// 拡大するゲージの描画
+				DrawCircle(mGageCX, mGageCY, mRadius++, mBrack, FALSE, 2);
 			}
 		}
 	}
+
+	/*DrawFormatString(200, 200, mWhite, "%d", mRadius);*/
 	
 	// エフェクトのフラグが「真」のとき
 	if (mEffectFlag)
 	{
 		DrawRotaGraph(mGageCX, mGageCY, mEffectScale, mEffectAngle, mEffectImg, true, false, false);
 	}
+
+	// 判定画像を描画していなかったら
+	if (!mReactionFlag)
+	{
+		// 描画
+		DrawGraph(mGageCX, mGageCY, mJudgeImg, true);
+	}
 	// 再生されている音楽の時間の確認（デバッグ用）
-	DrawFormatString(0, 30, mWhite, "Time:%f", mCountPack);
+	DrawFormatString(0, 30, mWhite, "Time:%d", mRandomTime);
 }
 
 
