@@ -51,6 +51,7 @@ Timing::Timing()
 	, mTimeCount(0)
 	, mNotesStartTime(150)
 	, mNotesEndTime(4600)
+	, mJudge(none)
 {
 	// 画像読み込み
 	mFreamImg = LoadGraph("data/newUI/frame.png");
@@ -100,6 +101,9 @@ Timing::~Timing()
 //-----------------------------------------------------------------------------
 void Timing::Update()
 {
+	// 判定
+	mJudge = none;
+
 	// カウント
 	// 急に始まらないようスタート時間まで待ってからスタート
 	if (mTimeCount > mNotesStartTime)
@@ -166,6 +170,9 @@ void Timing::Update()
 					mJudgeImg = mBadImg;
 					// 他にリアクションを判定しない
 					mReactionFlag = false;
+
+					// bad判定
+					mJudge = bad;
 				}
 				// グッドの条件
 				if (mRadius < mPerfectRadius && mRadius >= mBadRadius)
@@ -180,6 +187,9 @@ void Timing::Update()
 					mJudgeImg = mGoodImg;
 					// 他にリアクションを判定しない
 					mReactionFlag = false;
+
+					// good判定
+					mJudge = good;
 				}
 				// パーフェクトの条件
 				if (mRadius >= mPerfectRadius)
@@ -194,6 +204,9 @@ void Timing::Update()
 					mJudgeImg = mPerfectImg;
 					// 他にリアクションを判定しない
 					mReactionFlag = false;
+
+					// perfect判定
+					mJudge = perfect;
 				}
 			}
 			// タイミングフラグが「偽」であり、ゲージの半径が０になったら
@@ -211,6 +224,9 @@ void Timing::Update()
 				mJudgeImg = mBadImg;
 				// 他にリアクションを判定しない
 				mReactionFlag = false;
+
+				// 何も押されなかった判定
+				mJudge = notDone;
 			}
 		}
 		

@@ -32,40 +32,46 @@ Fish::~Fish()
 /// <summary>
 /// 更新関数
 /// </summary>
-void Fish::Updata()
+void Fish::Updata(int _judge)
 {
+	// 演技前
 	if (!mJumpedInFlag)
 	{
 		//飛び込みの処理
-		JumpUpdata();
+		JumpUpdata(_judge);
 	}
+	// 演技中
 	else
 	{
 		//アーティスティックスイミングの処理
-		DanceUpdata();
+		//DanceUpdata();
+
+		// ジャンプの処理
+		JumpUpdata(_judge);
 	}
 	
+	// ポジションの更新
+	mPos = VAdd(mPos, mJump->GetVelocity());
 }
 
 /// <summary>
 /// ジャンプの更新を入れた関数 : @saito
 /// </summary>
-void Fish::JumpUpdata()
+void Fish::JumpUpdata(int _judge)
 {
-	// 全てのジャンプが終わっていない状態で
 	// ボタンが押されたら、またはtimingゲージが縮小し終わったらジャンプする（ってしたい）
-	if (mJump->GetNowJump() != mJump->endJump &&
-		(Key[KEY_INPUT_SPACE] == 1 && mJump->GetIsGround())/*||
-		(mTiming->GetRadius() <= 1 && mJump->GetIsGround())*/)
+	if ((Key[KEY_INPUT_SPACE] == 1 && mJump->GetIsGround()) && _judge != 4 ||
+		_judge == 3)
 	{
 		// ジャンプの更新をするようにする
 		mJumpUpdataFlag = true;
 	}
 
-	if (mJumpUpdataFlag)
+	// 飛び込みの時
+	if (mJumpUpdataFlag && mJump->GetNowJump() != mJump->endDive)
 	{
 		//ジャンプの更新
-		mJump->JumpUpdate(mRotate);
+		mJump->DiveUpdate(mRotate);
 
 		// 今のジャンプが飛び込みじゃない、かつ、増加量が0になったら
 		if (mJump->GetNowJump() != mJump->thirdJump && mJump->GetGain() <= 0.0f)
@@ -76,13 +82,13 @@ void Fish::JumpUpdata()
 			mJumpUpdataFlag = false;
 		}
 		// 今のジャンプが飛び込みで、プールのところまでいったら
-		else if (mJump->GetNowJump() == mJump->thirdJump && mPos.y <= 0.0f)
+		else if (mJump->GetNowJump() == mJump->thirdJump && mPos.y <= 4.5f)
 		{
 			// ジャンプパターンを更新する
 			mJump->JumpSetUpdate();
 
 			// 押し戻し…？
-			mPos.y = 0.0f;
+			mPos.y = 4.5f;
 
 			// ジャンプの更新を止める
 			mJumpUpdataFlag = false;
@@ -92,8 +98,22 @@ void Fish::JumpUpdata()
 		}
 	}
 
-	// ポジションの更新
-	mPos = VAdd(mPos, mJump->GetVelocity());
+	// ジャンプの時
+	else if (mJumpUpdataFlag && mJump->GetNowJump() == mJump->endDive)
+	{
+		// ジャンプの更新
+		mJump->JumpUpdate(_judge);
+
+		// 増加量が0になったら
+		if (mJump->GetGain() <= 0.0f)
+		{
+			// ジャンプパターンを更新する
+			mJump->JumpSetUpdate();
+
+			// ジャンプの更新を止める
+			mJumpUpdataFlag = false;
+		}
+	}
 }
 
 /// <summary>

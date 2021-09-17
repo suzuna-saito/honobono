@@ -41,10 +41,29 @@ public:
 	void CSVRead();
 
 
+	// 判定
+	enum judgement
+	{
+		bad,
+		good,
+		perfect,
+		notDone,  // 何も押されなかった
+
+		none      // ゲージが出てない
+	};
+
+	// 判定の取得
+	judgement GetJudg() { return mJudge; }
+
 protected:
 	
 
 private:
+	// 判定
+	// 今の判定が何だったか
+	judgement mJudge;
+
+
 	//  フラグ
 	// タイミングゲージを描画するフラグ管理
 	bool mTimingDrawFlag;

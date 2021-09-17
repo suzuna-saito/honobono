@@ -171,7 +171,6 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Jump.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="NpcJump.cpp" />
     <ClCompile Include="Play.cpp" />
     <ClCompile Include="Pool.cpp" />
     <ClCompile Include="Result.cpp" />
@@ -202,7 +201,6 @@
     <ClInclude Include="Hitchecker.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Jump.h" />
-    <ClInclude Include="NpcJump.h" />
     <ClInclude Include="Play.h" />
     <ClInclude Include="Pool.h" />
     <ClInclude Include="Result.h" />

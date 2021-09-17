@@ -16,10 +16,10 @@ public:
 		VECTOR _pos, VECTOR _rotate, VECTOR _dancePos);		// コンストラクタ
 	virtual ~Fish();										// デストラクタ
 
-	void Updata();											// 更新関数
+	void Updata(int _judge);											// 更新関数
 
 	//ジャンプの更新処理をいれた関数
-	void JumpUpdata();
+	void JumpUpdata(int _judge);
 
 	//アーティスティックスイミングの更新処理をいれた関数
 	void DanceUpdata();

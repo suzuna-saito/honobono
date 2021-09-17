@@ -152,7 +152,7 @@ SceneBase* Play::Update()
 	if (startCount >= 60)
 	{
 		// 魚の制御
-		fishManager->Updata();
+		fishManager->Updata(timing->GetJudg());
 	}
 	
 	// シーンが変更されていなかったら自分のポインタを返す
