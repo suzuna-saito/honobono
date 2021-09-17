@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Common.h"
 #include "Fade.h"
+#include "Input.h"
 
 /// <summary>
 /// コンストラクタ
@@ -17,7 +18,7 @@ SceneManager::SceneManager()
 	, nextScene(nowScene)
 	// 現在のシーンを一時保存
 	, saveNextScene(nowScene)
-	// フェードインアウト生成
+	// フェードインアウト生成 
 	, fade(new Fade())
 	// フェードインアウトの状態をフェードインアウトしていない状態に変更
 	, fadeState(FadeState::NonFadeInOut)
@@ -47,6 +48,8 @@ bool SceneManager::UpdateScene()
     // 現在と次のシーンを比較するためのSceneBaseクラスポインタ
 	// Updateの戻り値で次のシーンのポインタが返ってくる
 	nextScene = nowScene->Update();
+
+	UpdateKey();
 
 	// フェードの状態をみて、フェードインアウトを行う
 	switch (fadeState)
@@ -135,9 +138,6 @@ void SceneManager::UpdateNonFadeInOutCase()
 	// フェードインアウトが終わったら、音楽、シーンを切り替えて、フェードインアウト初期化
 	if (saveNextScene != nowScene)
 	{
-		// 音楽を止める
-		//sound->StopMusic(*saveNextScene);
-
 		// 現在のシーンを解放
 		delete nowScene;
 		// 現在のシーンに一時保存したシーンを保存

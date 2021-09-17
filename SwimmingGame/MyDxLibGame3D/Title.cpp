@@ -1,7 +1,8 @@
 #include "Title.h"
-#include "Play.h"
+#include "Tutorial.h"
 #include "Camera.h"
 #include "Sound.h"
+#include "Input.h"
 
 /// <summary>
 /// コンストラクタ
@@ -93,18 +94,19 @@ Title::~Title()
 /// <return>シーンのポインタ</return>
 SceneBase* Title::Update()
 {
+	UpdateKey();
 	// シーン遷移条件
-	if (mCursorPoint == GAME_START && CheckHitKey(KEY_INPUT_RETURN))
+	if (mCursorPoint == GAME_START && Key[KEY_INPUT_SPACE] == 1)
 	{
 		// タイトルの効果音
 		mTitleSE->PlaySE();
 		// タイトルのBGMを止める
 		mTitleBGM->StopMusic();
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-		return new Play();
+		return new Tutorial();
 
 	}
-	else if (mCursorPoint == EXIT && CheckHitKey(KEY_INPUT_RETURN))
+	else if (mCursorPoint == EXIT && Key[KEY_INPUT_SPACE] == 1)
 	{
 		// ゲーム終了を選択したときになる効果音
 		mCancelSE->PlaySE();
@@ -186,7 +188,7 @@ void Title::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mAlpha);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mTextAlpha);
 	SetFontSize(FONT_SIZE);
-	DrawString(750, 750, "Push The Enter", GetColor(0, 0, 0));
+	DrawString(750, 750, "Push The SPACE", GetColor(0, 0, 0));
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mTextAlpha);
 }
 
