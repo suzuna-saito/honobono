@@ -50,7 +50,7 @@ Timing::Timing()
 	, mRandomFlag(true)
 	, mTimeCount(0)
 	, mNotesStartTime(150)
-	, mNotesEndTime(4600)
+	, mNotesEndTime(6000)
 	, mJudge(none)
 {
 	// 画像読み込み

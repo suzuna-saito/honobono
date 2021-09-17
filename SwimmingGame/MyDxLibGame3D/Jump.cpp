@@ -3,7 +3,7 @@
 //----------------------
 //定数
 //----------------------
-const float JUMP_Y = 0.3f;          // ジャンプした時のY軸の加算値
+const float JUMP_Y = 0.35f;          // ジャンプした時のY軸の加算値
 const float JUMP_Z = 0.25f;         // ジャンプした時のz軸の加算値
 const float JUMP_X = 0.15f;         // ジャンプした時のx軸の加算値
 

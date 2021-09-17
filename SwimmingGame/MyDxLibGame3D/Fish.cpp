@@ -2,7 +2,6 @@
 #include "Common.h"
 #include "Jump.h"
 #include"Input.h"
-#include"Dance.h"
 
 /// <summary>
 /// コンストラクタ
@@ -17,8 +16,10 @@ Fish::Fish(int _sourceModelHandle,
 	mRotate = _rotate;
 	mSetDancePos = _dancePos;
 
+	mMoveState = NotMove;
+
+
 	mJump = new Jump();
-	mDance = new Dance(mSetDancePos);
 }
 
 /// <summary>
@@ -32,26 +33,29 @@ Fish::~Fish()
 /// <summary>
 /// 更新関数
 /// </summary>
-void Fish::Updata(int _judge)
+void Fish::Updata(int _judge,float _deltaTime)
 {
-	// 演技前
-	if (!mJumpedInFlag)
-	{
-		//飛び込みの処理
-		JumpUpdata(_judge);
-	}
-	// 演技中
-	else
+	// ジャンプの処理
+	JumpUpdata(_judge);
+
+	// 飛び込みが終わったとき
+	if (mJumpedInFlag)
 	{
 		//アーティスティックスイミングの処理
-		//DanceUpdata();
-
-		// ジャンプの処理
-		JumpUpdata(_judge);
+		DanceUpdata();
 	}
+
+	//動いてほしい時に
+	if (mMoveState == NowMove)
+	{
+		// ポジションの更新をする
+		mPos = VAdd(mPos, mVelocity);
+
+		mPos = VAdd(mPos, mJump->GetVelocity());
+		VScale(mPos, _deltaTime);
+	}
+
 	
-	// ポジションの更新
-	mPos = VAdd(mPos, mJump->GetVelocity());
 }
 
 /// <summary>
@@ -114,6 +118,8 @@ void Fish::JumpUpdata(int _judge)
 			mJumpUpdataFlag = false;
 		}
 	}
+
+	mMoveState = NowMove;
 }
 
 /// <summary>
@@ -121,9 +127,126 @@ void Fish::JumpUpdata(int _judge)
 /// </summary>
 void Fish::DanceUpdata()
 {
-	if (mDance->SetDancePos(mSetDancePos, mPos, mRotate))
+	if (mSetDanceFlag)
 	{
-		
+		mVelocity = MoveAimlessWandering(mPos);
 	}
-	
+	else
+	{
+		mVelocity = MoveTargetPos(mSetDancePos, mPos, mRotate);
+	}
+}
+
+
+//andou
+/// <summary>
+///  目標の座標まで移動する関数
+/// </summary>
+/// <param name="_mSetPos">ダンス集合時のポジション</param>
+/// <param name="_mNowPos">モデルの現在のポジション</param>
+/// <param name="_Rotate">魚が向いている方向のベクトル</param>
+/// <returns>動いているときはfalse、動いていないときはtrueを返す</returns>
+VECTOR Fish::MoveTargetPos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotate)
+{
+	//移動ベクトルの計算
+	VECTOR posToSetPos = VSub(_SetPos, _NowPos);
+	VECTOR normPosToSetPos = VNorm(posToSetPos);
+	mTempVelocity = VScale(normPosToSetPos, DANCE_VELOCITY);
+
+
+	//止まるとき
+	if (CheckStopped(_SetPos, _NowPos))
+	{
+		//動いてほしくないのでNotMoveにする
+		mMoveState = NotMove;
+		//ダンスを始めるために
+		mDanceStartCount++;
+		//ダンスカウントが100以上の時
+		if (mDanceStartCount >= WAIT_DANCE_TIME_COUNT)
+		{
+			//ダンスを始められるのでtrueにする
+			mSetDanceFlag = true;
+		}
+
+		return mTempVelocity;
+	}
+	else
+	{
+		//動いてほしいのでNowMoveにする
+		mMoveState = NowMove;
+		//この関数の上で計算したvelocityを返す
+		return mTempVelocity;
+	}
+}
+
+/// <summary>
+/// ジャンプをしていないときの処理(反射処理)
+/// </summary>
+/// <param name="_nowPos">今のポジション</param>
+/// <returns>移動ベクトルを返す</returns>
+VECTOR Fish::MoveAimlessWandering(VECTOR& _nowPos)
+{
+	//動いてほしいのでNowMoveにする
+	mMoveState = NowMove;
+	//前にmTempVelocityを使っていた場合、Y軸を使用していると浮いてしまうので
+	//一度Y軸を０にする
+	mTempVelocity = VGet(mTempVelocity.x, 0.f, mTempVelocity.z);
+
+	/*
+	* プールの端に設定するとモデルが埋まってしまうので
+	* ポジションではなくポジション＋デバックの球体の半径を判定とする
+	*/
+	//上下の判定
+	if (_nowPos.x >= LINE_X - DEBUG_RADIUS
+		|| _nowPos.x <= -LINE_X + DEBUG_RADIUS)
+	{
+		mTempVelocity.x = -mTempVelocity.x;
+	}
+	//左右の判定
+	if (_nowPos.z >= LINE_Z - DEBUG_RADIUS
+		|| _nowPos.z <= -LINE_Z + DEBUG_RADIUS)
+	{
+		mTempVelocity.z = -mTempVelocity.z;
+	}
+
+	return mTempVelocity;
+}
+
+
+/// <summary>
+/// 移動したときに指定した位置に着いたかどうか
+/// </summary>
+/// <param name="_targetPos">指定した位置</param>
+/// <param name="_nowPos">今のモデルの位置</param>
+/// <returns>止まっていい時はtrue、止まってはいけない時はfalse</returns>
+bool Fish::CheckStopped(const VECTOR _targetPos, const VECTOR _nowPos)
+{
+
+	/*-----------モデルを止めるために停止範囲の距離の計算----------*/
+
+	VECTOR posToSetPos = VSub(_targetPos, _nowPos);
+	VECTOR normPosToSetPos = VNorm(posToSetPos);
+
+	//mPosからmSetDancePosまでの距離の計算
+	float PosSize = VSquareSize(posToSetPos);
+
+	VECTOR StopRange = VScale(normPosToSetPos, DANCE_STOP_RANGE);
+
+	//mSetDancePosからmStoprangeまでの距離の計算
+	VECTOR normSetPosToPos = VNorm(VSub(_nowPos, _targetPos));
+	StopRange = VScale(normSetPosToPos, DANCE_STOP_RANGE);
+
+	float mStopRadiusSize = VSquareSize(StopRange);
+
+	//mSetPosからmPosまでのベクトルの長さ(値は2乗)が
+	//mSetPosからmStopRadiusまでのベクトルの長さ(値は2乗)より
+	//大きい時に移動させる
+	if (PosSize > mStopRadiusSize)
+	{
+		return false;
+	}
+	else if (PosSize <= mStopRadiusSize)
+	{
+		return true;
+	}
 }

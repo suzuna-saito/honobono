@@ -85,6 +85,7 @@ Play::~Play()
 	mPlayBGM2->StopMusic();
 	mPlayBGM3->StopMusic();
 
+
 	//音楽の停止
 	mDancePlaySE->StopMusic();
 
@@ -157,7 +158,7 @@ SceneBase* Play::Update()
 	if (startCount >= 60)
 	{
 		// 魚の制御
-		fishManager->Updata();
+		fishManager->Updata(timing->GetJudg(),time->GetDeltaTime());
 
 		//andou
 		//ダンスを始めてもいいかのフラグがtrueだったとき

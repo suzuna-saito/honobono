@@ -16,7 +16,7 @@ public:
 		VECTOR _pos, VECTOR _rotate, VECTOR _dancePos);		// コンストラクタ
 	virtual ~Fish();										// デストラクタ
 
-	void Updata(int _judge);											// 更新関数
+	void Updata(int _judge,float _deltaTime);											// 更新関数
 
 	//ジャンプの更新処理をいれた関数
 	void JumpUpdata(int _judge);
@@ -47,7 +47,7 @@ private:
 	bool mJumpUpdataFlag;    // ジャンプの更新をするかどうか
 	bool mJumpedInFlag;      // ジャンプの更新が終わったかどうかを判定する変数(終わった：true、終わっていない:false)
 
-	float mDeltaTime;
+	//float mDeltaTime;
 };
 
 #endif // !_FISH_H_

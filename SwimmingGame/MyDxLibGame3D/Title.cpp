@@ -62,8 +62,6 @@ Title::Title()
 	// テクスチャ貼り付け
 	MV1SetTextureGraphHandle(mTextModel[0], 0, mTextTexture, true);
 
-	camera = new Camera();
-
 	// サウンドのロード
 	mTitleBGM = new Sound("data/newSound/bgm/title.mp3");
 	mTitleSE = new Sound("data/newSound/se/startSE.mp3");
@@ -83,7 +81,6 @@ Title::~Title()
 	MV1DeleteModel(*mTextModel);
 	DeleteGraph(mCursor);
 	DeleteGraph(mBackGroundGraph);
-	delete(camera);
 	delete mTitleBGM;
 	delete mTitleSE;
 	delete mCancelSE;

@@ -141,13 +141,13 @@ void FishManager::DestroyFish()
 /// <summary>
 /// XVŠÖ”
 /// </summary>
-void FishManager::Updata(int _judge)
+void FishManager::Updata(int _judge, float _delta)
 {
 	for (int i = 0; i < FISH_NUM; i++)
 	{
 		if (mFish[i] != NULL)
 		{
-			mFish[i]->Updata(_judge);
+			mFish[i]->Updata(_judge,_delta);
 		}
 	}
 

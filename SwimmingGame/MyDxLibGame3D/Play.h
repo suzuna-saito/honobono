@@ -57,7 +57,7 @@ private:
     // リズムボタン
     Timing* timing = nullptr;
 	// UI（ゴール
-	UIGoal* uiGoal;
+	//UIGoal* uiGoal;
 	// 当たり判定
 	HitChecker* hit;
     // バックグラウンド
