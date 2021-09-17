@@ -3,6 +3,10 @@
 */
 #include "Sound.h"
 
+// 定数
+const int VOLUME = 80;
+
+
 /// <summary>
 /// コンストラクタ
 /// </summary>
@@ -31,6 +35,9 @@ void Sound::PlayBGM()
 	{
 		PlaySoundMem(mSoundHandle, DX_PLAYTYPE_LOOP, TRUE);
 	}
+
+	// 音量調整
+	ChangeVolumeSoundMem(VOLUME, mSoundHandle);
 }
 
 /// <summary>
@@ -43,6 +50,9 @@ void Sound::PlayBackBGM()
 	{
 		PlaySoundMem(mSoundHandle, DX_PLAYTYPE_BACK, TRUE);
 	}
+
+	// 音量調整
+	ChangeVolumeSoundMem(VOLUME, mSoundHandle);
 }
 
 /// <summary>
@@ -55,6 +65,9 @@ void Sound::PlaySE()
 	{
 		PlaySoundMem(mSoundHandle, DX_PLAYTYPE_BACK, TRUE);
 	}
+
+	// 音量調整
+	ChangeVolumeSoundMem(VOLUME, mSoundHandle);
 }
 
 /// <summary>
@@ -70,12 +83,12 @@ void Sound::StopMusic()
 /// </summary>
 int Sound::CheckBGM()
 {
-	if (!CheckSoundMem(mSoundHandle))
-	{
-		return false;
-	}
-	else if (CheckSoundMem(mSoundHandle))
+	if (CheckSoundMem(mSoundHandle))
 	{
 		return true;
+	}
+	else
+	{
+		return false;
 	}
 }

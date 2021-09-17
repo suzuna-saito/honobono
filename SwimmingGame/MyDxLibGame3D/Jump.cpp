@@ -3,13 +3,17 @@
 //----------------------
 //定数
 //----------------------
-const float JUMP_Y = 0.3f;          // ジャンプした時のY軸の加算値
+const float JUMP_Y = 0.35f;          // ジャンプした時のY軸の加算値
 const float JUMP_Z = 0.25f;         // ジャンプした時のz軸の加算値
 const float JUMP_X = 0.15f;         // ジャンプした時のx軸の加算値
 
 const float FIRST_MAX = 3.0f;        // 1回目ジャンプの最大ジャンプ力
 const float SECOND_MAX = 5.0f;       // 2回目ジャンプの最大ジャンプ力
 const float THIRD_MAX = 8.0f;        // 飛び込みの最大ジャンプ力
+
+const float GOOD = 3.0f;           // goodの時のジャンプ力
+const float PERFECT = 7.0f;        // perfectの時のジャンプ力
+
 
 //-----------------------------------------------------------------------------
 // @brief  コンストラクタ.
@@ -35,7 +39,7 @@ Jump::~Jump()
 //-----------------------------------------------------------------------------
 // @brief  ジャンプ更新.
 //-----------------------------------------------------------------------------
-void Jump::JumpUpdate(VECTOR _rotate)
+void Jump::DiveUpdate(VECTOR _rotate)
 {
 	// 魚の向きによって飛び込む方向を換える
 	switch ((int)_rotate.y)
@@ -60,14 +64,14 @@ void Jump::JumpUpdate(VECTOR _rotate)
 		break;
 	}
 
-	// ジャンプの更新
-	JumpNowUpdate();
+	// 飛び込みの更新
+	DiveNowUpdate();
 }
 
 //-----------------------------------------------------------------------------
-// @brief  ジャンプの更新.
+// @brief  飛び込みの更新.
 //-----------------------------------------------------------------------------
-void Jump::JumpNowUpdate()
+void Jump::DiveNowUpdate()
 {
 	// 一定の高さに行くまでジャンプを上げていく
 	if (mJumpUp)
@@ -105,6 +109,50 @@ void Jump::JumpNowUpdate()
 	mGain += mVelocity.y;
 }
 
+
+//-----------------------------------------------------------------------------
+// @brief  ジャンプの更新.
+//-----------------------------------------------------------------------------
+void Jump::JumpUpdate(int _jadge)
+{
+	switch (_jadge) // 判定
+	{
+	case 0:    // badの時
+		mJumpMax = 0.0f;
+		break;
+	case 1:    // goodの時
+		mJumpMax = GOOD;
+		break;
+	case 2:    // parfectの時
+		mJumpMax = PERFECT;
+		break;
+	default:
+		break;
+	}
+
+	// 一定の高さに行くまでジャンプを上げていく
+	if (mJumpUp)
+	{
+		mIsGround = false;                     // 地面に接地していない
+
+		mVelocity = VGet(0.0f, JUMP_Y, 0.0f);  // ヴェロシティを設定
+
+		// 設定した最大値より増加した量が上に行ったら
+		if (mGain >= mJumpMax)
+		{
+			mJumpUp = false;       // もう上がらないのでfalseにする
+		}
+	}
+	if (!mJumpUp) // 下げていく
+	{
+		mVelocity = VGet(0.0f, -JUMP_Y, 0.0f);
+
+	}
+
+	// 増加量の計算
+	mGain += mVelocity.y;
+}
+
 //-----------------------------------------------------------------------------
 // @brief  ジャンプタイプの更新.
 //-----------------------------------------------------------------------------
@@ -126,9 +174,11 @@ void Jump::JumpSetUpdate()
 		mJumpMax = THIRD_MAX;
 		break;
 	case thirdJump:             // 飛び込みのジャンプだったら
-		mNowJump = endJump;     // ジャンプを終了する
+		mNowJump = endDive;     // ジャンプを終了する
+		mJumpMax = 0.0f;
 		break;
 	default:
+		mJumpMax = 0.0f;
 		break;
 	}
 }

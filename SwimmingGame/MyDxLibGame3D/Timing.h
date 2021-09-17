@@ -41,10 +41,29 @@ public:
 	void CSVRead();
 
 
+	// 判定
+	enum judgement
+	{
+		bad,
+		good,
+		perfect,
+		notDone,  // 何も押されなかった
+
+		none      // ゲージが出てない
+	};
+
+	// 判定の取得
+	judgement GetJudg() { return mJudge; }
+
 protected:
 	
 
 private:
+	// 判定
+	// 今の判定が何だったか
+	judgement mJudge;
+
+
 	//  フラグ
 	// タイミングゲージを描画するフラグ管理
 	bool mTimingDrawFlag;
@@ -82,15 +101,37 @@ private:
 	int mFreamX;
 	// フレームの座標Y
 	int mFreamY;
+	// 判定画像
+	int mJudgeImg;
+	// Perfect判定画像
+	int mPerfectImg;
+	// Good判定画像
+	int mGoodImg;
+	// Bad判定画像
+	int mBadImg;
 	// リアクションの座標X
 	int mReactionX;
 	// リアクションの座標Y
 	int mReactionY;
+	// ノーツ最大の大きさ
+	int mMaxRadius;
 	// パーフェクトの半径
 	int mPerfectRadius;
 	// バッドの半径
 	int mBadRadius;
 
+	// ランダムに格納する値をこれより下回らない
+	int mBaseTime;
+	// ランダムに格納する値の引数値
+	int mBasePoint;
+	// ノーツを出す次のタイミング
+	int mRandomTime;
+	// ランダムな値を格納していいかどうか
+	bool mRandomFlag;
+	// ノーツを開始させる時間
+	int mNotesStartTime;
+	// ノーツを終わらせる時間
+	int mNotesEndTime;
 
 	//  カウント
 	// リアクションを描画する時間をカウントする
@@ -99,10 +140,10 @@ private:
 	int mReactionCountMax;
 	// カウントを初期化
 	int mCountInit;
-	// フレーム数のカウント
-	float mCount;
-	// カウント入れるやつ
-	float mCountPack;
+	// ノーツ開始までをはかるカウント
+	int mCount;
+	// 曲の経過カウント
+	int mTimeCount;
 
 	//  CSV
     // CSVファイルを格納
@@ -146,8 +187,8 @@ private:
 	double mAngleRotate;  
 	// エフェクトを発生させるフラグ
 	bool mEffectFlag;
-
-
+	// バッドになったか
+	bool mBadFlag;
 
 
 	//  サウンド

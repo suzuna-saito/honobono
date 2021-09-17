@@ -5,7 +5,7 @@ const float P_SIZE = 0.325f;   // プールのサイズ
 const float W_SIZE = 3.0f;     // 水のサイズ
 const float D_SIZE = 0.6f;     // ダイビングボードのサイズ
 
-const float D_POS_X = 32.5f; // ダイビングボードのポジションｘ
+const float D_POS_X = 33.5f; // ダイビングボードのポジションｘ
 const float D_POS_Y = 7.5f;  // ダイビングボードのポジションｙ
 const float D_POS_Z = 52.0f; // ダイビングボードのポジションｚ
 

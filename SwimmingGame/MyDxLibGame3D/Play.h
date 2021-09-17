@@ -40,6 +40,9 @@ private:
     // 魚が動き始めるまでのカウント
     int startCount;
 
+    //ダンス集合時のポジションについてから待つフレーム数andou
+    int mWaitDanceCount;
+
     // スコアを保持する変数
     int mScore;
     // スコアの割合ポイントを持つ変数
@@ -54,7 +57,7 @@ private:
     // リズムボタン
     Timing* timing = nullptr;
 	// UI（ゴール
-	UIGoal* uiGoal;
+	//UIGoal* uiGoal;
 	// 当たり判定
 	HitChecker* hit;
     // バックグラウンド
@@ -76,6 +79,8 @@ private:
     // シンクロでちゃぷちゃぷする音
     Sound* mWaterOutSound;
 
+    //アーティスティックスイミング時の音楽andou
+    Sound* mDancePlaySE;
 
     /////// デバック用 /////////
     float test;

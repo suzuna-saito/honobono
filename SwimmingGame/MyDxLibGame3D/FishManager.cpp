@@ -37,6 +37,8 @@ const float F_POS_Z = 47.0f;  // ãõÇÃÉ|ÉWÉVÉáÉìÇöÅiê^ÇÒíÜÇÃë‰Ç∆àÍî‘â∫ÇÃë‰ÇÃÇöé≤Å
 const float F_POS_2Z = 44.0f;  // ãõÇÃÉ|ÉWÉVÉáÉìÇöÅiàÍî‘è„ë‰ÇÃÇöé≤Åj
 
 const float F_INTERVAL = 5.0f; // ãõÇ∆ãõÇÃä‘äu
+
+const float F_SET_POSITION_Y = 5.5f;
 //----------------------------------------
 
 /// <summary>
@@ -58,7 +60,7 @@ FishManager::FishManager()
 						,VGet(F_POS_2X,F_POS_Y,0.0f)	    //10
 						,VGet(F_POS_X,F_POS_3Y,F_INTERVAL) }	//11
 
-	, BEFORE_DIVING_ROTATE{	VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f)    //1
+	, BEFORE_DIVING_ROTATE{	VGet(0.0f, 270.0f * DX_PI_F / 180.0f, 0.0f)    //1
 							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //ÉvÉåÉCÉÑÅ[
 							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //2
 							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //3
@@ -71,13 +73,14 @@ FishManager::FishManager()
 							,VGet(0.0f,0.0f,0.0f)     //10
 							,VGet(0.0f,0.0f,0.0f) }   //11
 
-	,SET_DANCING_POS{	VGet(-7.5f,2.0f,15.0f),VGet(0.0f,2.0f,7.5f),VGet(7.5f,2.0f,15.0f)   	//1ÅAÉvÉåÉCÉÑÅ[ÅA3
-						,VGet(7.5f,2.0f,-15.0f),VGet(0.0f,2.0f,-7.5f),VGet(-7.5f,2.0f,-15.0f)	//4ÅA5ÅA6
-						,VGet(10.0f,2.0f,-7.5f),VGet(5.0f,2.0f,0.0f),VGet(10.0f,2.0f,7.5f)	    //7ÅA8ÅA9
-						,VGet(-10.0f,2.0f,-7.5f),VGet(-5.0f,2.0f,0.0f),VGet(-10.0f,2.0f,7.5f) }	//10ÅA11ÅA12
+	,SET_DANCING_POS{	VGet(-10.0f,F_SET_POSITION_Y,20.0f),VGet(0.0f,F_SET_POSITION_Y,10.0f),VGet(10.0f,F_SET_POSITION_Y,20.0f)   	//1ÅAÉvÉåÉCÉÑÅ[ÅA3
+						,VGet(10.0f,F_SET_POSITION_Y,-20.0f),VGet(0.0f,F_SET_POSITION_Y,-10.0f),VGet(-10.f,F_SET_POSITION_Y,-20.0f)	//4ÅA5ÅA6
+						,VGet(20.0f,F_SET_POSITION_Y,-12.5f),VGet(10.0f,F_SET_POSITION_Y,0.0f),VGet(20.0f,F_SET_POSITION_Y,12.5f)	    //7ÅA8ÅA9
+						,VGet(-20.0f,F_SET_POSITION_Y,-12.5f),VGet(-10.0f,F_SET_POSITION_Y,0.0f),VGet(-20.0f,F_SET_POSITION_Y, 12.5f) }	//10ÅA11ÅA12
 	,DEBUG_SPHERE_COLOR{ whiteColor ,0 ,yellowColor ,lightBlueColor ,yellowGreenColor ,
 							orangeColor ,redColor ,greenColor ,purpleColor ,brownColor ,
 								blueColor ,pinkColor }
+	, mDanceStartFlag(false)
 {
 	for (int i = 0; i < FISH_NUM; i++)
 	{
@@ -118,7 +121,6 @@ void FishManager::CreatFish()
 				BEFORE_DIVING_POS[i], BEFORE_DIVING_ROTATE[i], SET_DANCING_POS[i]);
 		}
 	}
-
 }
 
 /// <summary>
@@ -139,15 +141,18 @@ void FishManager::DestroyFish()
 /// <summary>
 /// çXêVä÷êî
 /// </summary>
-void FishManager::Updata()
+void FishManager::Updata(int _judge, float _delta)
 {
 	for (int i = 0; i < FISH_NUM; i++)
 	{
 		if (mFish[i] != NULL)
 		{
-			mFish[i]->Updata();
+			mFish[i]->Updata(_judge,_delta);
 		}
 	}
+
+	//ÉvÉåÉCÉÑÅ[Ç™É_ÉìÉXèWçáéûÇÃÉ|ÉWÉVÉáÉìÇ…Ç¬Ç¢ÇΩÇ∆Ç´Ç…flagÇéÊìæÇ∑ÇÈ
+	mDanceStartFlag = mFish[1]->GetSetDancePosFlag();
 }
 
 /// <summary>

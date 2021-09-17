@@ -11,19 +11,25 @@ public:
 	~Jump();       // デストラクタ
 
 	/// <summary>
-	/// ジャンプ更新処理
+	/// 飛び込みの更新処理
 	/// </summary>
 	/// <param name="_rotate">飛ぶオブジェクトの向き</param>
-	void JumpUpdate(VECTOR _rotate);
+	void DiveUpdate(VECTOR _rotate);
 
 	/// <summary>
 	/// ジャンプパターンの更新処理
 	/// </summary>
-	/// <param name="_pos">止まる位置</param>
 	void JumpSetUpdate();
 
+	/// <summary>
+	/// ジャンプの更新
+	/// </summary>
+	/// <param name="_jadge">タイミング判定</param>
+	void JumpUpdate(int _jadge);
+
+
 	// ジャンプの種類
-	enum NowJump
+	enum NowDive
 	{
 		// 1回目のジャンプ
 		firstJump,
@@ -32,8 +38,8 @@ public:
 		// 飛び込みジャンプ
 		thirdJump,
 
-		// 全てのジャンプが終了した
-		endJump
+		// 飛び込みが終了した
+		endDive
 	};
 
 private:
@@ -45,7 +51,7 @@ private:
 
 	float mGain;         // 今の増加量
 
-	NowJump mNowJump;    // 今のジャンプ
+	NowDive mNowJump;    // 今のジャンプ
 
 	bool mJumpUp;        // 上がることが出来る
 
@@ -56,7 +62,7 @@ private:
 	/// <summary>
 	/// ジャンプの処理
 	/// </summary>
-	void JumpNowUpdate();
+	void DiveNowUpdate();
 
 public:    // ゲッター、セッター
 	// 地面と接地しているかどうか
@@ -69,5 +75,5 @@ public:    // ゲッター、セッター
 	float GetGain() { return mGain; }
 
 	// 今なんのジャンプが行われているかを返す
-	NowJump GetNowJump() { return mNowJump; }
+	NowDive GetNowJump() { return mNowJump; }
 };
