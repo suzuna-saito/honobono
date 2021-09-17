@@ -15,7 +15,7 @@ public:
 	/// <summary>
 	/// ダンス集合時のポジション
 	/// </summary>
-	bool SetDancePos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotate);
+	VECTOR SetDancePos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotate);
 
 	//---------それぞれのgetter--------------	
 	//移動量を表すベクトルを返す
@@ -24,6 +24,9 @@ public:
 	//回転ベクトルを返す
 	VECTOR GetRotate() { return mRotate; }
 
+	//ダンス集合時にモデルが止まっているかどうかのフラグのgetter
+	const bool GetStopSetPosFlag() { return mStopFlag; }
+
 private:
 	VECTOR mVelocity;                   //移動量を表すベクトル
 	VECTOR mRotate;                     //モデルの回転
@@ -31,4 +34,7 @@ private:
 	VECTOR mSetDancePos;                //元の隊列に戻る為のポジションベクトル
 
 	VECTOR mStopRange;                  //モデルが止まる範囲
+
+	//Danceを持っているその魚が止まっているときはtrue、動いているときはfalse
+	bool mStopFlag;
 };

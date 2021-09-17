@@ -83,12 +83,12 @@ void Sound::StopMusic()
 /// </summary>
 int Sound::CheckBGM()
 {
-	if (!CheckSoundMem(mSoundHandle))
-	{
-		return false;
-	}
-	else if (CheckSoundMem(mSoundHandle))
+	if (CheckSoundMem(mSoundHandle))
 	{
 		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
