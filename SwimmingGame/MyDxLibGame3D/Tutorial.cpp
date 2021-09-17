@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "Sound.h"
 #include "Time.h"
+#include "Input.h"
 
 /// <summary>
 /// コンストラクタ
@@ -77,8 +78,9 @@ SceneBase* Tutorial::Update()
 {
 	// 時間を減らす
 	mTime--;
+	UpdateKey();
 	// シーン遷移の条件
-	if (CheckHitKey(KEY_INPUT_SPACE) || mTime < 0)
+	if (Key[KEY_INPUT_SPACE] == 1 || mTime < 0)
 	{
 		// チュートリアルのBGMを止める
 		mTutorialBGM->StopMusic();

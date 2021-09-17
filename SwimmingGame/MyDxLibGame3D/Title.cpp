@@ -2,6 +2,7 @@
 #include "Tutorial.h"
 #include "Camera.h"
 #include "Sound.h"
+#include "Input.h"
 
 /// <summary>
 /// コンストラクタ
@@ -93,8 +94,9 @@ Title::~Title()
 /// <return>シーンのポインタ</return>
 SceneBase* Title::Update()
 {
+	UpdateKey();
 	// シーン遷移条件
-	if (mCursorPoint == GAME_START && CheckHitKey(KEY_INPUT_SPACE))
+	if (mCursorPoint == GAME_START && Key[KEY_INPUT_SPACE] == 1)
 	{
 		// タイトルの効果音
 		mTitleSE->PlaySE();
@@ -104,7 +106,7 @@ SceneBase* Title::Update()
 		return new Tutorial();
 
 	}
-	else if (mCursorPoint == EXIT && CheckHitKey(KEY_INPUT_SPACE))
+	else if (mCursorPoint == EXIT && Key[KEY_INPUT_SPACE] == 1)
 	{
 		// ゲーム終了を選択したときになる効果音
 		mCancelSE->PlaySE();
