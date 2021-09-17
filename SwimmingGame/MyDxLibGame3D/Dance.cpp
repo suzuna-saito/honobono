@@ -32,7 +32,7 @@ void Dance::Updata()
 /// <param name="_mNowPos">モデルの現在のポジション</param>
 /// <param name="_Rotate">魚が向いている方向のベクトル</param>
 /// <returns>動いているときはfalse、動いていないときはtrueを返す</returns>
-VECTOR Dance::MoveTargetPos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotate)
+VECTOR Dance::SetDancePos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotate)
 {
 	//移動ベクトルの計算
 	VECTOR posToSetPos = VSub(_SetPos, _NowPos);
@@ -59,7 +59,7 @@ VECTOR Dance::MoveTargetPos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rota
 		mStopFlag = false;
 		return mVelocity;
 	}
-	else if (mPosSize <= mStopRadiusSize)
+	else if (mPosSize < mStopRadiusSize)
 	{
 		mStopFlag = true;
 		return mVelocity;

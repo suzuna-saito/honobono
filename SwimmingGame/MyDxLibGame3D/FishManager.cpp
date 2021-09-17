@@ -60,7 +60,7 @@ FishManager::FishManager()
 						,VGet(F_POS_2X,F_POS_Y,0.0f)	    //10
 						,VGet(F_POS_X,F_POS_3Y,F_INTERVAL) }	//11
 
-	, BEFORE_DIVING_ROTATE{	VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f)    //1
+	, BEFORE_DIVING_ROTATE{	VGet(0.0f, 270.0f * DX_PI_F / 180.0f, 0.0f)    //1
 							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //ÉvÉåÉCÉÑÅ[
 							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //2
 							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //3

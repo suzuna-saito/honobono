@@ -11,12 +11,13 @@ const int SPHERE_POLYGON_FINENESS = 5;
 /// </summary>
 FishBase::FishBase(int _sourceModelHandle)
 	:mModelHandle(-1)
-	, mModelFishTexture(-1)
-	, mPos(VGet(0.0f, 0.0f, 0.0f))
-	, mRotate(VGet(0.0f, 0.0f, 0.0f))
-	, mSetDancePos(VGet(0.0f, 0.0f, 0.0f))
-	, mVelocity(VGet(0.0f, 0.0f, 0.0f))
-	, mSetDancePosFlag(false)
+	, mPos(ZERO_VECTOR)
+	, mRotate(ZERO_VECTOR)
+	, mSetDancePos(ZERO_VECTOR)
+	, mVelocity(ZERO_VECTOR)
+	, mTempVelocity(ZERO_VECTOR)
+	, mSetDanceFlag(false)
+	, mDanceStartCount(0)
 {
 	// 画像データの読み込み
 	mModelHandle = MV1DuplicateModel(_sourceModelHandle);
@@ -29,7 +30,6 @@ FishBase::FishBase(int _sourceModelHandle)
 
 	// 画像サイズ変更
 	MV1SetScale(mModelHandle, FISH_SIZE);
-	MV1SetTextureGraphHandle(mModelHandle, 0, mModelFishTexture, false);
 }
 
 /// <summary>
@@ -39,7 +39,6 @@ FishBase::~FishBase()
 {
 	// モデルとテクスチャデータの消去
 	MV1DeleteModel(mModelHandle);
-	DeleteGraph(mModelFishTexture);
 }
 
 
@@ -58,7 +57,7 @@ void FishBase::Draw(int _debugColor)
 
 	//------------------------------------------------
 	//デバック用DrawSphere3D
-	DrawSphere3D(mPos, debugRad, SPHERE_POLYGON_FINENESS, _debugColor, _debugColor, false);
+	DrawSphere3D(mPos, DEBUG_RADIUS, SPHERE_POLYGON_FINENESS, _debugColor, _debugColor, false);
 
 }
 

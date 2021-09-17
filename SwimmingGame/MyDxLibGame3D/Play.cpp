@@ -8,16 +8,7 @@
 #include "BackGround.h"
 #include "Sound.h"
 #include "Score.h"
-
-//デバック用の定数---------------------------
-const float LINE_X = 32.0f; // 線の座標
-const float LINE_Y = 20.0f;
-const float LINE_Z = 51.0f;
-
-//ダンスで集合してから音楽を流すまでのフレームカウント
-const int WAIT_DANCE_TIME_COUNT = 50;
-
-//-------------------------------------------
+#include "Common.h"
 
 
 // コンストラクタ

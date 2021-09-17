@@ -15,7 +15,7 @@ public:
 	/// <summary>
 	/// ダンス集合時のポジション
 	/// </summary>
-	VECTOR MoveTargetPos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotate);
+	VECTOR SetDancePos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotate);
 
 	//---------それぞれのgetter--------------	
 	//移動量を表すベクトルを返す
