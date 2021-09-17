@@ -107,6 +107,7 @@ SceneBase* Play::Update()
 	// シーン遷移条件(デバック用：右シフトキーを押すと遷移)
 	if (CheckHitKey(KEY_INPUT_RSHIFT))
 	{
+		mPlayBGM1->StopMusic();
 		// リザルトにスコアを渡す
 		mScore = SceneBase::mScore->GetResult();
 		return new Result(&mScore);

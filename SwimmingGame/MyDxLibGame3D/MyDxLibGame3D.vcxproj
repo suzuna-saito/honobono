@@ -187,6 +187,7 @@
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Timing.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Tutorial.cpp" />
     <ClCompile Include="UIBase.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +218,7 @@
     <ClInclude Include="Time.h" />
     <ClInclude Include="Timing.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="Tutorial.h" />
     <ClInclude Include="UIBase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

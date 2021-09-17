@@ -127,7 +127,7 @@ SceneBase* Result::Update()
 	mResultBGM->PlayBGM();
 	
 	// シーン遷移条件
-	if (mCursorPoint == TITLE && CheckHitKey(KEY_INPUT_RETURN))
+	if (mCursorPoint == TITLE && CheckHitKey(KEY_INPUT_SPACE))
 	{
 		// リスタートを選んだ時の効果音
 		mRestartSE->PlaySE();
@@ -136,7 +136,7 @@ SceneBase* Result::Update()
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
 		return new Title();
 	}
-	else if (mCursorPoint == EXIT && CheckHitKey(KEY_INPUT_RETURN))
+	else if (mCursorPoint == EXIT && CheckHitKey(KEY_INPUT_SPACE))
 	{
 		// ゲーム終了を選んだ時の効果音
 		mCancelSE->PlaySE();
@@ -219,7 +219,7 @@ void Result::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mAlpha);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mTextAlpha);
 	SetFontSize(FONT_SIZE);
-	DrawString(750, 750, "Push The Enter", GetColor(0, 0, 0));
+	DrawString(750, 750, "Push The SPACE", GetColor(0, 0, 0));
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mTextAlpha);
 
 	// スコアを描画
