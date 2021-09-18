@@ -63,15 +63,15 @@ Timing::Timing()
 	mBadEffectImg = LoadGraph("data/newUI/BadEffect.png");
 
 	// 色
-	 mBrack = GetColor(0, 0, 0);
-	 mWhite = GetColor(255, 255, 255);
+	mBrack = GetColor(0, 0, 0);
+	mWhite = GetColor(255, 255, 255);
 
 	// サウンドのロード
 	mPerfectSound = new Sound("data/newSound/se/perfect.mp3");
 	mGoodSound = new Sound("data/newSound/se/good.mp3");
-	mBadSound = new Sound("data/newSound/se/bad.mp3");	
+	mBadSound = new Sound("data/newSound/se/bad.mp3");
 
-	fopen_s(&mFilePointer, "data/csv/bgm_1.csv","r");
+	fopen_s(&mFilePointer, "data/csv/bgm_1.csv", "r");
 	CSVRead();
 }
 
@@ -229,7 +229,7 @@ void Timing::Update()
 				mJudge = notDone;
 			}
 		}
-		
+
 		// リアクションカウントが最大値ではないとき
 		//if (!(mReactionCount < mReactionCountMax))
 		//{
@@ -299,7 +299,7 @@ void Timing::Update()
 void Timing::Draw()
 {
 	// パーフェクト判定の位置となるゲージの描画
-	DrawRotaGraph(mGageCX, mGageCY, 1 , 0, mFreamImg, true, false, false);
+	DrawRotaGraph(mGageCX, mGageCY, 1, 0, mFreamImg, true, false, false);
 
 	// タイミングゲージを描画するフラグが「真」となったら
 	if (mTimingDrawFlag)
@@ -316,7 +316,7 @@ void Timing::Draw()
 	}
 
 	/*DrawFormatString(200, 200, mWhite, "%d", mRadius);*/
-	
+
 	// エフェクトのフラグが「真」のとき
 	if (mEffectFlag)
 	{
@@ -330,14 +330,14 @@ void Timing::Draw()
 		DrawGraph(mGageCX, mGageCY, mJudgeImg, true);
 	}
 	// 再生されている音楽の時間の確認（デバッグ用）
-	DrawFormatString(0, 30, mWhite, "Time:%d", mRandomTime);
+	DrawFormatString(0, 100, mWhite, "Time:%d", mRandomTime);
 }
 
 
 //-----------------------------------------------------------------------------
 // @brief  CSVデータの読み込み.
 //-----------------------------------------------------------------------------
-void Timing ::CSVRead()
+void Timing::CSVRead()
 {
 	// ファイルポインターがNULLの時デバッグをやめる
 	if (mFilePointer == NULL)

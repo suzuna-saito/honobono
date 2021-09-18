@@ -1,8 +1,6 @@
 #pragma once
 #include "SceneBase.h"
 
-class Camera;
-
 
 /// <summary>
 /// タイトルシーンの生成、描画
@@ -82,8 +80,6 @@ private:
     float mGravity;                        // 重力
     bool mJympFlag[2];                     // ジャンプフラグ
     float mKeepPower;                      // ジャンプ量ランダム値セット変数
-
-    Camera* camera;
 
     class Sound* mTitleBGM;
     class Sound* mTitleSE;

@@ -21,12 +21,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		return -1;	// エラーが起きたら直ちに終了
 	}
 
-	InitializeEffekseer();
-
 	//画面モードのセット
-	SetGraphMode(640, 480, 16);
+	SetGraphMode(1920, 1080, 16);
 	/*SetGraphMode( SCREEN_W, SCREEN_H, 32);*/
 	ChangeWindowMode(TRUE);
+
+	InitializeEffekseer();
 
 	// シーン管理するクラスを生成
 	SceneManager* sceneManager = new SceneManager();
@@ -35,7 +35,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	bool isRun = true;
 
 	// 更新を行うかのフラグがtrueでエスケープキーが押されるか、ウインドウが閉じられるまでループ
-	while (!ProcessMessage() && !CheckHitKey(KEY_INPUT_ESCAPE) && isRun)
+	while (!CheckHitKey(KEY_INPUT_ESCAPE) && isRun)
 	{
 		// 画面を初期化する
 		ClearDrawScreen();
@@ -47,6 +47,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		// 裏画面の内容を表画面に反映させる
 		ScreenFlip();
+
+		ProcessMessage();
 	}
 
 	// シーンの管理クラス削除

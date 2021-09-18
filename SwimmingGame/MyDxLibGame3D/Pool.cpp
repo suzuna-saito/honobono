@@ -2,7 +2,7 @@
 
 // 定数-----------------------
 const float P_SIZE = 0.325f;   // プールのサイズ
-const float W_SIZE = 3.0f;     // 水のサイズ
+const float W_SIZE = 3.3f;     // 水のサイズ
 const float D_SIZE = 0.6f;     // ダイビングボードのサイズ
 
 const float D_POS_X = 33.5f; // ダイビングボードのポジションｘ
@@ -20,16 +20,16 @@ Pool::Pool()
 	:POOL_SIZE(VGet(P_SIZE, P_SIZE, P_SIZE))
 	, WATER_SIZE(VGet(W_SIZE, W_SIZE, W_SIZE))
 	, DIVINGBOARD_SIZE(VGet(D_SIZE, D_SIZE, D_SIZE))
-	,DIVINGBOARD_NUM(4)
-	,DIVINGBOARD_ROTATE{VGet( 0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f)
-	                   ,VGet( 0.0f, -90.0f * DX_PI_F / 180.0f, 0.0f)
-	                   ,VGet( 0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f)
-	                   ,VGet( 0.0f, 0.0f, 0.0f)}
-	,mPoolPos(VGet( 0.0f, 0.0f, 0.0f))
+	, DIVINGBOARD_NUM(4)
+	, DIVINGBOARD_ROTATE{ VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f)
+					   ,VGet(0.0f, -90.0f * DX_PI_F / 180.0f, 0.0f)
+					   ,VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f)
+					   ,VGet(0.0f, 0.0f, 0.0f) }
+	, mPoolPos(VGet(0.0f, 0.0f, 0.0f))
 	, mWaterPos(VGet(0.0f, W_HEIGHT, 0.0f))
 	, mDivingBoardPos{ VGet(-1.0f, D_POS_Y, -D_POS_Z),VGet(-D_POS_X, D_POS_Y, 1.0f)
 					,VGet(D_POS_X, D_POS_Y, -1.0f), VGet(1.0f, D_POS_Y, D_POS_Z) }
-	,i(0)
+	, i(0)
 {
 	// 画像の読み込み
 	mPoolHandle = MV1LoadModel("data/model/Pool/Outpool_OFFroop_dainashi.mqo");
