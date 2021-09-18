@@ -33,10 +33,10 @@ Fish::~Fish()
 /// <summary>
 /// 更新関数
 /// </summary>
-void Fish::Updata(int _judge,float _deltaTime)
+void Fish::Updata(int _judge, float _deltaTime, bool _startflag)
 {
 	// ジャンプの処理
-	JumpUpdata(_judge);
+	JumpUpdata(_judge, _startflag, _deltaTime);
 
 	// 飛び込みが終わったとき
 	if (mJumpedInFlag)
@@ -51,24 +51,23 @@ void Fish::Updata(int _judge,float _deltaTime)
 		// ポジションの更新をする
 		mPos = VAdd(mPos, mVelocity);
 
-		mPos = VAdd(mPos, mJump->GetVelocity());
-		VScale(mPos, _deltaTime);
+		/*VScale(mPos, _deltaTime);*/
 	}
-
-	
 }
 
 /// <summary>
 /// ジャンプの更新を入れた関数 : @saito
 /// </summary>
-void Fish::JumpUpdata(int _judge)
+void Fish::JumpUpdata(int _judge, bool _startflag, float _deltaTime)
 {
-	// ボタンが押されたら、またはtimingゲージが縮小し終わったらジャンプする（ってしたい）
+	// ボタンが押されたら、またはtimingゲージが縮小し終わったらジャンプする（ゲージが表示されてなかったらジャンプしない）
 	if ((Key[KEY_INPUT_SPACE] == 1 && mJump->GetIsGround()) && _judge != 4 ||
 		_judge == 3)
 	{
 		// ジャンプの更新をするようにする
 		mJumpUpdataFlag = true;
+
+		mMoveState = NowMove;
 	}
 
 	// 飛び込みの時
@@ -86,13 +85,13 @@ void Fish::JumpUpdata(int _judge)
 			mJumpUpdataFlag = false;
 		}
 		// 今のジャンプが飛び込みで、プールのところまでいったら
-		else if (mJump->GetNowJump() == mJump->thirdJump && mPos.y <= 4.5f)
+		else if (mJump->GetNowJump() == mJump->thirdJump && mPos.y <= 2.0f)
 		{
 			// ジャンプパターンを更新する
 			mJump->JumpSetUpdate();
 
 			// 押し戻し…？
-			mPos.y = 4.5f;
+			mPos.y = 2.0f;
 
 			// ジャンプの更新を止める
 			mJumpUpdataFlag = false;
@@ -102,15 +101,19 @@ void Fish::JumpUpdata(int _judge)
 		}
 	}
 
-	// ジャンプの時
-	else if (mJumpUpdataFlag && mJump->GetNowJump() == mJump->endDive)
+	// ジャンプの時　（ゲージが表示されていない　または　演技するポジションに行ってなかったら動かない）
+	else if (mJumpUpdataFlag && mJump->GetNowJump() == mJump->endDive && _judge != 0 && _startflag)
 	{
 		// ジャンプの更新
 		mJump->JumpUpdate(_judge);
 
-		// 増加量が0になったら
-		if (mJump->GetGain() <= 0.0f)
+		mPos = VAdd(mPos, mJump->GetVelocity());
+
+		// 5.0よりもポジションが低かったら
+		if (mPos.y <= 5.5f)
 		{
+			mPos.y = 5.5f;
+
 			// ジャンプパターンを更新する
 			mJump->JumpSetUpdate();
 
@@ -119,7 +122,7 @@ void Fish::JumpUpdata(int _judge)
 		}
 	}
 
-	mMoveState = NowMove;
+	mPos = VAdd(mPos, mJump->GetVelocity());
 }
 
 /// <summary>

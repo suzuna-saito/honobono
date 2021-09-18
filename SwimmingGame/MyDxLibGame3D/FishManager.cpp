@@ -60,7 +60,7 @@ FishManager::FishManager()
 						,VGet(F_POS_2X,F_POS_Y,0.0f)	    //10
 						,VGet(F_POS_X,F_POS_3Y,F_INTERVAL) }	//11
 
-	, BEFORE_DIVING_ROTATE{	VGet(0.0f, 270.0f * DX_PI_F / 180.0f, 0.0f)    //1
+	, BEFORE_DIVING_ROTATE{ VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f)    //1
 							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //プレイヤー
 							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //2
 							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //3
@@ -73,11 +73,11 @@ FishManager::FishManager()
 							,VGet(0.0f,0.0f,0.0f)     //10
 							,VGet(0.0f,0.0f,0.0f) }   //11
 
-	,SET_DANCING_POS{	VGet(-10.0f,F_SET_POSITION_Y,20.0f),VGet(0.0f,F_SET_POSITION_Y,10.0f),VGet(10.0f,F_SET_POSITION_Y,20.0f)   	//1、プレイヤー、3
+	, SET_DANCING_POS{ VGet(-10.0f,F_SET_POSITION_Y,20.0f),VGet(0.0f,F_SET_POSITION_Y,10.0f),VGet(10.0f,F_SET_POSITION_Y,20.0f)   	//1、プレイヤー、3
 						,VGet(10.0f,F_SET_POSITION_Y,-20.0f),VGet(0.0f,F_SET_POSITION_Y,-10.0f),VGet(-10.f,F_SET_POSITION_Y,-20.0f)	//4、5、6
 						,VGet(20.0f,F_SET_POSITION_Y,-12.5f),VGet(10.0f,F_SET_POSITION_Y,0.0f),VGet(20.0f,F_SET_POSITION_Y,12.5f)	    //7、8、9
 						,VGet(-20.0f,F_SET_POSITION_Y,-12.5f),VGet(-10.0f,F_SET_POSITION_Y,0.0f),VGet(-20.0f,F_SET_POSITION_Y, 12.5f) }	//10、11、12
-	,DEBUG_SPHERE_COLOR{ whiteColor ,0 ,yellowColor ,lightBlueColor ,yellowGreenColor ,
+	, DEBUG_SPHERE_COLOR{ whiteColor ,0 ,yellowColor ,lightBlueColor ,yellowGreenColor ,
 							orangeColor ,redColor ,greenColor ,purpleColor ,brownColor ,
 								blueColor ,pinkColor }
 	, mDanceStartFlag(false)
@@ -104,11 +104,11 @@ void FishManager::CreatFish()
 	mSourceModelHandle = MV1LoadModel("data/model/fish/npc.mv1");
 	// プレイヤー
 	mPlayerModelHandle = MV1LoadModel("data/model/fish/player.mv1");
-	
+
 
 	for (int i = 0; i < FISH_NUM; i++)
 	{
-		if (i == 1)
+		if (i % 2)
 		{
 			// プレイヤーの作成
 			mFish[i] = new Fish(mPlayerModelHandle,
@@ -141,13 +141,13 @@ void FishManager::DestroyFish()
 /// <summary>
 /// 更新関数
 /// </summary>
-void FishManager::Updata(int _judge, float _delta)
+void FishManager::Updata(int _judge, float _delta, bool _startflag)
 {
 	for (int i = 0; i < FISH_NUM; i++)
 	{
 		if (mFish[i] != NULL)
 		{
-			mFish[i]->Updata(_judge,_delta);
+			mFish[i]->Updata(_judge, _delta, _startflag);
 		}
 	}
 

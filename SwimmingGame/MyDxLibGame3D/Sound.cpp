@@ -4,7 +4,7 @@
 #include "Sound.h"
 
 // ’è”
-const int VOLUME = 80;
+const int VOLUME = 100;
 
 
 /// <summary>
@@ -61,7 +61,7 @@ void Sound::PlayBackBGM()
 void Sound::PlaySE()
 {
 	//Ä¶‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚çÄ¶‚·‚é
-	if (!CheckSoundMem(mSoundHandle) )
+	if (!CheckSoundMem(mSoundHandle))
 	{
 		PlaySoundMem(mSoundHandle, DX_PLAYTYPE_BACK, TRUE);
 	}

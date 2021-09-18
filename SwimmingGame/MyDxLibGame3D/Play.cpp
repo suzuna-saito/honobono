@@ -21,7 +21,7 @@ Play::Play()
 	, mPlayBGM2(nullptr)
 	, mPlayBGM3(nullptr)
 	, mWaterInSound(nullptr)
-	,mWaterOutSound(nullptr)
+	, mWaterOutSound(nullptr)
 	, mWaitDanceCount(WAIT_DANCE_TIME_COUNT)
 {
 	SetScene(play);
@@ -34,7 +34,7 @@ Play::Play()
 
 	// 魚生成
 	fishManager = new FishManager();
-	
+
 	// リズムボタンUI生成
 	timing = new Timing();
 
@@ -107,6 +107,8 @@ SceneBase* Play::Update()
 	if (!mPlayBGM1->CheckBGM()
 		&& !mDancePlaySE->CheckBGM())
 	{
+		mPlayBGM1->StopMusic();
+		mDancePlaySE->StopMusic();
 		// リザルトにスコアを渡す
 		mScore = SceneBase::mScore->GetResult();
 		return new Result(&mScore);
@@ -115,6 +117,8 @@ SceneBase* Play::Update()
 	// シーン遷移条件(デバック用：右シフトキーを押すと遷移)
 	if (CheckHitKey(KEY_INPUT_RSHIFT))
 	{
+		mPlayBGM1->StopMusic();
+		mDancePlaySE->StopMusic();
 		// リザルトにスコアを渡す
 		mScore = SceneBase::mScore->GetResult();
 		return new Result(&mScore);
@@ -158,11 +162,11 @@ SceneBase* Play::Update()
 	if (startCount >= 60)
 	{
 		// 魚の制御
-		fishManager->Updata(timing->GetJudg(),time->GetDeltaTime());
+		fishManager->Updata(timing->GetJudg(), time->GetDeltaTime(), fishManager->GetStopFlag());
 
 		//andou
 		//ダンスを始めてもいいかのフラグがtrueだったとき
-   		if (fishManager->GetStopFlag())
+		if (fishManager->GetStopFlag())
 		{
 			//ダンスを始めるまでのカウントを引いていく
 			mWaitDanceCount--;
@@ -178,7 +182,7 @@ SceneBase* Play::Update()
 		}
 
 	}
-	
+
 	// シーンが変更されていなかったら自分のポインタを返す
 	return this;
 }
@@ -196,7 +200,7 @@ void Play::Draw()
 	timing->Draw();
 
 	SceneBase::mScore->Draw();
-	
+
 	//それぞれの位置が分かりやすくなるように一本の線を表示（デバック用）
 	int redColor = GetColor(255, 0, 0);				//真ん中の色
 	int greenColor = GetColor(0, 255, 0);			//左上の色

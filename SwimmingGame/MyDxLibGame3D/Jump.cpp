@@ -44,24 +44,24 @@ void Jump::DiveUpdate(VECTOR _rotate)
 	// ‹›‚ÌŒü‚«‚É‚æ‚Á‚Ä”ò‚Ñ‚Ş•ûŒü‚ğŠ·‚¦‚é
 	switch ((int)_rotate.y)
 	{
-	case (int)(90.0f * DX_PI_F / 180.0f) :
-		mChange.z = JUMP_Z;
-		break;
+		case (int)(90.0f * DX_PI_F / 180.0f) :
+			mChange.z = JUMP_Z;
+			break;
 
-	case(int)(-90.0f * DX_PI_F / 180.0f) :
-		mChange.z = -JUMP_Z;
-		break;
+			case(int)(-90.0f * DX_PI_F / 180.0f) :
+				mChange.z = -JUMP_Z;
+				break;
 
-	case(int)(180.0f * DX_PI_F / 180.0f) :
-		mChange.x = JUMP_X;
-		break;
+				case(int)(180.0f * DX_PI_F / 180.0f) :
+					mChange.x = JUMP_X;
+					break;
 
-	case(int)(0.0f, 0.0f, 0.0f) :
-		mChange.x = -JUMP_X;
-		break;
+					case(int)(0.0f, 0.0f, 0.0f) :
+						mChange.x = -JUMP_X;
+						break;
 
-	default:
-		break;
+					default:
+						break;
 	}
 
 	// ”ò‚Ñ‚İ‚ÌXV
