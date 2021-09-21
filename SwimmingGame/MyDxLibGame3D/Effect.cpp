@@ -31,3 +31,12 @@ void Effect::PlayScaleEffect(VECTOR _EffectPos, VECTOR _Scale)
 
 	SetPosPlayingEffekseer3DEffect(mPlayingEffect, _EffectPos.x, _EffectPos.y, _EffectPos.z);
 }
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns>0:Ä¶’†A-1:Ä¶‚³‚ê‚Ä‚¢‚È‚¢A‚à‚µ‚­‚ÍÄ¶I—¹</returns>
+int Effect::GetNowPlaying3D()
+{
+	return IsEffekseer3DEffectPlaying(mPlayingEffect);
+}

@@ -103,23 +103,14 @@ void FishManager::CreatFish()
 	// モブ
 	mSourceModelHandle = MV1LoadModel("data/model/fish/npc.mv1");
 	// プレイヤー
-	mPlayerModelHandle = MV1LoadModel("data/model/fish/player.mv1");
+	mPlayerModelHandle = MV1LoadModel("data/model/fish/player02.mv1");
 
 
 	for (int i = 0; i < FISH_NUM; i++)
 	{
-		if (i % 2)
-		{
-			// プレイヤーの作成
-			mFish[i] = new Fish(mPlayerModelHandle,
-				BEFORE_DIVING_POS[i], BEFORE_DIVING_ROTATE[i], SET_DANCING_POS[i]);
-		}
-		else
-		{
-			//魚たちの生成
-			mFish[i] = new Fish(mSourceModelHandle,
-				BEFORE_DIVING_POS[i], BEFORE_DIVING_ROTATE[i], SET_DANCING_POS[i]);
-		}
+		// プレイヤーの作成
+		mFish[i] = new Fish(mPlayerModelHandle,
+			BEFORE_DIVING_POS[i], BEFORE_DIVING_ROTATE[i], SET_DANCING_POS[i]);
 	}
 }
 

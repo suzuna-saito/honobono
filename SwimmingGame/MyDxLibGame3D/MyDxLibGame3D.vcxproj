@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Fish.cpp" />
     <ClCompile Include="FishBase.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="Fade.h" />
     <ClInclude Include="Fish.h" />
     <ClInclude Include="FishBase.h" />

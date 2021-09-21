@@ -156,7 +156,6 @@ VECTOR Fish::MoveTargetPos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotat
 	VECTOR normPosToSetPos = VNorm(posToSetPos);
 	mTempVelocity = VScale(normPosToSetPos, DANCE_VELOCITY);
 
-
 	//~‚Ü‚é‚Æ‚«
 	if (CheckStopped(_SetPos, _NowPos))
 	{
@@ -224,10 +223,10 @@ VECTOR Fish::MoveAimlessWandering(VECTOR& _nowPos)
 /// <returns>~‚Ü‚Á‚Ä‚¢‚¢‚ÍtrueA~‚Ü‚Á‚Ä‚Í‚¢‚¯‚È‚¢‚Ífalse</returns>
 bool Fish::CheckStopped(const VECTOR _targetPos, const VECTOR _nowPos)
 {
-
 	/*-----------ƒ‚ƒfƒ‹‚ğ~‚ß‚é‚½‚ß‚É’â~”ÍˆÍ‚Ì‹——£‚ÌŒvZ----------*/
-
+	//‹——£
 	VECTOR posToSetPos = VSub(_targetPos, _nowPos);
+	//Œü‚«
 	VECTOR normPosToSetPos = VNorm(posToSetPos);
 
 	//mPos‚©‚çmSetDancePos‚Ü‚Å‚Ì‹——£‚ÌŒvZ

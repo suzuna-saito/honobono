@@ -1,5 +1,17 @@
 #include "Score.h"
 
+// 定数
+const int RESULT_POS_X = 580;   // リザルトの時のスコア左上頂点X
+const int RESULT_POS_Y = 400;   // リザルトの時のスコア左上頂点Y
+const int RESULT_POS_02X = 780; // リザルトの時のスコア右下頂点座標X
+const int RESULT_POS_02Y = 500; // リザルトの時のスコア右下頂点座標Y
+
+const int RESULT_NUM_X = RESULT_POS_02X+20;   // リザルトの時の数字左上頂点座標X
+const int RESULT_NUM_Y = RESULT_POS_Y;        // リザルトの時の数字左上頂点座標Y
+const int RESULT_NUM_02Y = RESULT_POS_02Y;    // リザルトの時の数字右下頂点座標Y
+
+const int RESULT_NUM_SPACE = 100;             // リザルトの時の数字の間隔
+
 /// <summary>
 /// コンストラクタ
 /// </summary>
@@ -14,6 +26,7 @@ Score::Score()
 	mColor = GetColor(0, 0, 0);
 	mScorePosX = 0;
 	mScorePosY = 0;
+	mResultPosX = RESULT_NUM_X;
 	mScore = 0;
 	mTmpScore = 0;
 	mScoreFlag = false;
@@ -37,19 +50,47 @@ Score::~Score()
 /// <summary>
 /// スコア描画
 /// </summary>
-void Score::Draw()
+void Score::Draw(int _nowScene)
 {
-	DrawGraph(mScorePosX, mScorePosY, mScoreHandle, true);
-	for (i = 0; i < DIGIT_NUM; i++)
+	// プレイシーンとリザルトシーンによって描画する大きさを変える
+	switch (_nowScene)
 	{
-		for (j = 0; j < NUMBER_NUM; j++)
+	case 2:   // プレイシーン
+		DrawGraph(mScorePosX, mScorePosY, mScoreHandle, true);
+		for (i = 0; i < DIGIT_NUM; i++)
 		{
-			if (mS[i] == j)
+			for (j = 0; j < NUMBER_NUM; j++)
 			{
-				DrawGraph(NUM_POS + NUM_SPACE * i, mScorePosY, mNumberHandle[j], true);
+				if (mS[i] == j)
+				{
+					DrawGraph(NUM_POS + NUM_SPACE * i, mScorePosY, mNumberHandle[j], true);
+				}
 			}
 		}
+		break;
+
+	case 4:   // リザルトシーン
+		DrawExtendGraph(RESULT_POS_X, RESULT_POS_Y, RESULT_POS_02X, RESULT_POS_02Y,
+			mScoreHandle, true);
+
+		NUM_SPACE = RESULT_NUM_SPACE;
+
+		for (i = 0; i < DIGIT_NUM; i++)
+		{
+			for (j = 0; j < NUMBER_NUM; j++)
+			{
+				if (mS[i] == j)
+				{
+					DrawExtendGraph(mResultPosX + NUM_SPACE * i, RESULT_NUM_Y, mResultPosX + NUM_SPACE * i + NUM_SPACE, RESULT_NUM_02Y, mNumberHandle[j], true);
+				}
+			}
+		}
+		break;
+
+	default:
+		break;
 	}
+	
 }
 
 /// <summary>
@@ -69,15 +110,6 @@ void Score::Update()
 	}
 }
 
-/// <summary>
-/// リザルト時のスコアの位置
-/// </summary>
-void Score::SetResultPosition()
-{
-	mScorePosX = 170;
-	mScorePosY = 175;
-	NUM_POS = mScorePosX + NUM_POS;
-}
 
 /// <summary>
 /// スコアの計算の割合をもらう

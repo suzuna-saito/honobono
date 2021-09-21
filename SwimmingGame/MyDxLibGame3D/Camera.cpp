@@ -8,7 +8,7 @@
 //  @brief 定数
 //------------------------------------------------------------
 const float CAMERA_NEAR = 0.1f;                                     // カメラの奥行(最小)
-const float CAMERA_FAR = 1000.0f;                                    // カメラの奥行(最大)
+const float CAMERA_FAR = 1000.0f;                                   // カメラの奥行(最大)
 const float CAMERA_FAZE[4] = { 5.0f,10.0f,15.0f,20.0f };            // カメラ切り替え時間
 const VECTOR ORIGIN_CAMERA_POS = VGet(0.0f, 0.0f, 0.0f);            // カメラ原点位置
 const VECTOR ORIGIN_CAMERA_ANGLE = VGet(0.0f, 0.0f, 0.0f);          // カメラ原点角度

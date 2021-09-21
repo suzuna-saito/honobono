@@ -199,7 +199,7 @@ void Play::Draw()
 	// リズムボタンUI描画
 	timing->Draw();
 
-	SceneBase::mScore->Draw();
+	SceneBase::mScore->Draw(GetScene());
 
 	//それぞれの位置が分かりやすくなるように一本の線を表示（デバック用）
 	int redColor = GetColor(255, 0, 0);				//真ん中の色

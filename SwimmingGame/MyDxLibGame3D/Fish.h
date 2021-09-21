@@ -16,7 +16,7 @@ public:
 		VECTOR _pos, VECTOR _rotate, VECTOR _dancePos);		// コンストラクタ
 	virtual ~Fish();										// デストラクタ
 
-	void Updata(int _judge, float _deltaTime, bool _startflag);											// 更新関数
+	void Updata(int _judge, float _deltaTime, bool _startflag)override;											// 更新関数
 
 	//ジャンプの更新処理をいれた関数
 	void JumpUpdata(int _judge, bool _startflag, float _deltaTime);
