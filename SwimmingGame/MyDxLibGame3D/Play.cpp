@@ -55,7 +55,7 @@ Play::Play()
 	mWaterOutSound = new Sound("data/newSound/se/out.mp3");
 
 	//アーティスティックスイミング時の音楽のコンストラクタ
-	mDancePlaySE = new Sound("data/newsound/bgm/BGM_3.mp3");
+	mDancePlaySE = new Sound("data/newsound/bgm/BGM_3.wav");
 
 	mPlayBGM1->PlayBackBGM();
 

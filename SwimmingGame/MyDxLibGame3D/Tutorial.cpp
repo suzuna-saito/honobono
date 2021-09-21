@@ -24,13 +24,13 @@ Tutorial::Tutorial()
 	, mTime(1000)
 	, mTimeMax(1000)
 	, mGageX1(50)
-	, mGageX2(300)
-	, mGageY1(50)
-	, mGageY2(70)
-	, mStartTextPosX(20)
-	, mStartTextPosY(15)
-	, mSkipTextPosX(40)
-	, mSkipTextPosY(70)
+	, mGageX2(600)
+	, mGageY1(100)
+	, mGageY2(130)
+	, mStartTextPosX(15)
+	, mStartTextPosY(25)
+	, mSkipTextPosX(100)
+	, mSkipTextPosY(150)
 	, mSkipDrawTime(750)
 	, mSkipDrawFlag(false)
 {
@@ -64,6 +64,11 @@ Tutorial::Tutorial()
 /// </summary>
 Tutorial::~Tutorial()
 {
+	// 画像の削除
+	DeleteGraph(mTutorialGraph);
+	DeleteGraph(mBackGroundGraph);
+	DeleteGraph(mStartText);
+	DeleteGraph(mSkipText);
 	// サウンドデータの削除
 	mTutorialBGM->StopMusic();
 	delete mTutorialBGM;
@@ -125,11 +130,10 @@ void Tutorial::TextUpdate()
 void Tutorial::Draw()
 {
 	// 背景描画
-	DrawExtendGraph(mBackPosX, mBackPosY,
-		BACK_EXTEND_X, BACK_EXTEND_Y, mBackGroundGraph, TRUE);
+	DrawGraph(mBackPosX, mBackPosY, mBackGroundGraph, TRUE);
 	// チュートリアル画像の描画
-	DrawExtendGraph(mTutorialkPosX, mTutorialPosY,
-		TUTORIAL_EXTEND_X, TUTORIAL_EXTEND_Y, mTutorialGraph, TRUE);
+	//DrawExtendGraph(mTutorialkPosX, mTutorialPosY,
+		//TUTORIAL_EXTEND_X, TUTORIAL_EXTEND_Y, mTutorialGraph, TRUE);
 
 	// テキスト描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mStartTextAlpha);

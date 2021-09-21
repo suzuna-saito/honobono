@@ -33,7 +33,7 @@ Result::Result(int* _Score)
 	, FISH_NUM(2)
 	, TEXT_NUM(3)
 	, BACK_EXTEND_X(2000)
-	, BACK_EXTEND_Y(1000)
+	, BACK_EXTEND_Y(1100)
 	, CURSOR_SIZE(1.0f)
 	, CURSOR_ANGLE(0.0f)
 	, TITLE(1)
@@ -78,7 +78,7 @@ Result::Result(int* _Score)
 	// âÊëúÇÉçÅ[Éh
 	mTexture = LoadGraph("data/model/ResultAsset/texture/watergarasu.jpg");
 	mCursor = LoadGraph("data/model/TextAsset/Cursor.png");
-	mBackGroundGraph = LoadGraph("data/model/ResultAsset/Result.png", false);
+	mBackGroundGraph = LoadGraph("data/model/ResultAsset/Result.png");
 	mRunkTexture[0] = LoadGraph("data/model/Medal/texture/Gold.png");
 	mRunkTexture[1] = LoadGraph("data/model/Medal/texture/Silver.png");
 	mRunkTexture[2] = LoadGraph("data/model/Medal/texture/Bronze.png");
