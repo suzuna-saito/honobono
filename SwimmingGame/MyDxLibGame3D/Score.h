@@ -1,6 +1,7 @@
 #pragma once
 #include "DxLib.h"
 
+
 class Score
 {
 public:
@@ -10,13 +11,10 @@ public:
 	virtual ~Score();
 
 	// スコアの描画
-	void Draw();
+	void Draw(int _nowScene);
 	
 	// スコアの計算
 	void Update();
-
-	// リザルト時のスコアの位置
-	void SetResultPosition();
 
 	// スコアの割合をもらう
 	void SetRadiusScore(int* _BaseScore);
@@ -38,6 +36,7 @@ protected:
 	int mColor;
 
 	int mScorePosX, mScorePosY;          // スコアの位置
+	int mResultPosX;                     // リザルト時のスコアの位置
 	int mTmpScore;                       // 計算用
 	int mS[5];                           // 描画用スコア
 	int mScore;                          // スコア

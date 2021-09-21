@@ -23,6 +23,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	//画面モードのセット
 	SetGraphMode(1920, 1080, 16);
+	//SetGraphMode(640, 480, 16);
 	/*SetGraphMode( SCREEN_W, SCREEN_H, 32);*/
 	//ChangeWindowMode(TRUE);
 
@@ -44,6 +45,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		// シーン管理更新
 		isRun = sceneManager->UpdateScene();
+
+		UpdateEffekseer3D();
+
+		DrawEffekseer3D();
 
 		// 裏画面の内容を表画面に反映させる
 		ScreenFlip();

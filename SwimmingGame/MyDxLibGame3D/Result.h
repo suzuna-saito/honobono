@@ -3,6 +3,7 @@
 
 class Camera;
 class Score;
+class Effect;
 
 /// <summary>
 /// リザルトシーンの生成、描画
@@ -36,6 +37,13 @@ public:
 	// ランク決定＆ランクごとのモデルを描画
 	void Runk();
 
+	// 何のメダルを表示しているか
+	enum medal
+	{
+		gold,
+		silver,
+		bronze
+	};
 
 private:
 	int i;
@@ -101,13 +109,14 @@ private:
 	int mRunkTexture[3];                  // メダルのテクスチャ
 	VECTOR mRunkPos;                      // メダルの位置
 	VECTOR mRunkScale;                    // メダルの大きさ
+	VECTOR mRunkEnlarged;                 // メダルの拡大値
 	VECTOR mRunkAngle;                    // メダルの角度
 
 	const int GOLD_SCORE;                 // 金メダルのスコア
 	const int SILVER_SCORE;               // 銀メダルのスコア
 	const int BRONZE_SCORE;               // 銅メダルのスコア
 	const int RUNK_NUM;                   // メダルの種類
-
+	medal mNowMedal;                      // 描画しているメダル
 
     Camera* camera;
 
@@ -115,5 +124,9 @@ private:
 	class Sound* mResultSE;
 	class Sound* mRestartSE;
 	class Sound* mCancelSE;
+
+	Effect* mMedalEffect;
+
+	bool mEndEffect;
 public: // ゲッター、セッター
 };

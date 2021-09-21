@@ -18,5 +18,7 @@ public:
 	void StopEffect();
 
 	void PlayScaleEffect(VECTOR _EffectPos, VECTOR _Scale);
+
+	int GetNowPlaying3D();
 };
 

@@ -4,6 +4,12 @@
 #include "Sound.h"
 #include "Score.h"
 #include  "Input.h"
+#include "Effect.h"
+
+
+// 定数
+const float ENLARGED = 0.02f;
+
 
 /// <summary>
 /// コンストラクタ
@@ -56,12 +62,15 @@ Result::Result(int* _Score)
 	, NUM_SPACE(30)
 	, mColor(GetColor(0, 0, 0))
 	, mRunkPos(VGet(7,5,15))
-	, mRunkScale(VGet(1,1,1))
+	, mRunkScale(VGet(0,0,0))
 	, mRunkAngle(VGet(0,0.1,0))
 	, GOLD_SCORE(2000)
 	, SILVER_SCORE(1000)
 	, BRONZE_SCORE(500)
 	, RUNK_NUM(3)
+	, mNowMedal(bronze)
+	, mRunkEnlarged(VGet(ENLARGED, ENLARGED, ENLARGED))
+	, mEndEffect(false)
 {
 	// シーン変更
 	SetScene(gameClear);
@@ -71,9 +80,9 @@ Result::Result(int* _Score)
 	mTextModel[0] = MV1LoadModel("data/model/ResultAsset/ResultText.mqo");
 	mTextModel[1] = MV1LoadModel("data/model/TextAsset/Title.mqo");
 	mTextModel[2] = MV1LoadModel("data/model/TextAsset/Exit.mqo");
-	mRunkModel[0] = MV1LoadModel("data/model/Medal/Gold.mqo");
-	mRunkModel[1] = MV1LoadModel("data/model/Medal/Silver.mqo");
-	mRunkModel[2] = MV1LoadModel("data/model/Medal/Bronze.mqo");
+	mRunkModel[0] = MV1LoadModel("data/model/Medal/Gold02.mv1");
+	mRunkModel[1] = MV1LoadModel("data/model/Medal/Silver02.mv1");
+	mRunkModel[2] = MV1LoadModel("data/model/Medal/Bronze02.mv1");
 
 	// 画像をロード
 	mTexture = LoadGraph("data/model/ResultAsset/texture/watergarasu.jpg");
@@ -98,8 +107,18 @@ Result::Result(int* _Score)
 	mRunkScore = *_Score;
 	// スコアにプレイ時のスコアを渡す
 	SceneBase::mScore->SetResultScore(_Score);
-	// スコアをリザルトの位置にセットし直す
-	SceneBase::mScore->SetResultPosition();
+
+	// 位置、大きさ、角度、テクスチャをセット
+	for (i = 0; i < RUNK_NUM; i++)
+	{
+		MV1SetPosition(mRunkModel[i], mRunkPos);
+		MV1SetScale(mRunkModel[i], mRunkScale);
+		MV1SetRotationXYZ(mRunkModel[i], mRunkAngle);
+		MV1SetTextureGraphHandle(mRunkModel[i], 0, mRunkTexture[i], true);
+	}
+
+	// エフェクト生成(ファイルを渡す)
+	mMedalEffect = new Effect("data/Effect/medalEffect.efk");
 }
 
 /// <summary>
@@ -118,6 +137,8 @@ Result::~Result()
 	delete mResultBGM;
 	delete mResultSE;
 	delete mCancelSE;
+
+	delete mMedalEffect;
 }
 
 // 更新処理
@@ -225,7 +246,7 @@ void Result::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mTextAlpha);
 
 	// スコアを描画
-	SceneBase::mScore->Draw();
+	SceneBase::mScore->Draw(GetScene());
 	// ランク決定
 	Runk();
 }
@@ -255,26 +276,49 @@ void Result::FishMove()
 /// </summary>
 void Result::Runk()
 {
-	// 位置、大きさ、角度、テクスチャをセット
-	for (i = 0; i < RUNK_NUM; i++)
-	{
-		MV1SetPosition(mRunkModel[i], mRunkPos);
-		MV1SetScale(mRunkModel[i], mRunkScale);
-		MV1SetRotationXYZ(mRunkModel[i], mRunkAngle);
-		MV1SetTextureGraphHandle(mRunkModel[i], 0, mRunkTexture[i], true);
-	}
-
 	// ランクごとのモデルを描画
-	if (mRunkScore > BRONZE_SCORE && mRunkScore < SILVER_SCORE)
+	if (mRunkScore > BRONZE_SCORE && mRunkScore < SILVER_SCORE || mRunkScore == 0)
 	{
 		MV1DrawModel(mRunkModel[2]);
 	}
 	else if (mRunkScore > SILVER_SCORE && mRunkScore < GOLD_SCORE)
 	{
 		MV1DrawModel(mRunkModel[1]);
+		mNowMedal = silver;
 	}
 	else if (mRunkScore > GOLD_SCORE)
 	{
 		MV1DrawModel(mRunkModel[0]);
+		mNowMedal = gold;
+	}
+
+	// エフェクト
+	if (mMedalEffect->GetNowPlaying3D() != 0 && !mEndEffect)
+	{
+		mMedalEffect->PlayScaleEffect(mRunkPos, VGet(0.5f, 0.5f, 0.5f));
+	}
+	else
+	{
+		mEndEffect = true;
+	}
+
+	// 描画するメダルのサイズを大きくしていく
+	if (mRunkScale.x < 1.5f)
+	{
+		switch (mNowMedal)
+		{
+		case gold:
+			MV1SetScale(mRunkModel[0], mRunkScale);
+			break;
+		case silver:
+			MV1SetScale(mRunkModel[1], mRunkScale);
+			break;
+		case bronze:
+			MV1SetScale(mRunkModel[2], mRunkScale);
+			break;
+		default:
+			break;
+		}
+		mRunkScale = VAdd(mRunkScale, mRunkEnlarged);
 	}
 }
