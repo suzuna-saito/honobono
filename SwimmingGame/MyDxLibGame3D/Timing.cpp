@@ -13,29 +13,33 @@ Timing::Timing()
 	, mReactionFlag(true)
 	, mScoreFlag(false)
 	, mScoreRadius(0)
-	, mBadFlag(false)
 	, mGageX(50)
 	, mGageY(350)
-	, mGageCX(100)
-	, mGageCY(400)
+	, mGageCX(0)
+	, mGageCY(0)
+	, mRightGagePosX(1160)
+	, mRightGagePosY(900)
+	, mLeftGagePosX(760)
+	, mLeftGagePosY(900)
 	, mFreamX(490)
 	, mFreamY(180)
 	, mRadius(0)
 	, mGageRadius(20)
 	, mRadiusInit(0)
 	, mMaxRadius(75)
-	, mPerfectRadius(69)
-	, mBadRadius(56)
+	, mPerfectSize(0.30f)
+	, mBadSize(0.50f)
 	, mReactionX(520)
 	, mReactionY(200)
 	, mReactionCount(0)
 	, mCountInit(0)
-	, mReactionCountMax(50)
+	, mReactionCountMax(30)
 	, mPerfectSound(nullptr)
 	, mGoodSound(nullptr)
 	, mBadSound(nullptr)
 	, mCsvData(0)
 	, mFilePointer(NULL)
+	, mEffectPosY(100)
 	, mEffectAngle(0)
 	, mEffectScale(1)
 	, mEffectFlag(false)
@@ -44,17 +48,26 @@ Timing::Timing()
 	, mEffectImg(-1)
 	, mJudgeImg(-1)
 	, mCount(0)
-	, mBasePoint(99)
-	, mBaseTime(1)
+	, mBaseTimePoint(100)
+	, mBaseTime(100)
 	, mRandomTime(0)
 	, mRandomFlag(true)
 	, mTimeCount(0)
 	, mNotesStartTime(150)
 	, mNotesEndTime(6000)
 	, mJudge(none)
+	, mFrameSize(0.60f)
+	, mFrameShrinkPoint(0.00050f)
+	, mFrameShrinkGage(0.250f)
+	, mFrameSizeInit(0.60f)
+	, mFrameMoveInit(0.010f)
+	, mFrameMovePoint(0.010f)
+	, mBaseGagePoint(1)
 {
 	// 画像読み込み
-	mFreamImg = LoadGraph("data/newUI/frame.png");
+	mTimingImg[0] = LoadGraph("data/newUI/RightTiming.png");      // 右
+	mTimingImg[1] = LoadGraph("data/newUI/LeftTiming.png");       // 左
+	mFreamImg = LoadGraph("data/newUI/frame2.png");
 	mPerfectImg = LoadGraph("data/newUI/Perfect.png");
 	mGoodImg = LoadGraph("data/newUI/Good.png");
 	mBadImg = LoadGraph("data/newUI/Bad.png");
@@ -81,6 +94,7 @@ Timing::Timing()
 //-----------------------------------------------------------------------------
 Timing::~Timing()
 {
+	DeleteGraph(*mTimingImg);
 	DeleteGraph(mFreamImg);
 	DeleteGraph(mPerfectImg);
 	DeleteGraph(mGoodImg);
@@ -119,7 +133,24 @@ void Timing::Update()
 	if (mRandomFlag)
 	{
 		// Randomに次の時間を格納する
-		mRandomTime = GetRand(mBasePoint) + mBaseTime;
+		mRandomTime = GetRand(mBaseTimePoint) + mBaseTime;
+		// フレームを出す場所は右か左かを決める
+		mImgDirection = GetRand(mBaseGagePoint);
+
+		// 右か左のゲージにフレームやエフェクトの位置を合わせる
+		// 右
+		if (!mImgDirection)
+		{
+			mGageCX = mRightGagePosX;
+			mGageCY = mRightGagePosY;
+		}
+		// 左
+		else
+		{
+			mGageCX = mLeftGagePosX;
+			mGageCY = mLeftGagePosY;
+		}
+
 		// ノーツを格納しないにする
 		mRandomFlag = false;
 	}
@@ -139,8 +170,8 @@ void Timing::Update()
 	// ゲージが描画されるフラグが立ったら
 	if (mTimingDrawFlag)
 	{
-		// スペースキーを押したらタイミングフラグ、スコアフラグが「真」となる
-		if (Key[KEY_INPUT_SPACE] == 1)
+		// 左右キーとフレームの場所が合っていたらを押したらタイミングフラグ、スコアフラグが「真」となる
+		if (Key[KEY_INPUT_LEFT] == 1 && mImgDirection || Key[KEY_INPUT_RIGHT] == 1 && !mImgDirection)
 		{
 			mTimingFlag = true;
 			mScoreFlag = true;
@@ -155,11 +186,10 @@ void Timing::Update()
 			// ボタンを押されタイミングフラグが「真」となったら
 			if (mTimingFlag)
 			{
+				// 判定はフレームのサイズで行っている
 				// バッドの条件
-				if (mRadius < mBadRadius)
+				if (mFrameSize > mBadSize)
 				{
-					// バッドになった
-					mBadFlag = true;
 					// エフェクト画像をバッドエフェクトにする
 					mEffectImg = mBadEffectImg;
 					// エフェクトフラグを「真」にする
@@ -175,7 +205,7 @@ void Timing::Update()
 					mJudge = bad;
 				}
 				// グッドの条件
-				if (mRadius < mPerfectRadius && mRadius >= mBadRadius)
+				if (mFrameSize > mPerfectSize && mFrameSize < mBadSize)
 				{
 					// エフェクト画像をグッドエフェクトにする
 					mEffectImg = mGoodEffectImg;
@@ -192,7 +222,7 @@ void Timing::Update()
 					mJudge = good;
 				}
 				// パーフェクトの条件
-				if (mRadius >= mPerfectRadius)
+				if (mFrameSize < mPerfectSize)
 				{
 					// エフェクト画像をパーフェクトエフェクトにする
 					mEffectImg = mPerfectEffectImg;
@@ -209,11 +239,9 @@ void Timing::Update()
 					mJudge = perfect;
 				}
 			}
-			// タイミングフラグが「偽」であり、ゲージの半径が０になったら
-			else if (!mTimingFlag && mRadius >= mMaxRadius)
+			// タイミングフラグが「偽」であり、フレームサイズの最低値を超えたら
+			else if (!mTimingFlag && mFrameSize < mFrameShrinkGage)
 			{
-				// バッドになった
-				mBadFlag = true;
 				// エフェクト画像をバッドエフェクトにする
 				mEffectImg = mBadEffectImg;
 				// エフェクトフラグを「真」にする
@@ -238,16 +266,22 @@ void Timing::Update()
 		if (mScoreFlag)
 		{
 			// バッドだったら
-			if (mBadFlag)
+			if (mJudge == bad || mJudge == notDone)
 			{
 				// スコアの割合を0にする
 				mScoreRadius = 0;
 			}
-			// そうじゃなければ
-			else
+			// パーフェクトだったら
+			else if(mJudge == perfect)
 			{
-				// スコアの割合を半径分の割合にする
-				mScoreRadius = mRadius;
+				// スコアの割合を100にする
+				mScoreRadius = 100;
+			}
+			// グッドだったら
+			else if (mJudge == good)
+			{
+				// スコアの割合を50にする
+				mScoreRadius = 50;
 			}
 		}
 		//}
@@ -263,11 +297,16 @@ void Timing::Update()
 			// リアクションを判定できるようにする
 			mReactionFlag = true;
 			// 判定はバッドではない
-			mBadFlag = false;
+			mJudge = none;
 			// ノーツの次時間を格納できる
 			mRandomFlag = true;
 			// ノーツまでのカウントを初期化
 			mCount = mCountInit;
+
+			// フレームサイズを初期化
+			mFrameSize = mFrameSizeInit;
+			// フレームが動く値を初期化
+			mFrameMovePoint = mFrameMoveInit;
 		}
 		// エフェクトのフラグが「真」のとき
 		if (mEffectFlag)
@@ -298,19 +337,28 @@ void Timing::Update()
 //-----------------------------------------------------------------------------
 void Timing::Draw()
 {
-	// パーフェクト判定の位置となるゲージの描画
-	DrawRotaGraph(mGageCX, mGageCY, 1, 0, mFreamImg, true, false, false);
+	// 右と左のゲージ画像を描画
+	DrawRotaGraph(mRightGagePosX, mRightGagePosY, 1, 0, mTimingImg[0], true, false, false);
+	DrawRotaGraph(mLeftGagePosX, mLeftGagePosY, 1, 0, mTimingImg[1], true, false, false);
 
 	// タイミングゲージを描画するフラグが「真」となったら
 	if (mTimingDrawFlag)
 	{
 		if (!mTimingFlag)
 		{
-			// 半径が75になるまで拡大
-			if (mRadius < mMaxRadius)
+			if (mFrameSize > mFrameShrinkGage)
 			{
+				// パーフェクト判定の位置となるゲージの描画
+				/*DrawRotaGraph(mGageCX, mGageCY, 1, 0, mTimingImg[mImgDirection], true, false, false);*/
+
 				// 拡大するゲージの描画
-				DrawCircle(mGageCX, mGageCY, mRadius++, mBrack, FALSE, 2);
+				/*DrawCircle(mGageCX, mGageCY, mRadius++, mBrack, FALSE, 2);*/
+
+				// フレームを一瞬拡大して縮小する処理
+				mFrameMovePoint -= mFrameShrinkPoint;
+				mFrameSize += mFrameMovePoint;
+				// フレームを描画
+				DrawRotaGraph(mGageCX, mGageCY, (double)mFrameSize, 0, mFreamImg, true, false, false);
 			}
 		}
 	}
@@ -327,10 +375,10 @@ void Timing::Draw()
 	if (!mReactionFlag)
 	{
 		// 描画
-		DrawGraph(mGageCX, mGageCY, mJudgeImg, true);
+		DrawRotaGraph(mGageCX, mGageCY - mEffectPosY, 1, 0, mJudgeImg, true, false, false);
 	}
 	// 再生されている音楽の時間の確認（デバッグ用）
-	DrawFormatString(0, 100, mWhite, "Time:%d", mRandomTime);
+	DrawFormatString(0, 300, mWhite, "Time:%d", mRandomTime);
 }
 
 

@@ -55,103 +55,78 @@ public:
 	// 判定の取得
 	judgement GetJudg() { return mJudge; }
 
-protected:
-	
-
-private:
+private:            // 長くなってきたので説明を横に置きました。
 	// 判定
 	// 今の判定が何だったか
 	judgement mJudge;
 
 
 	//  フラグ
-	// タイミングゲージを描画するフラグ管理
-	bool mTimingDrawFlag;
-	// タイミングゲージのクリック出来るかのフラグ管理
-	bool mTimingFlag;
-	// Reactionのフラグ管理
-	bool mReactionFlag;
+	bool mTimingDrawFlag;                 // タイミングゲージを描画するフラグ管理
+	bool mTimingFlag;                     // タイミングゲージのクリック出来るかのフラグ管理
+	bool mReactionFlag;                   // Reactionのフラグ管理
 
 	//  ゲージ
-	// ゲージの座標X
-	int mGageX;
-	// ゲージの座標Y
-	int mGageY;
-	// ゲージの中心座標X
-	int mGageCX;
-	// ゲージの中心座標Y
-	int mGageCY;
-	// 収縮するゲージの半径
-	int mRadius;
-	// 判定がパーフェクトになるゲージの半径
-	int mGageRadius;
-	// 半径の初期化
-	int mRadiusInit;
+	int mGageX;                        // ゲージの座標X
+	int mGageY;                        // ゲージの座標Y
+	int mGageCX;                       // ゲージの中心座標X
+	int mGageCY;                       // ゲージの中心座標Y
+	int mRadius;                       // 収縮するゲージの半径
+	int mGageRadius;                   // 判定がパーフェクトになるゲージの半径
+	int mRadiusInit;                   // 半径の初期化
+
+	int mImgDirection;                 // ゲージ画像のランダムに右か左かを格納する変数
+	int mBaseGagePoint;                // どこまでの数字をランダムにするか
+	int mRightGagePosX;                // 右のゲージのX座標
+	int mRightGagePosY;                // 右のゲージのY座標
+	int mLeftGagePosX;                 // 左のゲージのX座標
+	int mLeftGagePosY;                 // 左のゲージのY座標
 
 	//  色
-	// 黒色
-	int	mBrack;
-	// 白色
-	int mWhite;
+	int	mBrack;                      // 黒色
+	int mWhite;                      // 白色
 
 	//  リアクション
-	// リアクションが描画される位置にあるフレームの画像
-	int mFreamImg;
-	// フレームの座標X
-	int mFreamX;
-	// フレームの座標Y
-	int mFreamY;
-	// 判定画像
-	int mJudgeImg;
-	// Perfect判定画像
-	int mPerfectImg;
-	// Good判定画像
-	int mGoodImg;
-	// Bad判定画像
-	int mBadImg;
-	// リアクションの座標X
-	int mReactionX;
-	// リアクションの座標Y
-	int mReactionY;
-	// ノーツ最大の大きさ
-	int mMaxRadius;
-	// パーフェクトの半径
-	int mPerfectRadius;
-	// バッドの半径
-	int mBadRadius;
+	int mTimingImg[2];               // タイミングゲージの画像
+	int mFreamImg;                   // リアクションが描画される位置にあるフレームの画像
+	int mFreamX;                     // フレームの座標X
+	int mFreamY;                     // フレームの座標Y
+	int mJudgeImg;                   // 判定画像
+	int mPerfectImg;                 // Perfect判定画像
+	int mGoodImg;                    // Good判定画像
+	int mBadImg;                     // Bad判定画像
+	int mReactionX;                  // リアクションの座標X
+	int mReactionY;                  // リアクションの座標Y
+	int mMaxRadius;                  // ノーツ最大の大きさ
+	float mPerfectSize;              // パーフェクトの半径
+	float mBadSize;                  // バッドの半径
 
-	// ランダムに格納する値をこれより下回らない
-	int mBaseTime;
-	// ランダムに格納する値の引数値
-	int mBasePoint;
-	// ノーツを出す次のタイミング
-	int mRandomTime;
-	// ランダムな値を格納していいかどうか
-	bool mRandomFlag;
-	// ノーツを開始させる時間
-	int mNotesStartTime;
-	// ノーツを終わらせる時間
-	int mNotesEndTime;
+	float mFrameSize;                // フレームの大きさ
+	float mFrameShrinkPoint;         // 収縮する値
+
+	float mFrameMovePoint;           // フレームの
+	float mFrameShrinkGage;          // 収縮するゲージの値
+	float mFrameSizeInit;            // フレームの初期化
+	float mFrameMoveInit;            // フレーム
+
+	int mBaseTime;                   // ランダムに格納する値をこれより下回らない
+	int mBaseTimePoint;              // ランダムに格納する値の引数値
+	int mRandomTime;                 // ノーツを出す次のタイミング
+	bool mRandomFlag;                // ランダムな値を格納していいかどうか
+	int mNotesStartTime;             // ノーツを開始させる時間
+	int mNotesEndTime;               // ノーツを終わらせる時間
 
 	//  カウント
-	// リアクションを描画する時間をカウントする
-	int mReactionCount;
-	// リアクションを描画する時間の最大値
-	int mReactionCountMax;
-	// カウントを初期化
-	int mCountInit;
-	// ノーツ開始までをはかるカウント
-	int mCount;
-	// 曲の経過カウント
-	int mTimeCount;
+	int mReactionCount;              // リアクションを描画する時間をカウントする
+	int mReactionCountMax;           // リアクションを描画する時間の最大値
+	int mCountInit;                  // カウントを初期化
+	int mCount;                      // ノーツ開始までをはかるカウント
+	int mTimeCount;                  // 曲の経過カウント
 
 	//  CSV
-    // CSVファイルを格納
-	char mCsv[24] = "data/CSV/TestTiming.csv";
-	// ファイルのポインタ
-	FILE* mFilePointer;
-	// データを格納
-	char mCsvData;
+	char mCsv[24] = "data/CSV/TestTiming.csv";         // CSVファイルを格納
+	FILE* mFilePointer;                                // ファイルのポインタ
+	char mCsvData;                                     // データを格納
 
 	float mNum;
 	char mBuffer[10];
@@ -162,42 +137,27 @@ private:
 	float mRhythm[23];
 
 	//  スコア
-	// Score処理フラグ
-	bool mScoreFlag;
-	// スコア
-	int mScoreRadius;
+	bool mScoreFlag;        // Score処理フラグ
+	int mScoreRadius;       // スコア
 
 
 	//  エフェクト
-	// エフェクト画像
-	int mEffectImg;       
-	// パーフェクトエフェクト画像
-	int mPerfectEffectImg;
-	// グッドエフェクト画像
-	int mGoodEffectImg;   
-	// バッドエフェクト画像
-	int mBadEffectImg;    
-	// エフェクトの大きさ
-	double mEffectScale;  
-	// エフェクトのアングル
-	double mEffectAngle;  
-	// エフェクトがだんだん大きくなる時にプラスする値
-	double mScalePlus;    
-	// エフェクトが開店する時にプラスする値
-	double mAngleRotate;  
-	// エフェクトを発生させるフラグ
-	bool mEffectFlag;
-	// バッドになったか
-	bool mBadFlag;
+	int mEffectImg;               // エフェクト画像      
+	int mPerfectEffectImg;        // パーフェクトエフェクト画像
+	int mGoodEffectImg;           // グッドエフェクト画像
+	int mBadEffectImg;            // バッドエフェクト画像
 
+	int mEffectPosY;              // ゲージを中心のエフェクトY座標(ゲージの中心から少し上にあげる)
+	double mEffectScale;          // エフェクトの大きさ
+	double mEffectAngle;          // エフェクトのアングル
+	double mScalePlus;            // エフェクトがだんだん大きくなる時にプラスする値
+	double mAngleRotate;          // エフェクトが開店する時にプラスする値
+	bool mEffectFlag;             // エフェクトを発生させるフラグ
 
 	//  サウンド
-	// パーフェクトの時になる効果音
-	class Sound* mPerfectSound;
-	// グッドの時になる効果音
-	class Sound* mGoodSound;
-	// バッドの時になる効果音
-	class Sound* mBadSound;
+	class Sound* mPerfectSound;       // パーフェクトの時になる効果音
+	class Sound* mGoodSound;          // グッドの時になる効果音
+	class Sound* mBadSound;           // バッドの時になる効果音
 
 	int i = 0;
 
