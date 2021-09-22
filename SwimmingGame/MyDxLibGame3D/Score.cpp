@@ -19,13 +19,15 @@ Score::Score()
 {
 	FONT_SIZE = 30;
 	DIGIT_NUM = 5;
-	NUM_POS = 110;
-	NUM_SPACE = 40;
+	NUM_POS = 220;
+	NUM_SPACE = 80;
+	mScoreBarPosY = 50;
+	mNumPosY = 30;
 	i = j = 0;
 	tmp = 0;
 	mColor = GetColor(0, 0, 0);
-	mScorePosX = 0;
-	mScorePosY = 0;
+	mScorePosX = 50;
+	mScorePosY = 80;
 	mResultPosX = RESULT_NUM_X;
 	mScore = 0;
 	mTmpScore = 0;
@@ -36,8 +38,10 @@ Score::Score()
 		mS[i] = 0;
 	}
 
-	LoadDivGraph("data/newUI/number.png", 10, 5, 2, 40, 50, mNumberHandle, true);
+	LoadDivGraph("data/newUI/number.png", 10, 5, 2, 80, 100, mNumberHandle, true);
 	mScoreHandle = LoadGraph("data/newUI/score.png", true);
+
+	mScoreBar = LoadGraph("data/newUI/ScoreBar.png", true);
 }
 
 /// <summary>
@@ -56,6 +60,9 @@ void Score::Draw(int _nowScene)
 	switch (_nowScene)
 	{
 	case 2:   // プレイシーン
+
+		DrawGraph(mScorePosX, mScorePosY + mScoreBarPosY, mScoreBar, true);
+
 		DrawGraph(mScorePosX, mScorePosY, mScoreHandle, true);
 		for (i = 0; i < DIGIT_NUM; i++)
 		{
@@ -63,7 +70,7 @@ void Score::Draw(int _nowScene)
 			{
 				if (mS[i] == j)
 				{
-					DrawGraph(NUM_POS + NUM_SPACE * i, mScorePosY, mNumberHandle[j], true);
+					DrawGraph(NUM_POS + NUM_SPACE * i, mScorePosY - mNumPosY, mNumberHandle[j], true);
 				}
 			}
 		}

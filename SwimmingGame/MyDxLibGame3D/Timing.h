@@ -21,7 +21,7 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	void Update(bool _sound);
 
 	/// <summary>
 	/// 描画
@@ -115,6 +115,8 @@ private:            // 長くなってきたので説明を横に置きました。
 	bool mRandomFlag;                // ランダムな値を格納していいかどうか
 	int mNotesStartTime;             // ノーツを開始させる時間
 	int mNotesEndTime;               // ノーツを終わらせる時間
+
+	int mDifficultyCount;            // 難易度を上げるカウント    
 
 	//  カウント
 	int mReactionCount;              // リアクションを描画する時間をカウントする

@@ -8,7 +8,7 @@
 
 //スクリーンの大きさ
 const int  SCREEN_W = 1920;
-const int SCREEN_H	= 900;
+const int SCREEN_H	= 1080;
 
 //ラジアン
 const double PI = 3.1415926535897932384626433832795;

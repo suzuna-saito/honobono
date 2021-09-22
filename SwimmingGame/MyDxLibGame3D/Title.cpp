@@ -49,9 +49,9 @@ Title::Title()
 	, mRubiPosX(380)
 	, mRubiPosY(160)
 	, mIconPosX(1180)
-	, mIconPosY(980)
+	, mIconPosY(920)
 	, mTeamNamePosX(1280)
-	, mTeamNamePosY(960)
+	, mTeamNamePosY(900)
 {
 	SetScene(title);
 	// ƒ‚ƒfƒ‹‚ğƒ[ƒh

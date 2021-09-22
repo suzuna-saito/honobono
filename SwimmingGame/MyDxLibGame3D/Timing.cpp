@@ -4,6 +4,13 @@
 #include "Sound.h"
 #include "Time.h"
 
+
+// 定数
+int END_TIME = 3210;               // ゲージを出さなくする
+
+int NORMAL_TIME = END_TIME / 2;    // ゲージがちょっと早くなるタイミング
+int DIFFICULT_TIME = END_TIME / 3; // ゲージが一番早くなるタイミング
+
 //-----------------------------------------------------------------------------
 // @brief  コンストラクタ.
 //-----------------------------------------------------------------------------
@@ -49,12 +56,12 @@ Timing::Timing()
 	, mJudgeImg(-1)
 	, mCount(0)
 	, mBaseTimePoint(100)
-	, mBaseTime(100)
+	, mBaseTime(30)
 	, mRandomTime(0)
 	, mRandomFlag(true)
 	, mTimeCount(0)
-	, mNotesStartTime(150)
-	, mNotesEndTime(6000)
+	, mNotesStartTime(30)
+	, mNotesEndTime(END_TIME)
 	, mJudge(none)
 	, mFrameSize(0.60f)
 	, mFrameShrinkPoint(0.00050f)
@@ -63,6 +70,7 @@ Timing::Timing()
 	, mFrameMoveInit(0.010f)
 	, mFrameMovePoint(0.010f)
 	, mBaseGagePoint(1)
+	, mDifficultyCount(END_TIME)
 {
 	// 画像読み込み
 	mTimingImg[0] = LoadGraph("data/newUI/RightTiming.png");      // 右
@@ -113,10 +121,38 @@ Timing::~Timing()
 //-----------------------------------------------------------------------------
 // @brief  更新.
 //-----------------------------------------------------------------------------
-void Timing::Update()
+void Timing::Update(bool _sound)
 {
 	// 判定
 	mJudge = none;
+
+	// カウントを減らしていく
+	mDifficultyCount--;
+
+	// 残りが2分の1だったらゲージを出す速さ,ゲージが縮む速さを少し早くする
+	if (mDifficultyCount <= NORMAL_TIME && mDifficultyCount > DIFFICULT_TIME)
+	{
+		mBaseTimePoint = 60;
+		mBaseTime = 15;
+
+		// だんだん縮む速さを上げる
+		if (mFrameShrinkPoint <= 0.001)
+		{
+			mFrameShrinkPoint += 0.0001;
+		}
+	}
+	// 残りが3分の1だったらゲージを出す速さ,ゲージが縮む速さを割と早くする
+	if (mDifficultyCount <= DIFFICULT_TIME)
+	{
+		mBaseTimePoint = 20;
+		mBaseTime = 0;
+
+		// だんだん縮む速さを上げる
+		if (mFrameShrinkPoint <= 0.0015)
+		{
+			mFrameShrinkPoint += 0.0001;
+		}
+	}
 
 	// カウント
 	// 急に始まらないようスタート時間まで待ってからスタート
@@ -156,7 +192,7 @@ void Timing::Update()
 	}
 
 	// カウントがRandomに入れたカウントに来たとき、曲が終わっていなければ
-	if (mCount == mRandomTime && mTimeCount < mNotesEndTime)
+	if (mCount == mRandomTime && _sound)
 	{
 		// タイミングゲージ描画フラグを「真」にする
 		mTimingDrawFlag = true;

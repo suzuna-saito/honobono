@@ -80,6 +80,9 @@ private:
 	// スキップテキストが描画されるフラグ
 	bool mSkipDrawFlag;
 
+	// スキップするかどうか true:シーン遷移 false:遷移しない
+	bool mSkipFlag;
+
 
 	//  時間ゲージ
 	// ゲージを表示する時間

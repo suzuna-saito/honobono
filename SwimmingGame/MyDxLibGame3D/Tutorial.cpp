@@ -31,8 +31,9 @@ Tutorial::Tutorial()
 	, mStartTextPosY(25)
 	, mSkipTextPosX(100)
 	, mSkipTextPosY(150)
-	, mSkipDrawTime(750)
+	, mSkipDrawTime(950)
 	, mSkipDrawFlag(false)
+	, mSkipFlag(false)
 {
 	// シーン変更
 	SetScene(tutorial);
@@ -85,7 +86,7 @@ SceneBase* Tutorial::Update()
 	mTime--;
 	UpdateKey();
 	// シーン遷移の条件
-	if (Key[KEY_INPUT_SPACE] == 1 || mTime < 0)
+	if (mSkipFlag || mTime < 0)
 	{
 		// チュートリアルのBGMを止める
 		mTutorialBGM->StopMusic();
@@ -107,6 +108,12 @@ void Tutorial::TextUpdate()
 	if (mTime < mSkipDrawTime)
 	{
 		mSkipDrawFlag = true;
+
+		// スキップの文字が描画されているときにスペースが押されたら
+		if (Key[KEY_INPUT_SPACE] == 1)
+		{
+			mSkipFlag = true;  // シーン遷移フラグをtrueにする
+		}
 	}
 
 	// 画像の透明度を変更
@@ -145,6 +152,7 @@ void Tutorial::Draw()
 	{
 		// スキップテキストの描画
 		DrawGraph(mSkipTextPosX, mSkipTextPosY, mSkipText, TRUE);
+
 	}
 
 	//枠を描画
