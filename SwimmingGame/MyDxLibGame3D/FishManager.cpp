@@ -100,8 +100,7 @@ FishManager::~FishManager()
 /// </summary>
 void FishManager::CreatFish()
 {
-	// モブ
-	mSourceModelHandle = MV1LoadModel("data/model/fish/npc.mv1");
+
 	// プレイヤー
 	mPlayerModelHandle = MV1LoadModel("data/model/fish/player02.mv1");
 
@@ -132,13 +131,13 @@ void FishManager::DestroyFish()
 /// <summary>
 /// 更新関数
 /// </summary>
-void FishManager::Updata(int _judge, float _delta, bool _startflag)
+void FishManager::Updata(int _judge, float _delta, bool _startflag, int _nowScene)
 {
 	for (int i = 0; i < FISH_NUM; i++)
 	{
 		if (mFish[i] != NULL)
 		{
-			mFish[i]->Updata(_judge, _delta, _startflag);
+			mFish[i]->Updata(_judge, _delta, _startflag, _nowScene);
 		}
 	}
 

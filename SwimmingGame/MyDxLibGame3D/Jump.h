@@ -25,8 +25,12 @@ public:
 	/// ジャンプの更新
 	/// </summary>
 	/// <param name="_jadge">タイミング判定</param>
-	void JumpUpdate(int _jadge);
+	void JumpUpdate(int _jadge,int _nowScene);
 
+	/// <summary>
+	/// トレーニングシーンのための初期化
+	/// </summary>
+	void TrainingInit();
 
 	// ジャンプの種類
 	enum NowDive

@@ -35,6 +35,8 @@ public:
 		title,
 		// チュートリアル
 		tutorial,
+		// 練習
+		training,
 		// ゲームプレイ
 		play,
 		// アーティスティックスイミング時

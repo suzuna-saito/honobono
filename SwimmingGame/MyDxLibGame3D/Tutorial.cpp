@@ -1,5 +1,5 @@
 #include "Tutorial.h"
-#include "Play.h"
+#include "Training.h"
 #include "Camera.h"
 #include "Sound.h"
 #include "Time.h"
@@ -93,7 +93,7 @@ SceneBase* Tutorial::Update()
 		// 効果音を再生
 		mTutorialSE->PlaySE();
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
-		return new Play();
+		return new Training();
 	}
 
 	TextUpdate();

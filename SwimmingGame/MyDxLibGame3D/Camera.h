@@ -11,7 +11,7 @@
 /// <summary>
 /// カメラの更新
 /// </summary>
-class Camera:public Time
+class Camera :public Time
 {
 public:
 	Camera();							// コンストラクタ.
@@ -32,10 +32,14 @@ public:
 	// カメラ原点位置セット
 	void SetOriginCameraUpdate();
 
+	// トレーニングシーンの時のカメラ @saito
+	void TrainingCameraUpdate();
+
 	// 確認用カメラ @saito
 	void FixedCameraUpUpdate();
 	void FixedCameraRightUpdate(float _posZ);
 	void FixedCameraBackUpdate(float _posZ, float _angleX);
+
 private:
 	int i;
 	float mTimeCount;     // カメラ更新時間

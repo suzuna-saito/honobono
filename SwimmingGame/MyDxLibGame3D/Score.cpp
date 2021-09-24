@@ -59,7 +59,7 @@ void Score::Draw(int _nowScene)
 	// プレイシーンとリザルトシーンによって描画する大きさを変える
 	switch (_nowScene)
 	{
-	case 2:   // プレイシーン
+	case 3:   // プレイシーン
 
 		DrawGraph(mScorePosX, mScorePosY + mScoreBarPosY, mScoreBar, true);
 

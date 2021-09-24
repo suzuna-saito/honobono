@@ -3,7 +3,7 @@
 //----------------------
 //定数
 //----------------------
-const float JUMP_Y = 0.35f;          // ジャンプした時のY軸の加算値
+const float JUMP_Y = 0.25f;          // ジャンプした時のY軸の加算値
 const float JUMP_Z = 0.25f;         // ジャンプした時のz軸の加算値
 const float JUMP_X = 0.15f;         // ジャンプした時のx軸の加算値
 
@@ -11,7 +11,7 @@ const float FIRST_MAX = 3.0f;        // 1回目ジャンプの最大ジャンプ力
 const float SECOND_MAX = 5.0f;       // 2回目ジャンプの最大ジャンプ力
 const float THIRD_MAX = 8.0f;        // 飛び込みの最大ジャンプ力
 
-const float GOOD = 3.0f;           // goodの時のジャンプ力
+const float GOOD = 3.5f;           // goodの時のジャンプ力
 const float PERFECT = 7.0f;        // perfectの時のジャンプ力
 
 
@@ -44,24 +44,24 @@ void Jump::DiveUpdate(VECTOR _rotate)
 	// 魚の向きによって飛び込む方向を換える
 	switch ((int)_rotate.y)
 	{
-		case (int)(90.0f * DX_PI_F / 180.0f) :
-			mChange.z = JUMP_Z;
-			break;
+	case (int)(90.0f * DX_PI_F / 180.0f) :
+		mChange.z = JUMP_Z;
+		break;
 
-			case(int)(-90.0f * DX_PI_F / 180.0f) :
-				mChange.z = -JUMP_Z;
-				break;
+	case(int)(-90.0f * DX_PI_F / 180.0f) :
+		mChange.z = -JUMP_Z;
+		break;
 
-				case(int)(180.0f * DX_PI_F / 180.0f) :
-					mChange.x = JUMP_X;
-					break;
+	case(int)(180.0f * DX_PI_F / 180.0f) :
+		mChange.x = JUMP_X;
+		break;
 
-					case(int)(0.0f, 0.0f, 0.0f) :
-						mChange.x = -JUMP_X;
-						break;
+	case(int)(0.0f, 0.0f, 0.0f) :
+		mChange.x = -JUMP_X;
+		break;
 
-					default:
-						break;
+	default:
+		break;
 	}
 
 	// 飛び込みの更新
@@ -113,7 +113,7 @@ void Jump::DiveNowUpdate()
 //-----------------------------------------------------------------------------
 // @brief  ジャンプの更新.
 //-----------------------------------------------------------------------------
-void Jump::JumpUpdate(int _jadge)
+void Jump::JumpUpdate(int _jadge, int _nowScene)
 {
 	switch (_jadge) // 判定
 	{
@@ -152,6 +152,20 @@ void Jump::JumpUpdate(int _jadge)
 	// 増加量の計算
 	mGain += mVelocity.y;
 }
+
+//-----------------------------------------------------------------------------
+// @brief  トレーニングシーンのための初期化
+//-----------------------------------------------------------------------------
+void Jump::TrainingInit()
+{
+	mVelocity = VGet(0.0f, 0.0f, 0.0f);   // 移動力を初期値に戻す
+	mIsGround = true;                     // 地面との接地判定
+	mJumpUp = true;                       // 次のジャンプのためにtrueにする
+	mGain = 0.0f;                         // 次のジャンプのために増加量を0.0fにする
+
+	mJumpMax = 0.0f;
+}
+
 
 //-----------------------------------------------------------------------------
 // @brief  ジャンプタイプの更新.

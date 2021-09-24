@@ -33,36 +33,47 @@ Fish::~Fish()
 /// <summary>
 /// 更新関数
 /// </summary>
-void Fish::Updata(int _judge, float _deltaTime, bool _startflag)
+void Fish::Updata(int _judge, float _deltaTime, bool _startflag, int _nowScene)
 {
-	// ジャンプの処理
-	JumpUpdata(_judge, _startflag, _deltaTime);
-
-	// 飛び込みが終わったとき
-	if (mJumpedInFlag)
+	// 今のシーンがトレーニングか、プレイかで更新する処理を変える
+	switch (_nowScene)
 	{
-		//アーティスティックスイミングの処理
-		DanceUpdata();
-	}
+	case 2: // トレーニングシーン
+		TrainingJump(_judge);
+		break;
 
-	//動いてほしい時に
-	if (mMoveState == NowMove)
-	{
-		// ポジションの更新をする
-		mPos = VAdd(mPos, mVelocity);
+	case 3:  // プレイシーン
+		// ジャンプの処理
+		JumpUpdata(_judge, _startflag, _deltaTime);
 
-		/*VScale(mPos, _deltaTime);*/
+		// 飛び込みが終わったとき
+		if (mJumpedInFlag)
+		{
+			//アーティスティックスイミングの処理
+			DanceUpdata();
+		}
+
+		//動いてほしい時に
+		if (mMoveState == NowMove)
+		{
+			// ポジションの更新をする
+			mPos = VAdd(mPos, mVelocity);
+
+			/*VScale(mPos, _deltaTime);*/
+		}
+		break;
+	default:
+		break;
 	}
 }
 
 /// <summary>
-/// ジャンプの更新を入れた関数 : @saito
+/// プレイシーンのジャンプの更新を入れた関数 : @saito
 /// </summary>
 void Fish::JumpUpdata(int _judge, bool _startflag, float _deltaTime)
 {
 	// ボタンが押されたら、またはtimingゲージが縮小し終わったらジャンプする（ゲージが表示されてなかったらジャンプしない）
-	if (((Key[KEY_INPUT_RIGHT] == 1 || Key[KEY_INPUT_LEFT] == 1 )
-		&& mJump->GetIsGround()) && _judge != 4 ||
+	if (((Key[KEY_INPUT_RIGHT] == 1 || Key[KEY_INPUT_LEFT] == 1) && mJump->GetIsGround() && _judge != 4 )||
 		_judge == 3)
 	{
 		// ジャンプの更新をするようにする
@@ -106,7 +117,7 @@ void Fish::JumpUpdata(int _judge, bool _startflag, float _deltaTime)
 	else if (mJumpUpdataFlag && mJump->GetNowJump() == mJump->endDive && _judge != 0 && _startflag)
 	{
 		// ジャンプの更新
-		mJump->JumpUpdate(_judge);
+		mJump->JumpUpdate(_judge,3);
 
 		mPos = VAdd(mPos, mJump->GetVelocity());
 
@@ -117,6 +128,45 @@ void Fish::JumpUpdata(int _judge, bool _startflag, float _deltaTime)
 
 			// ジャンプパターンを更新する
 			mJump->JumpSetUpdate();
+
+			// ジャンプの更新を止める
+			mJumpUpdataFlag = false;
+		}
+	}
+
+	mPos = VAdd(mPos, mJump->GetVelocity());
+}
+
+/// <summary>
+/// トレーニングシーンのジャンプ更新
+/// </summary>
+void Fish::TrainingJump(int _judge)
+{
+	// ボタンが押されたら、またはtimingゲージが縮小し終わったらジャンプする（ゲージが表示されてなかったらジャンプしない）
+	if ((Key[KEY_INPUT_RIGHT] == 1 || Key[KEY_INPUT_LEFT] == 1) && mJump->GetIsGround()&& _judge != 4)
+	{
+		// ジャンプの更新をするようにする
+		mJumpUpdataFlag = true;
+
+		// 初期化
+		mJump->TrainingInit();
+	}
+
+	// ジャンプの時　（ゲージが表示されていないときは動かない）
+	if (mJumpUpdataFlag && _judge != 0)
+	{
+		// ジャンプの更新
+		mJump->JumpUpdate(_judge, 2);
+
+		mPos = VAdd(mPos, mJump->GetVelocity());
+
+		// 5.0よりもポジションが低かったら
+		if (mPos.y <= 5.5f)
+		{
+			mPos.y = 5.5f;
+
+			// 初期化
+			mJump->TrainingInit();
 
 			// ジャンプの更新を止める
 			mJumpUpdataFlag = false;
@@ -156,6 +206,7 @@ VECTOR Fish::MoveTargetPos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotat
 	VECTOR posToSetPos = VSub(_SetPos, _NowPos);
 	VECTOR normPosToSetPos = VNorm(posToSetPos);
 	mTempVelocity = VScale(normPosToSetPos, DANCE_VELOCITY);
+
 
 	//止まるとき
 	if (CheckStopped(_SetPos, _NowPos))
@@ -224,10 +275,10 @@ VECTOR Fish::MoveAimlessWandering(VECTOR& _nowPos)
 /// <returns>止まっていい時はtrue、止まってはいけない時はfalse</returns>
 bool Fish::CheckStopped(const VECTOR _targetPos, const VECTOR _nowPos)
 {
+
 	/*-----------モデルを止めるために停止範囲の距離の計算----------*/
-	//距離
+
 	VECTOR posToSetPos = VSub(_targetPos, _nowPos);
-	//向き
 	VECTOR normPosToSetPos = VNorm(posToSetPos);
 
 	//mPosからmSetDancePosまでの距離の計算

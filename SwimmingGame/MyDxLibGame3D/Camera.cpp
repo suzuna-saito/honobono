@@ -8,7 +8,7 @@
 //  @brief 定数
 //------------------------------------------------------------
 const float CAMERA_NEAR = 0.1f;                                     // カメラの奥行(最小)
-const float CAMERA_FAR = 1000.0f;                                   // カメラの奥行(最大)
+const float CAMERA_FAR = 1000.0f;                                    // カメラの奥行(最大)
 const float CAMERA_FAZE[4] = { 5.0f,10.0f,15.0f,20.0f };            // カメラ切り替え時間
 const VECTOR ORIGIN_CAMERA_POS = VGet(0.0f, 0.0f, 0.0f);            // カメラ原点位置
 const VECTOR ORIGIN_CAMERA_ANGLE = VGet(0.0f, 0.0f, 0.0f);          // カメラ原点角度
@@ -20,6 +20,9 @@ const VECTOR PLAY_CAMERA_ANGLE[4] = { VGet(0.50f, -0.80f, 0.0f),    // 一つ目
 									  VGet(0.50f, 0.0f, 0.0f),		// 二つ目のカメラ角度
 									  VGet(0.0f, 3.210f, 0.0f),		// 三つ目のカメラ角度
 									  VGet(0.0f, -2.50f, 0.0f) };	// 四つ目のカメラ角度
+
+const VECTOR TRAINING_CAMERA_POS = VGet(-0.0f, 6.0f, 18.0f);         // トレーニングシーンのカメラ位置
+const VECTOR TRAINING_CAMERA_ANGLE = VGet(0.0f, 3.25f, 0.0f);      // トレーニングシーンのカメラ角度
 
 const VECTOR FIXED_CAMERA_UP_POS = VGet(0.0f, 140.0f, -0.0f);      // 確認用カメラ（上固定）@saito
 const VECTOR FIXED_CAMERA_RIGHT_POS = VGet(60.0f, 18.0f, -15.0f);   // 確認用カメラ（右固定）@saito
@@ -69,7 +72,7 @@ void Camera::DivingCameraUpdate(Time& _time)
 	float DeltaTime = _time.GetDeltaTime();
 
 	// DeltaTimeを更新時間に加算
-	mTimeCount += DeltaTime;
+ 	mTimeCount += DeltaTime;
 
 	// 一周が終わったらカメラ更新時間をリセット
 	if (mTimeCount > CAMERA_FAZE[3])
@@ -98,6 +101,12 @@ void Camera::SetOriginCameraUpdate()
 	mAngle = ORIGIN_CAMERA_ANGLE;
 }
 
+void Camera::TrainingCameraUpdate()
+{
+	mPos = TRAINING_CAMERA_POS;
+	mAngle = TRAINING_CAMERA_ANGLE;
+}
+
 
 /// <summary>
 /// 上からの固定カメラ（デバック用）@saito
@@ -108,7 +117,7 @@ void Camera::FixedCameraUpUpdate()
 	mAngle = VGet(1.5f, 0.0f, 0.0f);
 
 	// カメラ位置変更
-	SetCameraPositionAndAngle(mPos, mAngle.x,mAngle.y,mAngle.z);
+	SetCameraPositionAndAngle(mPos, mAngle.x, mAngle.y, mAngle.z);
 }
 /// <summary>
 /// 右からの固定カメラ（デバック用）@saito
@@ -145,7 +154,7 @@ void Camera::TryDrawCameraUpdate()
 {
 	// 上下左右奥行き移動
 	// 上下
-	if(CheckHitKey(KEY_INPUT_UP))
+	if (CheckHitKey(KEY_INPUT_UP))
 	{
 		mPos.y += 1;
 	}

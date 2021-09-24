@@ -14,7 +14,7 @@ public:
 
 	virtual ~FishBase();										// デストラクタ
 
-	virtual void Updata(int _judge, float _deltaTime, bool _startflag) = 0;									// 更新関数(純粋仮想関数)
+	virtual void Updata(int _judge, float _deltaTime, bool _startflag, int _nowScene) = 0;									// 更新関数(純粋仮想関数)
 
 	virtual void Draw(int _debugColor);							// 描画関数
 

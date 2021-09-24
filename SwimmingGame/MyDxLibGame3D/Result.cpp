@@ -138,6 +138,7 @@ Result::~Result()
 	delete mResultSE;
 	delete mCancelSE;
 
+	mMedalEffect->StopEffect();
 	delete mMedalEffect;
 }
 
@@ -156,6 +157,8 @@ SceneBase* Result::Update()
 		mRestartSE->PlaySE();
 		// BGMをとめる
 		mResultBGM->StopMusic();
+
+		mMedalEffect->StopEffect();
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
 		return new Title();
 	}

@@ -163,7 +163,7 @@ SceneBase* Play::Update()
 	if (startCount >= 30)
 	{
 		// 魚の制御
-		fishManager->Updata(timing->GetJudg(), time->GetDeltaTime(), fishManager->GetStopFlag());
+		fishManager->Updata(timing->GetJudg(), time->GetDeltaTime(), fishManager->GetStopFlag(),GetScene());
 
 		//andou
 		//ダンスを始めてもいいかのフラグがtrueだったとき
