@@ -121,7 +121,7 @@ Timing::~Timing()
 //-----------------------------------------------------------------------------
 // @brief  更新.
 //-----------------------------------------------------------------------------
-void Timing::Update(bool _sound)
+void Timing::Update(bool _sound,int _nowScene)
 {
 	// 判定
 	mJudge = none;
@@ -129,29 +129,41 @@ void Timing::Update(bool _sound)
 	// カウントを減らしていく
 	mDifficultyCount--;
 
-	// 残りが2分の1だったらゲージを出す速さ,ゲージが縮む速さを少し早くする
-	if (mDifficultyCount <= NORMAL_TIME && mDifficultyCount > DIFFICULT_TIME)
+	// 今のシーンがプレイだったらゲージを早くする処理をする
+	switch (_nowScene)
 	{
-		mBaseTimePoint = 60;
-		mBaseTime = 15;
+	case 2:      // 練習の時一定のリズムで出るようにする
+		mBaseTimePoint = 1;
+		mBaseTime = 30;
 
-		// だんだん縮む速さを上げる
-		if (mFrameShrinkPoint <= 0.001)
+		break;
+	case 3:      // プレイ
+		// 残りが2分の1だったらゲージを出す速さ,ゲージが縮む速さを少し早くする
+		if (mDifficultyCount <= NORMAL_TIME && mDifficultyCount > DIFFICULT_TIME)
 		{
-			mFrameShrinkPoint += 0.0001;
-		}
-	}
-	// 残りが3分の1だったらゲージを出す速さ,ゲージが縮む速さを割と早くする
-	if (mDifficultyCount <= DIFFICULT_TIME)
-	{
-		mBaseTimePoint = 20;
-		mBaseTime = 0;
+			mBaseTimePoint = 60;
+			mBaseTime = 15;
 
-		// だんだん縮む速さを上げる
-		if (mFrameShrinkPoint <= 0.0015)
-		{
-			mFrameShrinkPoint += 0.0001;
+			// だんだん縮む速さを上げる
+			if (mFrameShrinkPoint <= 0.001)
+			{
+				mFrameShrinkPoint += 0.0001;
+			}
 		}
+		// 残りが3分の1だったらゲージを出す速さ,ゲージが縮む速さを割と早くする
+		if (mDifficultyCount <= DIFFICULT_TIME)
+		{
+			mBaseTimePoint = 20;
+			mBaseTime = 0;
+
+			// だんだん縮む速さを上げる
+			if (mFrameShrinkPoint <= 0.0015)
+			{
+				mFrameShrinkPoint += 0.0001;
+			}
+		}
+	default:
+		break;
 	}
 
 	// カウント
@@ -198,7 +210,7 @@ void Timing::Update(bool _sound)
 		mTimingDrawFlag = true;
 	}
 
-	UpdateKey();
+	//UpdateKey();
 
 	// スコアフラグを「偽」にする
 	mScoreFlag = false;
@@ -491,4 +503,11 @@ void Timing::CSVRead()
 	}
 	// ファイルを閉じる
 	fclose(mFilePointer);
+}
+
+void Timing::Init()
+{
+	mTimingDrawFlag = false;
+	mEffectFlag = false;
+	mReactionFlag = true;
 }

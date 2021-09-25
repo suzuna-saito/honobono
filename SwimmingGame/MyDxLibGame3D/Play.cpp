@@ -9,7 +9,7 @@
 #include "Sound.h"
 #include "Score.h"
 #include "Common.h"
-
+#include "Input.h"
 
 // コンストラクタ
 Play::Play()
@@ -105,6 +105,8 @@ Play::~Play()
 /// <return>シーンのポインタ</return>
 SceneBase* Play::Update()
 {
+	UpdateKey();
+
 	if (!mPlayBGM1->CheckBGM()
 		&& !mDancePlaySE->CheckBGM())
 	{
@@ -147,7 +149,7 @@ SceneBase* Play::Update()
 	}
 
 	// リズムボタンUI更新
-	timing->Update(mNowSound->CheckBGM());
+	timing->Update(mNowSound->CheckBGM(),GetScene());
 	// スコアの割合をもらってくる
 	mScoreRadius = timing->GetRadius();
 	// スコアのフラグをもらう
@@ -163,7 +165,7 @@ SceneBase* Play::Update()
 	if (startCount >= 30)
 	{
 		// 魚の制御
-		fishManager->Updata(timing->GetJudg(), time->GetDeltaTime(), fishManager->GetStopFlag(),GetScene());
+		fishManager->Updata(timing->GetJudg(), fishManager->GetStopFlag(),GetScene());
 
 		//andou
 		//ダンスを始めてもいいかのフラグがtrueだったとき

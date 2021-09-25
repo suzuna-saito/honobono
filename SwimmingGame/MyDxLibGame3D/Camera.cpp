@@ -22,7 +22,7 @@ const VECTOR PLAY_CAMERA_ANGLE[4] = { VGet(0.50f, -0.80f, 0.0f),    // 一つ目
 									  VGet(0.0f, -2.50f, 0.0f) };	// 四つ目のカメラ角度
 
 const VECTOR TRAINING_CAMERA_POS = VGet(-0.0f, 6.0f, 18.0f);         // トレーニングシーンのカメラ位置
-const VECTOR TRAINING_CAMERA_ANGLE = VGet(0.0f, 3.25f, 0.0f);      // トレーニングシーンのカメラ角度
+const VECTOR TRAINING_CAMERA_ANGLE = VGet(0.0f, 3.15f, 0.0f);      // トレーニングシーンのカメラ角度
 
 const VECTOR FIXED_CAMERA_UP_POS = VGet(0.0f, 140.0f, -0.0f);      // 確認用カメラ（上固定）@saito
 const VECTOR FIXED_CAMERA_RIGHT_POS = VGet(60.0f, 18.0f, -15.0f);   // 確認用カメラ（右固定）@saito

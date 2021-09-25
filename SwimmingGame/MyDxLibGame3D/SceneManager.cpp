@@ -49,7 +49,7 @@ bool SceneManager::UpdateScene()
 	// Updateの戻り値で次のシーンのポインタが返ってくる
 	nextScene = nowScene->Update();
 
-	UpdateKey();
+	//UpdateKey();
 
 	// フェードの状態をみて、フェードインアウトを行う
 	switch (fadeState)
