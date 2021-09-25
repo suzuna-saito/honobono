@@ -9,6 +9,7 @@
 #include "Sound.h"
 #include "Score.h"
 #include "Common.h"
+#include "Promotion.h"
 
 
 // コンストラクタ
@@ -34,16 +35,16 @@ Play::Play()
 
 	// 魚生成
 	fishManager = new FishManager();
-
 	// リズムボタンUI生成
 	timing = new Timing();
-
 	// 背景の生成
 	backGround = new BackGround();
 	// 時間の生成
 	time = new Time();
-
+	// カメラの生成
 	camera = new Camera();
+	// 広告の生成
+	promo = new Promotion();
 
 	fishManager->CreatFish();
 
@@ -105,6 +106,8 @@ Play::~Play()
 /// <return>シーンのポインタ</return>
 SceneBase* Play::Update()
 {
+	ChangeLightTypePoint(VGet(0.0f, 60.0f, 0.0f), 200.0f, 0.0f, 0.009f,0.0f);
+
 	if (!mPlayBGM1->CheckBGM()
 		&& !mDancePlaySE->CheckBGM())
 	{
@@ -198,6 +201,8 @@ void Play::Draw()
 	fishManager->Draw();
 	// プール描画
 	pool->Draw();
+	// 広告の描画
+	promo->Draw();
 	// リズムボタンUI描画
 	timing->Draw();
 

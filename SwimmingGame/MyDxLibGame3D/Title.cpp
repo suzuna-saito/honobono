@@ -51,7 +51,7 @@ Title::Title()
 	, mIconPosX(1180)
 	, mIconPosY(920)
 	, mTeamNamePosX(1280)
-	, mTeamNamePosY(900)
+	, mTeamNamePosY(920)
 {
 	SetScene(title);
 	// ƒ‚ƒfƒ‹‚ğƒ[ƒh

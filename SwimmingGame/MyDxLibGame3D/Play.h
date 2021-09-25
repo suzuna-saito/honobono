@@ -82,9 +82,10 @@ private:
     //アーティスティックスイミング時の音楽andou
     Sound* mDancePlaySE;
 
-
     // 今流れている音楽
     Sound* mNowSound;
+
+    class Promotion* promo;
 
     /////// デバック用 /////////
     float test;
