@@ -34,7 +34,7 @@ Pool::Pool()
 	// 画像の読み込み
 	mPoolHandle = MV1LoadModel("data/model/Pool/Outpool_OFFroop_dainashi.mqo");
 	mPoolWaterHandle = MV1LoadModel("data/model/Pool/water.x");
-	mDivingBoardHandle = MV1LoadModel("data/model/Pool/DivingBoard.mqo");
+	mDivingBoardHandle = MV1LoadModel("data/model/Pool/DivingBoard.mv1");
 
 	// 座標のセット
 	MV1SetPosition(mPoolHandle, mPoolPos);
