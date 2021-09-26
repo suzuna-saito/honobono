@@ -50,22 +50,23 @@ FishManager::FishManager()
 	, BEFORE_DIVING_POS{ VGet(-F_INTERVAL,F_POS_2Y,-F_POS_Z)   //1
 						,VGet(0.0f, F_POS_Y, -F_POS_2Z)        //2
 						,VGet(F_INTERVAL,F_POS_3Y,-F_POS_Z)    //3
-						,VGet(F_INTERVAL,F_POS_2Y,F_POS_Z)     //4
-						,VGet(0.0f,F_POS_Y,F_POS_2Z)           //5
-						,VGet(-F_INTERVAL,F_POS_3Y,F_POS_Z)    //6
-						,VGet(-F_POS_X,F_POS_2Y,F_INTERVAL)    //7
-						,VGet(-F_POS_2X,F_POS_Y,0.0f)          //8
-						,VGet(-F_POS_X,F_POS_3Y,-F_INTERVAL) } //9
+						,VGet(-F_POS_X,F_POS_2Y,F_INTERVAL)    //4
+						,VGet(-F_POS_2X,F_POS_Y,0.0f)          //5
+						,VGet(-F_POS_X,F_POS_3Y,-F_INTERVAL)   //6
+						,VGet(F_POS_X, F_POS_2Y, -F_INTERVAL)  //7
+						,VGet(F_POS_2X, F_POS_Y, 0.0f)	       //8
+						,VGet(F_POS_X, F_POS_3Y, F_INTERVAL) } //9
 
 	, BEFORE_DIVING_ROTATE{ VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f)    //1
 							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //2
 							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //3
-							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //4
-							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //5
-							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //6
-							,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)    //7
-							,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)    //8
-							,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f) }  //9
+							,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)    //4
+							,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)    //5
+							,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)    //6
+							,VGet(0.0f, 0.0f,0.0f)                        //7
+							,VGet(0.0f,0.0f,0.0f)                         //8
+							,VGet(0.0f,0.0f,0.0f) }                       //9
+
 
 	/*一番最初に指定された位置に移動したときの形
 	* 				6,5,4
@@ -155,7 +156,7 @@ void FishManager::Updata(int _judge, bool _startflag, int _nowScene)
 	{
 		if (mFish[i] != NULL)
 		{
-			//全員が指定した位置まで移動したとき
+			//全員が指定した位置まで移動したとき(何かいい案あればください)
 			if (mFish[0]->GetDancePosFlag()
 				&& mFish[1]->GetDancePosFlag()
 				&& mFish[2]->GetDancePosFlag()
@@ -200,27 +201,33 @@ void FishManager::Draw()
 }
 
 /// <summary>
-/// @@@
+/// ダンス中の移動処理
 /// </summary>
-/// <param name="_nowPos"></param>
-/// <returns></returns>
+/// <param name="_nowPos">FishBaseを持った魚の変数</param>
+/// <returns>ダンス中移動するためのベクトル</returns>
 VECTOR FishManager::MoveGroupAimlessWandering(FishBase* _fish)
 {
-	if (mDanceStartFlag)
+	//もしmDanceStartFlagがtrueだったら
+	if (mDanceStartFlag
+		&& (_fish->GetMoveState() == _fish->NowMove))
 	{
-		if (_fish->GetPos().x >= LINE_X - 10
-			|| _fish->GetPos().x <= -LINE_X + 5.f)
+		//左右の反射処理
+		if (_fish->GetPos().x >= LINE_X - 12.5f
+			|| _fish->GetPos().x <= -LINE_X + 7.5f)
 		{
 			mWholeVelocity.x = -mWholeVelocity.x;
 		}
+		//上下の反射処理
 		if (_fish->GetPos().z >= LINE_Z - 10
-			|| _fish->GetPos().z <= -LINE_Z + 5.f)
+			|| _fish->GetPos().z <= -LINE_Z + 7.5f)
 		{
 			mWholeVelocity.z = -mWholeVelocity.z;
 		}
 
+		//反射処理をした後、またはその前に設定された移動ベクトルを返す
 		return mWholeVelocity;
 	}
 
+	//mDanceStartFlagがfalseだったときはベクトルが全部ゼロの状態にする
 	return ZERO_VECTOR;
 }

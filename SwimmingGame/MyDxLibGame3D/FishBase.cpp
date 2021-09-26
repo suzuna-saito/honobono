@@ -16,9 +16,7 @@ FishBase::FishBase(int _sourceModelHandle)
 	, mSetDancePos(ZERO_VECTOR)
 	, mVelocity(ZERO_VECTOR)
 	, mTempVelocity(ZERO_VECTOR)
-	, mSetDanceFlag(false)
-	, mDanceStartCount(0)
-	//, mWaveRadius(0.f)//andou
+	, mDanceStartFlag(false)
 	, mTempAimlessVelocity(ZERO_VECTOR)
 {
 	// ‰æ‘œƒf[ƒ^‚Ì“Ç‚İ‚İ
