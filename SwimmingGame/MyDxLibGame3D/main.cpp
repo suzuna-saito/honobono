@@ -22,7 +22,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	}
 
 	//画面モードのセット
-	SetGraphMode(1920, 1080, 16);
+	SetGraphMode(640, 420, 16);
+	//SetGraphMode(1920, 1080, 16);
 	/*SetGraphMode( SCREEN_W, SCREEN_H, 32);*/
 	ChangeWindowMode(TRUE);
 

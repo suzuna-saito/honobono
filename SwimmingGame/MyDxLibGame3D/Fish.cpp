@@ -2,6 +2,11 @@
 #include "Common.h"
 #include "Jump.h"
 #include"Input.h"
+#include<math.h>
+
+//--------------------------------------
+//aimlessWardering中に上下にウェーブしているときのスピード
+const float WAVE_SPEED = 0.0025f;
 
 /// <summary>
 /// コンストラクタ
@@ -12,13 +17,18 @@ Fish::Fish(int _sourceModelHandle,
 	, mJumpUpdataFlag(false)
 	, mJumpedInFlag(false)
 {
+	//FishManagerの引数をFishのメンバ変数に代入
 	mPos = _pos;
 	mRotate = _rotate;
 	mSetDancePos = _dancePos;
 
+	//動いてほしいかどうかをenumで判定する
 	mMoveState = NotMove;
 
+	//
+	mDanceState = NoStates;//@@@
 
+	//ジャンプのクラスをインスタンス化
 	mJump = new Jump();
 }
 
@@ -130,9 +140,24 @@ void Fish::JumpUpdata(int _judge, bool _startflag, float _deltaTime)
 /// </summary>
 void Fish::DanceUpdata()
 {
+	////@@@
+	//switch (mDanceState)
+	//{
+	//case NoStates:
+	//	break;
+
+	//case SetPostion:
+	//		break;
+
+	//case AimlessWandering:
+	//	break;
+
+	//default:
+	//	break;
+	//}
 	if (mSetDanceFlag)
 	{
-		mVelocity = MoveAimlessWandering(mPos);
+		mVelocity = mTempAimlessVelocity;
 	}
 	else
 	{
@@ -162,14 +187,16 @@ VECTOR Fish::MoveTargetPos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotat
 	{
 		//動いてほしくないのでNotMoveにする
 		mMoveState = NotMove;
-		//ダンスを始めるために
-		mDanceStartCount++;
-		//ダンスカウントが100以上の時
-		if (mDanceStartCount >= WAIT_DANCE_TIME_COUNT)
-		{
-			//ダンスを始められるのでtrueにする
-			mSetDanceFlag = true;
-		}
+		////ダンスを始めるために
+		//mDanceStartCount++;
+		////ダンスカウントが100以上の時
+		//if (mDanceStartCount >= WAIT_DANCE_TIME_COUNT)
+		//{
+		//	//ダンスを始められるのでtrueにする
+		//	mSetDanceFlag = true;
+		//}
+
+		mSetDanceFlag = true;//@@@
 
 		return mTempVelocity;
 	}
@@ -180,39 +207,6 @@ VECTOR Fish::MoveTargetPos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotat
 		//この関数の上で計算したvelocityを返す
 		return mTempVelocity;
 	}
-}
-
-/// <summary>
-/// ジャンプをしていないときの処理(反射処理)
-/// </summary>
-/// <param name="_nowPos">今のポジション</param>
-/// <returns>移動ベクトルを返す</returns>
-VECTOR Fish::MoveAimlessWandering(VECTOR& _nowPos)
-{
-	//動いてほしいのでNowMoveにする
-	mMoveState = NowMove;
-	//前にmTempVelocityを使っていた場合、Y軸を使用していると浮いてしまうので
-	//一度Y軸を０にする
-	mTempVelocity = VGet(mTempVelocity.x, 0.f, mTempVelocity.z);
-
-	/*
-	* プールの端に設定するとモデルが埋まってしまうので
-	* ポジションではなくポジション＋デバックの球体の半径を判定とする
-	*/
-	//上下の判定
-	if (_nowPos.x >= LINE_X - DEBUG_RADIUS
-		|| _nowPos.x <= -LINE_X + DEBUG_RADIUS)
-	{
-		mTempVelocity.x = -mTempVelocity.x;
-	}
-	//左右の判定
-	if (_nowPos.z >= LINE_Z - DEBUG_RADIUS
-		|| _nowPos.z <= -LINE_Z + DEBUG_RADIUS)
-	{
-		mTempVelocity.z = -mTempVelocity.z;
-	}
-
-	return mTempVelocity;
 }
 
 
