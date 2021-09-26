@@ -17,6 +17,9 @@ const int SKIP_TIME = 50;    // スキップテキストを描画し始める時間
 const int SKIP_POS_X = 150;   // スキップテキスト座標X
 const int SKIP_POS_Y = 130;  // スキップテキスト座標Y
 
+const int ARROW_POS_X = 1400;
+const int ARROW_POS_Y = 120;
+
 const int TEXT_POS_X = 440;
 const int TEXT_POS_Y = 220;
 
@@ -39,6 +42,7 @@ Training::Training()
 	, mSkipDrawFlag(false)
 	, mPlayDrawFlag(false)
 	, mEndDrawFlag(false)
+	, mFastForwardDrawFlag(true)
 	, mNowDia(zero)
 	, mDrawDia(0)
 	, mDrawReaction(0)
@@ -66,10 +70,13 @@ Training::Training()
 
 	// サウンドの生成
 	mPlayBGM1 = new Sound("data/newSound/bgm/kari.mp3");
-	
+
 	// テキスト画像のロード
 	mTrainingText = LoadGraph("data/model/TrainingAsset/TrainingText.png");
 	mSkipText = LoadGraph("data/model/TutorialAsset/skipText.png");
+	mFastForward = LoadGraph("data/model/TrainingAsset/FastForward.png");
+	mNowFastForward = LoadGraph("data/model/TrainingAsset/NowFastForward.png");
+	mArrow = LoadGraph("data/model/TrainingAsset/Arrow.png");
 }
 
 // デストラクタ
@@ -129,6 +136,20 @@ SceneBase* Training::Update()
 			mSkipDrawFlag = true;
 
 			mTime = FIRST_TIME;
+		}
+	}
+
+	// 早送り
+	if (mNowDia != stop)
+	{
+		mFastForwardDrawFlag = true;
+
+		// →キーが押されたら早送りフラグを
+		if (CheckHitKey(KEY_INPUT_RIGHT))
+		{
+			mFastForwardDrawFlag = false;
+
+			mTime += 10;
 		}
 	}
 
@@ -402,11 +423,26 @@ void Training::Draw()
 	// 練習中という文字描画
 	DrawGraph(TRAINING_POS_X, TRAINING_POS_Y, mTrainingText, TRUE);
 
-	// 描画するセリフがあったら
+	// 描画するセリフがあるとき
 	if (mNowDia != stop)
 	{
 		// セリフの描画
 		DrawGraph(TEXT_POS_X, TEXT_POS_Y, mDrawDia, TRUE);
+
+		// 早送りボタンが押されていなかったら
+		if (mFastForwardDrawFlag && mPerfectCount != 5)
+		{
+			// 矢印（→）キーで早送りテキスト
+			DrawGraph(SKIP_POS_X, SKIP_POS_Y, mFastForward, TRUE);
+		}
+		// 押されていたら
+		else if (!mFastForwardDrawFlag && mPerfectCount != 5)
+		{
+			// 早送り中テキスト
+			DrawGraph(SKIP_POS_X, SKIP_POS_Y, mNowFastForward, TRUE);
+			// 早送り中画像
+			DrawGraph(ARROW_POS_X, ARROW_POS_Y, mArrow, TRUE);
+		}
 	}
 	else if (mNowDia == stop)
 	{

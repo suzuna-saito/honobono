@@ -102,12 +102,15 @@ private:
 
     int mTrainingText;    // 練習中テキスト
     int mSkipText;        // スキップテキスト
+    int mFastForward;     // 早送りテキスト
+    int mNowFastForward;  // 早送り中テキスト
+    int mArrow;           // 三角の再生ボタンみたいなやつ
 
-
-    bool mFirstDrawFlag;  // 最初のセリフたちを描画するフラグ
-    bool mSkipDrawFlag;   // スキップ時のテキストを描画するフラグ
-    bool mPlayDrawFlag;   // 練習中の時のテキストを描画するフラグ
-    bool mEndDrawFlag;    // シーン遷移時のテキスト描画フラグ
+    bool mFirstDrawFlag;        // 最初のセリフたちを描画するフラグ
+    bool mSkipDrawFlag;         // スキップ時のテキストを描画するフラグ
+    bool mPlayDrawFlag;         // 練習中の時のテキストを描画するフラグ
+    bool mFastForwardDrawFlag;  // 早送り中のテキストを描画するフラグ
+    bool mEndDrawFlag;          // シーン遷移時のテキスト描画フラグ
 
     int mNowDia;          // 今のセリフ
     int mPlayNowDia;      // プレイ中のセリフ

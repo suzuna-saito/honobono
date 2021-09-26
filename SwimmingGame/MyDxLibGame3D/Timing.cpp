@@ -133,7 +133,7 @@ void Timing::Update(bool _sound,int _nowScene)
 	switch (_nowScene)
 	{
 	case 2:      // 練習の時一定のリズムで出るようにする
-		mBaseTimePoint = 1;
+		mBaseTimePoint = 0;
 		mBaseTime = 30;
 
 		break;
