@@ -11,6 +11,7 @@ const int RESULT_NUM_Y = RESULT_POS_Y;        // リザルトの時の数字左上頂点座標Y
 const int RESULT_NUM_02Y = RESULT_POS_02Y;    // リザルトの時の数字右下頂点座標Y
 
 const int RESULT_NUM_SPACE = 100;             // リザルトの時の数字の間隔
+const int DRAW_PLUS_SCORE = 50;               // 加算値スコアの描画時間
 
 /// <summary>
 /// コンストラクタ
@@ -33,15 +34,30 @@ Score::Score()
 	mTmpScore = 0;
 	mScoreFlag = false;
 	NUMBER_NUM = 10;
+	mPlusScore = 0;
+	mPlusPosX = 300;
+	mPlusPosY = 170;
+	mScoreCount = 0;
+	mPlusNumPosX = 380;
+	mPlusNumPosY = 200;
+	mPlusNumSpace = 60;
+	mDrawPlusNum = false;
+
 	for (i = 0; i < DIGIT_NUM; i++)
 	{
 		mS[i] = 0;
+	}
+
+	for (i = 0; i < DIGIT_NUM - 1; i++)
+	{
+		mPlusS[i] = 0;
 	}
 
 	LoadDivGraph("data/newUI/number.png", 10, 5, 2, 80, 100, mNumberHandle, true);
 	mScoreHandle = LoadGraph("data/newUI/score.png", true);
 
 	mScoreBar = LoadGraph("data/newUI/ScoreBar.png", true);
+	mPlusHandle = LoadGraph("data/newUI/Plus.png", true);
 }
 
 /// <summary>
@@ -71,6 +87,24 @@ void Score::Draw(int _nowScene)
 				if (mS[i] == j)
 				{
 					DrawGraph(NUM_POS + NUM_SPACE * i, mScorePosY - mNumPosY, mNumberHandle[j], true);
+				}
+			}
+		}
+
+		// 加算値を描画してもいいなら
+		if (mDrawPlusNum)
+		{
+			// プラスの画像を描画
+			DrawGraph(mPlusPosX, mPlusPosY, mPlusHandle, true);
+			// 加算値を描画
+			for (i = 0; i < DIGIT_NUM - 1; i++)
+			{
+				for (j = 0; j < NUMBER_NUM; j++)
+				{
+					if (mPlusS[i] == j)
+					{
+						DrawRotaGraph(mPlusNumPosX + mPlusNumSpace * i, mPlusNumPosY, 0.8, 0, mNumberHandle[j], true, false, false);
+					}
 				}
 			}
 		}
@@ -105,6 +139,7 @@ void Score::Draw(int _nowScene)
 /// </summary>
 void Score::Update()
 {
+	// スコアのソート
 	mTmpScore = mScore;
 	if (mScore <= 99900)
 	{
@@ -115,6 +150,36 @@ void Score::Update()
 			mTmpScore = (mTmpScore - tmp) / 10;
 		}
 	}
+
+	// 加算値のソート
+	for (i = DIGIT_NUM - 2; i >= 0; i--)
+	{
+		mPlusS[i] = mPlusScore % 10;
+		tmp = mPlusScore % 10;
+		mPlusScore = (mPlusScore - tmp) / 10;
+	}
+}
+
+/// <summary>
+/// カウントを計測する関数
+/// </summary>
+void Score::Count()
+{
+	// 加算値が描画されていたら
+	if (mDrawPlusNum)
+	{
+		// 加算値描画時間をカウントする
+		mScoreCount++;
+	}
+
+	// 加算値描画時間が終わったら
+	if (mScoreCount > DRAW_PLUS_SCORE)
+	{
+		// カウントを0
+		mScoreCount = 0;
+		// 描画許可をfalse
+		mDrawPlusNum = false;
+	}
 }
 
 
@@ -124,11 +189,18 @@ void Score::Update()
 /// <param name="_BaseScore">スコアに掛ける割合</param>
 void Score::SetRadiusScore(int* _BaseScore)
 {
+	// スコアを格納してよかったら
 	if (mScoreFlag)
 	{
+		// 加算値の変数に値を格納
+		mPlusScore = *_BaseScore * 10;
+		// スコアの変数に値を格納
 		mScore += *_BaseScore * 10;
+		// 加算値描画許可をtrueに
+		mDrawPlusNum = true;
 		Update();
 	}
+	Count();
 }
 
 /// <summary>
