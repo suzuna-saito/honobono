@@ -13,16 +13,16 @@
 *	|							|
 *	|							|
 *	|							|
-* 7 |							|12
-* 8 |							|11
-* 9 |							|10
+* 7 |							|12(現在リストラ中)
+* 8 |							|11(現在リストラ中)
+* 9 |							|10(現在リストラ中)
 *	|							|
 *	|							|
 *	|							|
 *	|							|
 *	|							|
 *	-----------------------------
-*			1,player,3
+*				1,2,3
 */
 
 // 定数---------------------------------
@@ -48,44 +48,58 @@ FishManager::FishManager()
 	:mSourceModelHandle(-1)
 	, mPlayerModelHandle(-1)
 	, BEFORE_DIVING_POS{ VGet(-F_INTERVAL,F_POS_2Y,-F_POS_Z)   //1
-						,VGet(0.0f, F_POS_Y, -F_POS_2Z)  //プレイヤー
-						,VGet(F_INTERVAL,F_POS_3Y,-F_POS_Z)	//2
-						,VGet(F_INTERVAL,F_POS_2Y,F_POS_Z)		//3
-						,VGet(0.0f,F_POS_Y,F_POS_2Z)		//4
-						,VGet(-F_INTERVAL,F_POS_3Y,F_POS_Z)	//5
-						,VGet(-F_POS_X,F_POS_2Y,F_INTERVAL)	//6
-						,VGet(-F_POS_2X,F_POS_Y,0.0f)	//7
-						,VGet(-F_POS_X,F_POS_3Y,-F_INTERVAL)	//8
-						,VGet(F_POS_X,F_POS_2Y,-F_INTERVAL)    //9
-						,VGet(F_POS_2X,F_POS_Y,0.0f)	    //10
-						,VGet(F_POS_X,F_POS_3Y,F_INTERVAL) }	//11
+						,VGet(0.0f, F_POS_Y, -F_POS_2Z)        //2
+						,VGet(F_INTERVAL,F_POS_3Y,-F_POS_Z)    //3
+						,VGet(F_INTERVAL,F_POS_2Y,F_POS_Z)     //4
+						,VGet(0.0f,F_POS_Y,F_POS_2Z)           //5
+						,VGet(-F_INTERVAL,F_POS_3Y,F_POS_Z)    //6
+						,VGet(-F_POS_X,F_POS_2Y,F_INTERVAL)    //7
+						,VGet(-F_POS_2X,F_POS_Y,0.0f)          //8
+						,VGet(-F_POS_X,F_POS_3Y,-F_INTERVAL) } //9
 
 	, BEFORE_DIVING_ROTATE{ VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f)    //1
-							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //プレイヤー
 							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //2
-							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //3
+							,VGet(0.0f,90.0f * DX_PI_F / 180.0f,0.0f)     //3
 							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //4
 							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //5
-							,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)    //6
+							,VGet(0.0f,-90.0f * DX_PI_F / 180.0f,0.0f)    //6
 							,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)    //7
 							,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f)    //8
-							,VGet(0.0f, 0.0f,0.0f)    //9
-							,VGet(0.0f,0.0f,0.0f)     //10
-							,VGet(0.0f,0.0f,0.0f) }   //11
+							,VGet(0.0f,180.0f * DX_PI_F / 180.0f,0.0f) }  //9
 
-	, SET_DANCING_POS{ VGet(-10.0f,F_SET_POSITION_Y,20.0f),VGet(0.0f,F_SET_POSITION_Y,10.0f),VGet(10.0f,F_SET_POSITION_Y,20.0f)   	//1、プレイヤー、3
-						,VGet(10.0f,F_SET_POSITION_Y,-20.0f),VGet(0.0f,F_SET_POSITION_Y,-10.0f),VGet(-10.f,F_SET_POSITION_Y,-20.0f)	//4、5、6
-						,VGet(20.0f,F_SET_POSITION_Y,-12.5f),VGet(10.0f,F_SET_POSITION_Y,0.0f),VGet(20.0f,F_SET_POSITION_Y,12.5f)	    //7、8、9
-						,VGet(-20.0f,F_SET_POSITION_Y,-12.5f),VGet(-10.0f,F_SET_POSITION_Y,0.0f),VGet(-20.0f,F_SET_POSITION_Y, 12.5f) }	//10、11、12
-	, DEBUG_SPHERE_COLOR{ whiteColor ,0 ,yellowColor ,lightBlueColor ,yellowGreenColor ,
-							orangeColor ,redColor ,greenColor ,purpleColor ,brownColor ,
-								blueColor ,pinkColor }
+	/*一番最初に指定された位置に移動したときの形
+	* 				6,5,4
+	*    -------------------------------
+	* 	|                               |
+	* 	|                               |
+	* 	|                               |
+	* 	|                               |
+	* 7 |            3   6   9          |
+	* 8 |                               |
+	* 9 |        2   5   8              |
+	* 	|                               |
+	* 	|      1   4   7                |
+	* 	|                               |
+	* 	|                               |
+	* 	|                               |
+	*    -------------------------------
+	* 				1,2,3
+	*/
+	, SET_DANCING_POS{ VGet(-7.5f,F_SET_POSITION_Y,0.f),VGet(-5.f,F_SET_POSITION_Y,5.f),VGet(0.f,F_SET_POSITION_Y,7.5f)       //1、2、3
+						,VGet(5.f,F_SET_POSITION_Y,5.f),VGet(0.f,F_SET_POSITION_Y,0.f),VGet(-5.f,F_SET_POSITION_Y,-5.f)       //4、5、6
+						,VGet(0.f,F_SET_POSITION_Y,-7.5f),VGet(5.0f,F_SET_POSITION_Y,-5.f),VGet(7.5f,F_SET_POSITION_Y,0.f) }  //7、8、9
+	, DEBUG_SPHERE_COLOR{ WHITE_COLOR ,BLACK_COLOR ,YELLOW_COLOR ,LIGHTBLUE_COLOR ,YELLOWGREEN_COLOR ,
+							ORANGE_COULOR ,RED_COLOR ,GREEN_COLOR ,PURPLE_COLOR }
 	, mDanceStartFlag(false)
 {
 	for (int i = 0; i < FISH_NUM; i++)
 	{
-		mFish[i] = NULL;
+		//NULLだと０が入るので中身を空っぽにするためにnullptrにする
+		mFish[i] = nullptr;
 	}
+
+	//全体が動く時のvelocity
+	mWholeVelocity = VGet(0.25f, 0.f, 0.25f);
 }
 
 /// <summary>
@@ -103,13 +117,13 @@ void FishManager::CreatFish()
 	// モブ
 	mSourceModelHandle = MV1LoadModel("data/model/fish/npc.mv1");
 	// プレイヤー
-	mPlayerModelHandle = MV1LoadModel("data/model/fish/player02.mv1");
+	mPlayerModelHandle = MV1LoadModel("data/model/fish/player.mv1");
 
 
 	for (int i = 0; i < FISH_NUM; i++)
 	{
-		// プレイヤーの作成
-		mFish[i] = new Fish(mPlayerModelHandle,
+		//魚たちの生成
+		mFish[i] = new Fish(mSourceModelHandle,
 			BEFORE_DIVING_POS[i], BEFORE_DIVING_ROTATE[i], SET_DANCING_POS[i]);
 	}
 }
@@ -121,10 +135,13 @@ void FishManager::DestroyFish()
 {
 	for (int i = 0; i < FISH_NUM; i++)
 	{
+		//メモリを消す
 		delete mFish[i];
-		mFish[i] = NULL;
+		//NULLだと０が入るので中身を空っぽにするためにnullptrにする
+		mFish[i] = nullptr;
 	}
 
+	//モデルの削除
 	MV1DeleteModel(mPlayerModelHandle);
 	MV1DeleteModel(mSourceModelHandle);
 }
@@ -138,12 +155,30 @@ void FishManager::Updata(int _judge, float _delta, bool _startflag)
 	{
 		if (mFish[i] != NULL)
 		{
+			//全員が指定した位置まで移動したとき
+			if (mFish[0]->GetDancePosFlag()
+				&& mFish[1]->GetDancePosFlag()
+				&& mFish[2]->GetDancePosFlag()
+				&& mFish[3]->GetDancePosFlag()
+				&& mFish[4]->GetDancePosFlag()
+				&& mFish[5]->GetDancePosFlag()
+				&& mFish[6]->GetDancePosFlag()
+				&& mFish[7]->GetDancePosFlag()
+				&& mFish[8]->GetDancePosFlag())
+			{
+				//全体のダンススタートのフラグをtrueにする
+				mDanceStartFlag = true;
+			}
+			//全員のダンススタートのフラグがtrueだった時
+			if (mDanceStartFlag)
+			{
+				//集合した時の中心を基準として(この場合のインデックスは5)反射処理を行う
+				mFish[i]->SetTempAimlessVelocity(MoveGroupAimlessWandering(mFish[5]));
+			}
+
 			mFish[i]->Updata(_judge, _delta, _startflag);
 		}
 	}
-
-	//プレイヤーがダンス集合時のポジションについたときにflagを取得する
-	mDanceStartFlag = mFish[1]->GetSetDancePosFlag();
 }
 
 /// <summary>
@@ -157,5 +192,35 @@ void FishManager::Draw()
 		{
 			mFish[i]->Draw(DEBUG_SPHERE_COLOR[i]);
 		}
+
+		//--------------------------------
+		//全体の移動するときの当たり判定を可視化するためのデバック用描画
+		DrawSphere3D(mFish[4]->GetPos(), 10.f, 5, PINK_COLOR, PINK_COLOR, false);
 	}
+}
+
+/// <summary>
+/// @@@
+/// </summary>
+/// <param name="_nowPos"></param>
+/// <returns></returns>
+VECTOR FishManager::MoveGroupAimlessWandering(FishBase* _fish)
+{
+	if (mDanceStartFlag)
+	{
+		if (_fish->GetPos().x >= LINE_X - 10
+			|| _fish->GetPos().x <= -LINE_X + 5.f)
+		{
+			mWholeVelocity.x = -mWholeVelocity.x;
+		}
+		if (_fish->GetPos().z >= LINE_Z - 10
+			|| _fish->GetPos().z <= -LINE_Z + 5.f)
+		{
+			mWholeVelocity.z = -mWholeVelocity.z;
+		}
+
+		return mWholeVelocity;
+	}
+
+	return ZERO_VECTOR;
 }

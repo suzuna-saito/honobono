@@ -4,7 +4,7 @@
 #include"DxLib.h"
 
 //定数
-const int FISH_NUM = 12;    // 魚の数
+const int FISH_NUM = 9;    // 魚の数
 
 /// <summary>
 /// 魚のベース/処理クラスの前方宣言
@@ -28,8 +28,10 @@ public:
 
 	void Draw();					//描画関数
 
+	VECTOR MoveGroupAimlessWandering(FishBase* _fish);//@@@
+
 	//ダンスを始めてもいいかどうかのフラグのgetter
-	const bool GetStopFlag()const { return mDanceStartFlag; }
+	const bool GetDanceStartFlag()const { return mDanceStartFlag; }
 
 private:
 	FishBase* mFish[FISH_NUM];		//魚たちの配列
@@ -44,6 +46,8 @@ private:
 	const VECTOR BEFORE_DIVING_POS[FISH_NUM];	//それぞれの魚たちの座標
 	const VECTOR BEFORE_DIVING_ROTATE[FISH_NUM];//それぞれの魚たちの向き
 	const VECTOR SET_DANCING_POS[FISH_NUM];		//それぞれの魚たちのアーティスティックスイミング開始時の座標
+
+	VECTOR mWholeVelocity;//@@@
 
 	//---------------デバック用変数-------------
 	const int DEBUG_SPHERE_COLOR[FISH_NUM];		//それぞれの魚たちのDrawSphere3Dデバック用の色
