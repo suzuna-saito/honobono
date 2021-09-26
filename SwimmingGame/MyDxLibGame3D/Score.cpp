@@ -110,7 +110,7 @@ void Score::Draw(int _nowScene)
 		}
 		break;
 
-	case 4:   // リザルトシーン
+	case 5:   // リザルトシーン
 		DrawExtendGraph(RESULT_POS_X, RESULT_POS_Y, RESULT_POS_02X, RESULT_POS_02Y,
 			mScoreHandle, true);
 

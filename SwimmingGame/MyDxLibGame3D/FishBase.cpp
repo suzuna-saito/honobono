@@ -59,6 +59,6 @@ void FishBase::Draw(int _debugColor)
 
 	//------------------------------------------------
 	//デバック用DrawSphere3D
-	DrawSphere3D(mPos, DEBUG_RADIUS, SPHERE_POLYGON_FINENESS, _debugColor, _debugColor, false);
+	//DrawSphere3D(mPos, DEBUG_RADIUS, SPHERE_POLYGON_FINENESS, _debugColor, _debugColor, false);
 }
 

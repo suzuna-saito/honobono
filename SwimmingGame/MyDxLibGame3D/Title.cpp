@@ -6,6 +6,10 @@
 #include "Play.h"
 #include "Training.h"
 
+
+
+const float RAIT = 0.57;
+
 /// <summary>
 /// コンストラクタ
 /// </summary>
@@ -56,6 +60,12 @@ Title::Title()
 	, mTeamNamePosY(920)
 {
 	SetScene(title);
+
+	ChangeLightTypeDir(VGet(RAIT, RAIT, RAIT));
+	SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0));
+	SetLightSpcColor(GetColorF(0.33f, 0.33f, 0.33f, 0));
+	SetLightAmbColor(GetColorF(0.57f, 0.57f, 0.57f, 0));
+
 	// モデルをロード
 	mFishModel = MV1LoadModel("data/model/TitleAsset/Fish.mqo");
 	mTextModel[0] = MV1LoadModel("data/model/TitleAsset/TitleText.mqo");

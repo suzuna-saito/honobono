@@ -10,6 +10,7 @@
 #include "Score.h"
 #include "Common.h"
 #include "Promotion.h"
+#include "Input.h"
 
 
 // コンストラクタ
@@ -106,6 +107,8 @@ Play::~Play()
 /// <return>シーンのポインタ</return>
 SceneBase* Play::Update()
 {
+	UpdateKey();
+
 	ChangeLightTypePoint(VGet(0.0f, 60.0f, 0.0f), 200.0f, 0.0f, 0.009f,0.0f);
 
 	if (!mPlayBGM1->CheckBGM()
@@ -150,7 +153,7 @@ SceneBase* Play::Update()
 	}
 
 	// リズムボタンUI更新
-	timing->Update(mNowSound->CheckBGM());
+	timing->Update(mNowSound->CheckBGM(),GetScene());
 	// スコアの割合をもらってくる
 	mScoreRadius = timing->GetRadius();
 	// スコアのフラグをもらう
@@ -166,7 +169,7 @@ SceneBase* Play::Update()
 	if (startCount >= 30)
 	{
 		// 魚の制御
-		fishManager->Updata(timing->GetJudg(), time->GetDeltaTime(), fishManager->GetDanceStartFlag(),GetScene());
+		fishManager->Updata(timing->GetJudg(), fishManager->GetDanceStartFlag(),GetScene());
 
 		//andou
 		//ダンスを始めてもいいかのフラグがtrueだったとき
@@ -215,16 +218,16 @@ void Play::Draw()
 	int purpleColor = GetColor(128, 0, 128);		//右上の色
 	int lightBlueColor = GetColor(0, 255, 255);		//右下の色
 
-	//プールの真ん中
-	DrawLine3D(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, LINE_Y, 0.0f), redColor);
-	//プールの左上端
-	DrawLine3D(VGet(-LINE_X, 0.0f, LINE_Z), VGet(-LINE_X, LINE_Y, LINE_Z), greenColor);
-	//プールの左下端
-	DrawLine3D(VGet(-LINE_X, 0.0f, -LINE_Z), VGet(-LINE_X, LINE_Y, -LINE_Z), yellowColor);
-	//プールの右上端
-	DrawLine3D(VGet(LINE_X, 0.0f, LINE_Z), VGet(LINE_X, LINE_Y, LINE_Z), purpleColor);
-	//プールの右下端
-	DrawLine3D(VGet(LINE_X, 0.0f, -LINE_Z), VGet(LINE_X, LINE_Y, -LINE_Z), lightBlueColor);
+	////プールの真ん中
+	//DrawLine3D(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, LINE_Y, 0.0f), redColor);
+	////プールの左上端
+	//DrawLine3D(VGet(-LINE_X, 0.0f, LINE_Z), VGet(-LINE_X, LINE_Y, LINE_Z), greenColor);
+	////プールの左下端
+	//DrawLine3D(VGet(-LINE_X, 0.0f, -LINE_Z), VGet(-LINE_X, LINE_Y, -LINE_Z), yellowColor);
+	////プールの右上端
+	//DrawLine3D(VGet(LINE_X, 0.0f, LINE_Z), VGet(LINE_X, LINE_Y, LINE_Z), purpleColor);
+	////プールの右下端
+	//DrawLine3D(VGet(LINE_X, 0.0f, -LINE_Z), VGet(LINE_X, LINE_Y, -LINE_Z), lightBlueColor);
 }
 
 

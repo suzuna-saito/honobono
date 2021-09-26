@@ -119,7 +119,7 @@ Timing::~Timing()
 //-----------------------------------------------------------------------------
 // @brief  更新.
 //-----------------------------------------------------------------------------
-void Timing::Update(bool _sound)
+void Timing::Update(bool _sound,int _nowScene)
 {
 	// 判定
 	mJudge = none;
@@ -127,26 +127,44 @@ void Timing::Update(bool _sound)
 	// 曲の経過時間をカウント
 	mTimeCount++;
 
-	// カウント
-	// 急に始まらないようスタート時間まで待ってからスタート
-	if (mTimeCount > mNotesStartTime && mNoteCount != NOTE_NUM)
+
+	// 今のシーンがプレイだったらゲージを早くする処理をする
+	switch (_nowScene)
 	{
+	case 2:      // 練習の時一定のリズムで出るようにする
+		mNoteCount = 0;
+
 		// 円が出現するまでの時間をカウント
 		mCount++;
 		// カウントを減らしていく
 		mDifficultyCount++;
-	}
 
-	// 終盤だったらゲージを出す速さ,ゲージが縮む速さを少し早くする
-	if (mDifficultyCount >= DIFFICULT_TIME && mDifficultyCount < END_TIME)
-	{
-		// だんだん縮む速さを上げる
-		mFrameShrinkPoint = 0.0020f;
-	}
-	// サビだったらゲージを出す速さ,ゲージが縮む速さを割と早くする
-	else if (mDifficultyCount >= END_TIME)
-	{
-		mFrameShrinkPoint = 0.00150f;
+		break;
+
+	case 3:      // プレイ
+
+		// 急に始まらないようスタート時間まで待ってからスタート
+		if (mTimeCount > mNotesStartTime && mNoteCount != NOTE_NUM)
+		{
+			// 円が出現するまでの時間をカウント
+			mCount++;
+			// カウントを減らしていく
+			mDifficultyCount++;
+		}
+
+		// 終盤だったらゲージを出す速さ,ゲージが縮む速さを少し早くする
+		if (mDifficultyCount >= DIFFICULT_TIME && mDifficultyCount < END_TIME)
+		{
+			// だんだん縮む速さを上げる
+			mFrameShrinkPoint = 0.0020f;
+		}
+		// サビだったらゲージを出す速さ,ゲージが縮む速さを割と早くする
+		else if (mDifficultyCount >= END_TIME)
+		{
+			mFrameShrinkPoint = 0.00150f;
+		}
+
+		break;
 	}
 
 	// 次のノーツを格納するときが来たら
@@ -170,8 +188,6 @@ void Timing::Update(bool _sound)
 			mGageCY = mLeftGagePosY;
 		}
 	}
-
-	UpdateKey();
 
 	// スコアフラグを「偽」にする
 	mScoreFlag = false;
@@ -394,7 +410,7 @@ void Timing::Draw()
 		DrawRotaGraph(mGageCX, mGageCY - mEffectPosY, 1, 0, mJudgeImg, true, false, false);
 	}
 	// 再生されている音楽の時間の確認（デバッグ用）
-	DrawFormatString(0, 300, mWhite, "Time:%d", mNoteTime[mNoteCount]);
+	//DrawFormatString(0, 300, mWhite, "Time:%d", mNoteTime[mNoteCount]);
 }
 
 
@@ -471,4 +487,11 @@ void Timing::CSVRead()
 	}
 	// ファイルを閉じる
 	fclose(mFilePointer);
+}
+
+void Timing::Init()
+{
+	mTimingDrawFlag = false;
+	mEffectFlag = false;
+	mReactionFlag = true;
 }

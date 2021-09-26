@@ -109,6 +109,9 @@
     <ClCompile Include="Effect.cpp">
       <Filter>ソース ファイル\UI\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="Training.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -182,6 +185,9 @@
     </ClInclude>
     <ClInclude Include="Promotion.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Training.h">
+      <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

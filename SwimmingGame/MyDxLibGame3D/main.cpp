@@ -27,6 +27,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	/*SetGraphMode( SCREEN_W, SCREEN_H, 32);*/
 	//ChangeWindowMode(TRUE);
 
+	//現在のミリ秒を取得
+	double nextTime = GetNowCount();
+
 	InitializeEffekseer();
 
 	// シーン管理するクラスを生成
@@ -53,6 +56,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		// 裏画面の内容を表画面に反映させる
 		ScreenFlip();
 
+		// 1フレームにかける時間
+		//1/ 60秒 = 約16.66ミリ秒
+		const float TimeSpentFrame = 16.66f;
+
+		//ループが終わる直前までの時間
+		nextTime += TimeSpentFrame;
+
+		//1フレームに16.66ミリ秒かかっていなければ待つ
+		if (nextTime > GetNowCount())
+		{
+			//ループの開始からループが終わる直前までの時間を計測
+			WaitTimer((int)nextTime - GetNowCount());
+		}
+		
 		ProcessMessage();
 	}
 

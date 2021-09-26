@@ -166,7 +166,7 @@ private:            // 長くなってきたので説明を横に置きました。
 	double mAngleRotate;          // エフェクトが開店する時にプラスする値
 	bool mEffectFlag;             // エフェクトを発生させるフラグ
 
-	//  サウンド
+	// サウンド
 	class Sound* mPerfectSound;       // パーフェクトの時になる効果音
 	class Sound* mGoodSound;          // グッドの時になる効果音
 	class Sound* mBadSound;           // バッドの時になる効果音

@@ -68,6 +68,7 @@ Training::Training()
 	camera->TrainingCameraUpdate();
 	camera->CameraSet();
 
+
 	// サウンドの生成
 	mPlayBGM1 = new Sound("data/newSound/bgm/kari.mp3");
 
@@ -106,6 +107,7 @@ Training::~Training()
 /// <return>シーンのポインタ</return>
 SceneBase* Training::Update()
 {
+
 	UpdateKey();
 
 	// 音楽の再生
@@ -140,7 +142,7 @@ SceneBase* Training::Update()
 	}
 
 	// 早送り
-	if (mNowDia != stop)
+	if ((mNowDia != stop && mPerfectCount != 5) || (mNowDia >= endOne && mPerfectCount == 5))
 	{
 		mFastForwardDrawFlag = true;
 
@@ -169,10 +171,11 @@ SceneBase* Training::Update()
 	{
 		timing->Init();
 		// シーン遷移前のセリフが出るように設定する
-		mNowDia = endOne;
+		mNowDia = endZero;
 
 		mPlayDrawFlag = false;
 		mEndDrawFlag = true;
+		mTime = FIRST_TIME+20;
 	}
 
 	// 魚の更新
@@ -375,13 +378,15 @@ SceneBase* Training::Update()
 		{
 		case endZero:
 			DeleteGraph(mDrawReaction);
-			DeleteGraph(mDrawDia);
 			mNowDia = endOne;
+			DeleteGraph(mDrawDia);
+			mTime = FIRST_TIME;
 			break;
 		case endOne:
-			DeleteGraph(mDrawReaction);
 			mNowDia = endTwo;
+			DeleteGraph(mDrawReaction);
 			mDrawDia = LoadGraph("data/model/TrainingAsset/End01.png");
+			mTime = 30;
 			break;
 		case endTwo:
 			mNowDia = endThree;
@@ -430,13 +435,13 @@ void Training::Draw()
 		DrawGraph(TEXT_POS_X, TEXT_POS_Y, mDrawDia, TRUE);
 
 		// 早送りボタンが押されていなかったら
-		if (mFastForwardDrawFlag && mPerfectCount != 5)
+		if (mFastForwardDrawFlag && mNowDia != endZero)
 		{
 			// 矢印（→）キーで早送りテキスト
 			DrawGraph(SKIP_POS_X, SKIP_POS_Y, mFastForward, TRUE);
 		}
 		// 押されていたら
-		else if (!mFastForwardDrawFlag && mPerfectCount != 5)
+		else if (!mFastForwardDrawFlag && mNowDia != endZero)
 		{
 			// 早送り中テキスト
 			DrawGraph(SKIP_POS_X, SKIP_POS_Y, mNowFastForward, TRUE);

@@ -123,7 +123,7 @@ void FishManager::CreatFish()
 	for (int i = 0; i < FISH_NUM; i++)
 	{
 		//魚たちの生成
-		mFish[i] = new Fish(mSourceModelHandle,
+		mFish[i] = new Fish(mPlayerModelHandle,
 			BEFORE_DIVING_POS[i], BEFORE_DIVING_ROTATE[i], SET_DANCING_POS[i]);
 	}
 }
@@ -149,7 +149,7 @@ void FishManager::DestroyFish()
 /// <summary>
 /// 更新関数
 /// </summary>
-void FishManager::Updata(int _judge, float _delta, bool _startflag, int _nowScene)
+void FishManager::Updata(int _judge, bool _startflag, int _nowScene)
 {
 	for (int i = 0; i < FISH_NUM; i++)
 	{
@@ -176,7 +176,7 @@ void FishManager::Updata(int _judge, float _delta, bool _startflag, int _nowScen
 				mFish[i]->SetTempAimlessVelocity(MoveGroupAimlessWandering(mFish[5]));
 			}
 
-			mFish[i]->Updata(_judge, _delta, _startflag, _nowScene);
+			mFish[i]->Updata(_judge, _startflag, _nowScene);
 		}
 	}
 }
@@ -195,7 +195,7 @@ void FishManager::Draw()
 
 		//--------------------------------
 		//全体の移動するときの当たり判定を可視化するためのデバック用描画
-		DrawSphere3D(mFish[4]->GetPos(), 10.f, 5, PINK_COLOR, PINK_COLOR, false);
+		//DrawSphere3D(mFish[4]->GetPos(), 10.f, 5, PINK_COLOR, PINK_COLOR, false);
 	}
 }
 
