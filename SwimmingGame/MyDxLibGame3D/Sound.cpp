@@ -4,7 +4,7 @@
 #include "Sound.h"
 
 // ’è”
-const int VOLUME = 100;
+const int VOLUME = 130;
 
 
 /// <summary>

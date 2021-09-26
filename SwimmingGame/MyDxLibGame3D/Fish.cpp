@@ -43,7 +43,7 @@ Fish::~Fish()
 /// <summary>
 /// 更新関数
 /// </summary>
-void Fish::Updata(int _judge, float _deltaTime, bool _startflag, int _nowScene)
+void Fish::Updata(int _judge, bool _startflag, int _nowScene)
 {
 	// 今のシーンがトレーニングか、プレイかで更新する処理を変える
 	switch (_nowScene)
@@ -54,7 +54,7 @@ void Fish::Updata(int _judge, float _deltaTime, bool _startflag, int _nowScene)
 
 	case 3:  // プレイシーン
 		// ジャンプの処理
-		JumpUpdata(_judge, _startflag, _deltaTime);
+		JumpUpdata(_judge, _startflag);
 
 		// 飛び込みが終わったとき
 		if (mJumpedInFlag)
@@ -80,7 +80,7 @@ void Fish::Updata(int _judge, float _deltaTime, bool _startflag, int _nowScene)
 /// <summary>
 /// プレイシーンのジャンプの更新を入れた関数 : @saito
 /// </summary>
-void Fish::JumpUpdata(int _judge, bool _startflag, float _deltaTime)
+void Fish::JumpUpdata(int _judge, bool _startflag)
 {
 	// ボタンが押されたら、またはtimingゲージが縮小し終わったらジャンプする（ゲージが表示されてなかったらジャンプしない）
 	if (((Key[KEY_INPUT_RIGHT] == 1 || Key[KEY_INPUT_LEFT] == 1) && mJump->GetIsGround() && _judge != 4 )||

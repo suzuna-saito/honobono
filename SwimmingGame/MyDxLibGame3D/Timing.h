@@ -21,7 +21,7 @@ public:
 	/// <summary>
 	/// XV
 	/// </summary>
-	void Update(bool _sound);
+	void Update(bool _sound, int _nowScene);
 
 	/// <summary>
 	/// •`‰æ
@@ -40,6 +40,11 @@ public:
 	/// </summary>
 	void CSVRead();
 
+
+	/// <summary>
+	/// ‰Šú‰»
+	/// </summary>
+	void Init();
 
 	// ”»’è
 	enum judgement

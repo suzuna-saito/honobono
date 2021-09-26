@@ -24,7 +24,7 @@ public:
 	void CreatFish();				//魚たちの生成
 	void DestroyFish();				//魚たちの削除
 
-	void Updata(int _judge, float _deltaTime, bool _startflag, int _nowScene);					//更新関数
+	void Updata(int _judge, bool _startflag, int _nowScene);					//更新関数
 
 	void Draw();					//描画関数
 

@@ -4,6 +4,7 @@
 #include "Sound.h"
 #include "Input.h"
 #include "Play.h"
+#include "Training.h"
 
 /// <summary>
 /// コンストラクタ
@@ -113,7 +114,8 @@ SceneBase* Title::Update()
 		mTitleBGM->StopMusic();
 		// 条件を満たしていたら次のシーンを生成してそのポインタを返す
 		//return new Tutorial();
-		return new Play();
+		//return new Play();
+		return new Training();
 
 	}
 	else if (mCursorPoint == EXIT && Key[KEY_INPUT_SPACE] == 1)
