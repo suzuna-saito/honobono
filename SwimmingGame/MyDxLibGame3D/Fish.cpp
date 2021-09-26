@@ -25,8 +25,8 @@ Fish::Fish(int _sourceModelHandle,
 	//動いてほしいかどうかをenumで判定する
 	mMoveState = NotMove;
 
-	//
-	mDanceState = NoStates;//@@@
+	////
+	//mDanceState = NoStates;//@@@
 
 	//ジャンプのクラスをインスタンス化
 	mJump = new Jump();
@@ -140,27 +140,16 @@ void Fish::JumpUpdata(int _judge, bool _startflag, float _deltaTime)
 /// </summary>
 void Fish::DanceUpdata()
 {
-	////@@@
-	//switch (mDanceState)
-	//{
-	//case NoStates:
-	//	break;
-
-	//case SetPostion:
-	//		break;
-
-	//case AimlessWandering:
-	//	break;
-
-	//default:
-	//	break;
-	//}
-	if (mSetDanceFlag)
+	//もしダンスがスタートしていたら
+	if (mDanceStartFlag)
 	{
+		//
 		mVelocity = mTempAimlessVelocity;
 	}
+	//スタートしていなければ
 	else
 	{
+		//目的の場所まで移動する関数が返す値をvelocityに入れる
 		mVelocity = MoveTargetPos(mSetDancePos, mPos, mRotate);
 	}
 }
@@ -187,16 +176,9 @@ VECTOR Fish::MoveTargetPos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotat
 	{
 		//動いてほしくないのでNotMoveにする
 		mMoveState = NotMove;
-		////ダンスを始めるために
-		//mDanceStartCount++;
-		////ダンスカウントが100以上の時
-		//if (mDanceStartCount >= WAIT_DANCE_TIME_COUNT)
-		//{
-		//	//ダンスを始められるのでtrueにする
-		//	mSetDanceFlag = true;
-		//}
 
-		mSetDanceFlag = true;//@@@
+		//ダンスを始めるためにフラグをtrueにする
+		mDanceStartFlag = true;
 
 		return mTempVelocity;
 	}
@@ -218,31 +200,30 @@ VECTOR Fish::MoveTargetPos(const VECTOR _SetPos, VECTOR& _NowPos, VECTOR& _Rotat
 /// <returns>止まっていい時はtrue、止まってはいけない時はfalse</returns>
 bool Fish::CheckStopped(const VECTOR _targetPos, const VECTOR _nowPos)
 {
-
 	/*-----------モデルを止めるために停止範囲の距離の計算----------*/
+	VECTOR posToSetPos = VSub(_targetPos, _nowPos);//fishの今の座標から目標の座標までのベクトルを算出
+	float PosSize = VSquareSize(posToSetPos);//posToSetPosを二乗の距離の値にする(ベクトルではなくfloatにする)
+	/*
+	* VSizeを使うと処理が重くなるため値の処理が重くならないようにVSquareSize()を使用する
+	*/
 
-	VECTOR posToSetPos = VSub(_targetPos, _nowPos);
-	VECTOR normPosToSetPos = VNorm(posToSetPos);
+	VECTOR setPosToPos = VSub(_nowPos, _targetPos);//fishの目標の座標から今の座標までのベクトルを算出
+	VECTOR normSetPosToPos = VNorm(setPosToPos);//setPosToPosのベクトルを正規化
+	VECTOR StopRange = VScale(normSetPosToPos, DANCE_STOP_RANGE);//normSetPosToPosのベクトルの大きさを1から0.25にする
 
-	//mPosからmSetDancePosまでの距離の計算
-	float PosSize = VSquareSize(posToSetPos);
+	float mStopRadiusSize = VSquareSize(StopRange);//StopRangeをベクトルから距離にする
 
-	VECTOR StopRange = VScale(normPosToSetPos, DANCE_STOP_RANGE);
-
-	//mSetDancePosからmStoprangeまでの距離の計算
-	VECTOR normSetPosToPos = VNorm(VSub(_nowPos, _targetPos));
-	StopRange = VScale(normSetPosToPos, DANCE_STOP_RANGE);
-
-	float mStopRadiusSize = VSquareSize(StopRange);
-
-	//mSetPosからmPosまでのベクトルの長さ(値は2乗)が
-	//mSetPosからmStopRadiusまでのベクトルの長さ(値は2乗)より
-	//大きい時に移動させる
-	if (PosSize > mStopRadiusSize)
+	/*
+	* mSetPosからmPosまでのベクトルの長さ(値は2乗)が
+	* mSetPosからmStopRadiusまでのベクトルの長さ(値は2乗)より
+	* 大きい時、移動しなければならないのでtrue
+	* 小さい時は移動する必要はないのでfalseを返す
+	*/
+	if (PosSize >= mStopRadiusSize)
 	{
 		return false;
 	}
-	else if (PosSize <= mStopRadiusSize)
+	else if (PosSize < mStopRadiusSize)
 	{
 		return true;
 	}

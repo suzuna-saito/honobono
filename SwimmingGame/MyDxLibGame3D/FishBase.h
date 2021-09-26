@@ -37,9 +37,7 @@ public:
 	const VECTOR& GetDancePos()const { return mSetDancePos; }
 
 	//ダンス集合時のポジションにいるときのフラグのgetter
-	const bool GetDancePosFlag() { return mSetDanceFlag; }
-
-	void SetAssemblyDanceFlag(const bool _assemblyFlag) {};//@@@@
+	const bool GetDancePosFlag() { return mDanceStartFlag; }
 
 	//動いているかどうかのステータス
 	enum MoveState
@@ -48,13 +46,8 @@ public:
 		NotMove,            //動いていない
 	};
 
-	//@@@
-	enum DanceState
-	{
-		NoStates,
-		SetPostion,
-		AimlessWandering,
-	};
+	//動いているかどうかのステータスのgetter
+	const MoveState GetMoveState()const { return mMoveState; }
 
 protected:
 
@@ -63,17 +56,13 @@ protected:
 	VECTOR	mPos;				// 座標
 	VECTOR	mVelocity;			// 実際に移動する移動ベクトル
 	VECTOR  mTempVelocity;      // 仮の移動ベクトル
-	VECTOR  mTempAimlessVelocity;
+	VECTOR  mTempAimlessVelocity;  //ダンス中の仮の移動ベクトル
 	VECTOR	mRotate;			// モデルが向いている角度
 	VECTOR	mSetDancePos;		//シンクロ時最も多いポジション
 
 	MoveState mMoveState;     //移動しているかどうかのステータス
 
-	DanceState mDanceState;//@@@
-
-	bool mSetDanceFlag;   //アーティスティックスイミングが始められる時はtrue、始まらないときはfalse
-
-	int mDanceStartCount;
+	bool mDanceStartFlag;   //アーティスティックスイミングが始められる時はtrue、始まらないときはfalse
 
 	//float mWaveRadius;　　　　　　// ウェーブ処理をするためのラジアン角を入れる変数、未実装 andou
 };
