@@ -30,19 +30,31 @@ public:
 	void SetRotate(const VECTOR _setRotate) { mRotate = _setRotate; }
 	const VECTOR& GetRotate()const { return mRotate; }
 
+	//移動ベクトルのsetter
+	void SetTempAimlessVelocity(const VECTOR _setVelo) { mTempAimlessVelocity = _setVelo; }
+
 	//アーティスティックスイミング開始時の座標のgetter
 	const VECTOR& GetDancePos()const { return mSetDancePos; }
 
 	//ダンス集合時のポジションにいるときのフラグのgetter
-	const bool GetSetDancePosFlag() { return mSetDanceFlag; }
+	const bool GetDancePosFlag() { return mSetDanceFlag; }
 
+	void SetAssemblyDanceFlag(const bool _assemblyFlag) {};//@@@@
 
+	//動いているかどうかのステータス
 	enum MoveState
 	{
 		NowMove,            //今動いている
 		NotMove,            //動いていない
 	};
 
+	//@@@
+	enum DanceState
+	{
+		NoStates,
+		SetPostion,
+		AimlessWandering,
+	};
 
 protected:
 
@@ -51,13 +63,19 @@ protected:
 	VECTOR	mPos;				// 座標
 	VECTOR	mVelocity;			// 実際に移動する移動ベクトル
 	VECTOR  mTempVelocity;      // 仮の移動ベクトル
+	VECTOR  mTempAimlessVelocity;
 	VECTOR	mRotate;			// モデルが向いている角度
 	VECTOR	mSetDancePos;		//シンクロ時最も多いポジション
 
 	MoveState mMoveState;     //移動しているかどうかのステータス
+
+	DanceState mDanceState;//@@@
+
 	bool mSetDanceFlag;   //アーティスティックスイミングが始められる時はtrue、始まらないときはfalse
 
 	int mDanceStartCount;
+
+	//float mWaveRadius;　　　　　　// ウェーブ処理をするためのラジアン角を入れる変数、未実装 andou
 };
 
 #endif // !_FISHBASE_H_

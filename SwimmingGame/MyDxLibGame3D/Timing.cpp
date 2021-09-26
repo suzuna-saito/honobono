@@ -4,13 +4,6 @@
 #include "Sound.h"
 #include "Time.h"
 
-
-// 定数
-int END_TIME = 3210;               // ゲージを出さなくする
-
-int NORMAL_TIME = END_TIME / 2;    // ゲージがちょっと早くなるタイミング
-int DIFFICULT_TIME = END_TIME / 3; // ゲージが一番早くなるタイミング
-
 //-----------------------------------------------------------------------------
 // @brief  コンストラクタ.
 //-----------------------------------------------------------------------------
@@ -20,22 +13,23 @@ Timing::Timing()
 	, mReactionFlag(true)
 	, mScoreFlag(false)
 	, mScoreRadius(0)
+	, mScorePlus(1)
 	, mGageX(50)
 	, mGageY(350)
 	, mGageCX(0)
 	, mGageCY(0)
 	, mRightGagePosX(1160)
-	, mRightGagePosY(900)
+	, mRightGagePosY(830)
 	, mLeftGagePosX(760)
-	, mLeftGagePosY(900)
+	, mLeftGagePosY(830)
 	, mFreamX(490)
 	, mFreamY(180)
 	, mRadius(0)
 	, mGageRadius(20)
 	, mRadiusInit(0)
 	, mMaxRadius(75)
-	, mPerfectSize(0.30f)
-	, mBadSize(0.50f)
+	, mPerfectSize(0.40f)
+	, mBadSize(0.70f)
 	, mReactionX(520)
 	, mReactionY(200)
 	, mReactionCount(0)
@@ -57,20 +51,23 @@ Timing::Timing()
 	, mCount(0)
 	, mBaseTimePoint(100)
 	, mBaseTime(30)
-	, mRandomTime(0)
-	, mRandomFlag(true)
 	, mTimeCount(0)
-	, mNotesStartTime(30)
-	, mNotesEndTime(END_TIME)
+	, mNotesStartTime(180)
+	, mNotesEndTime(18)
 	, mJudge(none)
-	, mFrameSize(0.60f)
-	, mFrameShrinkPoint(0.00050f)
+	, mFrameSize(1)
+	, mFrameShrinkPoint(0.0010f)
 	, mFrameShrinkGage(0.250f)
-	, mFrameSizeInit(0.60f)
+	, mFrameSizeInit(1)
 	, mFrameMoveInit(0.010f)
 	, mFrameMovePoint(0.010f)
 	, mBaseGagePoint(1)
-	, mDifficultyCount(END_TIME)
+	, mDifficultyCount()
+	, mNoteCount(0)
+	, mNoteTime{30, 30, 30,250,100,90,80,10,10,10,10,10,10,10,40,60,80,80}
+	, END_TIME(1700)
+	, DIFFICULT_TIME(1150)
+	, NOTE_NUM(18)
 {
 	// 画像読み込み
 	mTimingImg[0] = LoadGraph("data/newUI/RightTiming.png");      // 右
@@ -94,6 +91,7 @@ Timing::Timing()
 
 	fopen_s(&mFilePointer, "data/csv/bgm_1.csv", "r");
 	CSVRead();
+
 }
 
 
@@ -126,50 +124,35 @@ void Timing::Update(bool _sound)
 	// 判定
 	mJudge = none;
 
-	// カウントを減らしていく
-	mDifficultyCount--;
-
-	// 残りが2分の1だったらゲージを出す速さ,ゲージが縮む速さを少し早くする
-	if (mDifficultyCount <= NORMAL_TIME && mDifficultyCount > DIFFICULT_TIME)
-	{
-		mBaseTimePoint = 60;
-		mBaseTime = 15;
-
-		// だんだん縮む速さを上げる
-		if (mFrameShrinkPoint <= 0.001)
-		{
-			mFrameShrinkPoint += 0.0001;
-		}
-	}
-	// 残りが3分の1だったらゲージを出す速さ,ゲージが縮む速さを割と早くする
-	if (mDifficultyCount <= DIFFICULT_TIME)
-	{
-		mBaseTimePoint = 20;
-		mBaseTime = 0;
-
-		// だんだん縮む速さを上げる
-		if (mFrameShrinkPoint <= 0.0015)
-		{
-			mFrameShrinkPoint += 0.0001;
-		}
-	}
-
-	// カウント
-	// 急に始まらないようスタート時間まで待ってからスタート
-	if (mTimeCount > mNotesStartTime)
-	{
-		// 円が出現するまでの時間をカウント
-		mCount++;
-	}
-
 	// 曲の経過時間をカウント
 	mTimeCount++;
 
-	// 次のノーツを格納するときが来たら
-	if (mRandomFlag)
+	// カウント
+	// 急に始まらないようスタート時間まで待ってからスタート
+	if (mTimeCount > mNotesStartTime && mNoteCount != NOTE_NUM)
 	{
-		// Randomに次の時間を格納する
-		mRandomTime = GetRand(mBaseTimePoint) + mBaseTime;
+		// 円が出現するまでの時間をカウント
+		mCount++;
+		// カウントを減らしていく
+		mDifficultyCount++;
+	}
+
+	// 終盤だったらゲージを出す速さ,ゲージが縮む速さを少し早くする
+	if (mDifficultyCount >= DIFFICULT_TIME && mDifficultyCount < END_TIME)
+	{
+		// だんだん縮む速さを上げる
+		mFrameShrinkPoint = 0.0020f;
+	}
+	// サビだったらゲージを出す速さ,ゲージが縮む速さを割と早くする
+	else if (mDifficultyCount >= END_TIME)
+	{
+		mFrameShrinkPoint = 0.00150f;
+	}
+
+	// 次のノーツを格納するときが来たら
+	if (mCount == mNoteTime[mNoteCount])
+	{
+		mTimingDrawFlag = true;
 		// フレームを出す場所は右か左かを決める
 		mImgDirection = GetRand(mBaseGagePoint);
 
@@ -186,16 +169,6 @@ void Timing::Update(bool _sound)
 			mGageCX = mLeftGagePosX;
 			mGageCY = mLeftGagePosY;
 		}
-
-		// ノーツを格納しないにする
-		mRandomFlag = false;
-	}
-
-	// カウントがRandomに入れたカウントに来たとき、曲が終わっていなければ
-	if (mCount == mRandomTime && _sound)
-	{
-		// タイミングゲージ描画フラグを「真」にする
-		mTimingDrawFlag = true;
 	}
 
 	UpdateKey();
@@ -241,7 +214,7 @@ void Timing::Update(bool _sound)
 					mJudge = bad;
 				}
 				// グッドの条件
-				if (mFrameSize > mPerfectSize && mFrameSize < mBadSize)
+				else if (mFrameSize > mPerfectSize && mFrameSize < mBadSize)
 				{
 					// エフェクト画像をグッドエフェクトにする
 					mEffectImg = mGoodEffectImg;
@@ -253,12 +226,11 @@ void Timing::Update(bool _sound)
 					mJudgeImg = mGoodImg;
 					// 他にリアクションを判定しない
 					mReactionFlag = false;
-
 					// good判定
 					mJudge = good;
 				}
 				// パーフェクトの条件
-				if (mFrameSize < mPerfectSize)
+				else if (mFrameSize < mPerfectSize)
 				{
 					// エフェクト画像をパーフェクトエフェクトにする
 					mEffectImg = mPerfectEffectImg;
@@ -288,7 +260,6 @@ void Timing::Update(bool _sound)
 				mJudgeImg = mBadImg;
 				// 他にリアクションを判定しない
 				mReactionFlag = false;
-
 				// 何も押されなかった判定
 				mJudge = notDone;
 			}
@@ -301,23 +272,29 @@ void Timing::Update(bool _sound)
 		// スコアを入れられるなら
 		if (mScoreFlag)
 		{
-			// バッドだったら
-			if (mJudge == bad || mJudge == notDone)
+			// バッドまたは何もしていないだったら
+			if (mJudge == bad || mJudge == notDone || mJudge == none)
 			{
 				// スコアの割合を0にする
 				mScoreRadius = 0;
+				// スコアの加算倍率を元に戻す
+				mScorePlus = 1;
 			}
 			// パーフェクトだったら
 			else if(mJudge == perfect)
 			{
 				// スコアの割合を100にする
-				mScoreRadius = 100;
+				mScoreRadius = 100 * mScorePlus;
+				// スコアの加算倍率を0.2増やす
+				mScorePlus += 0.20f;
 			}
 			// グッドだったら
 			else if (mJudge == good)
 			{
 				// スコアの割合を50にする
-				mScoreRadius = 50;
+				mScoreRadius = 50 * mScorePlus;
+				// スコアの加算倍率を0.1増やす
+				mScorePlus += 0.10f;
 			}
 		}
 		//}
@@ -335,7 +312,10 @@ void Timing::Update(bool _sound)
 			// 判定はバッドではない
 			mJudge = none;
 			// ノーツの次時間を格納できる
-			mRandomFlag = true;
+			if (mNoteCount < NOTE_NUM)
+			{
+				mNoteCount++;
+			}
 			// ノーツまでのカウントを初期化
 			mCount = mCountInit;
 
@@ -373,10 +353,6 @@ void Timing::Update(bool _sound)
 //-----------------------------------------------------------------------------
 void Timing::Draw()
 {
-	// 右と左のゲージ画像を描画
-	DrawRotaGraph(mRightGagePosX, mRightGagePosY, 1, 0, mTimingImg[0], true, false, false);
-	DrawRotaGraph(mLeftGagePosX, mLeftGagePosY, 1, 0, mTimingImg[1], true, false, false);
-
 	// タイミングゲージを描画するフラグが「真」となったら
 	if (mTimingDrawFlag)
 	{
@@ -399,6 +375,10 @@ void Timing::Draw()
 		}
 	}
 
+	// 右と左のゲージ画像を描画
+	DrawRotaGraph(mRightGagePosX, mRightGagePosY, 1, 0, mTimingImg[0], true, false, false);
+	DrawRotaGraph(mLeftGagePosX, mLeftGagePosY, 1, 0, mTimingImg[1], true, false, false);
+
 	/*DrawFormatString(200, 200, mWhite, "%d", mRadius);*/
 
 	// エフェクトのフラグが「真」のとき
@@ -414,7 +394,7 @@ void Timing::Draw()
 		DrawRotaGraph(mGageCX, mGageCY - mEffectPosY, 1, 0, mJudgeImg, true, false, false);
 	}
 	// 再生されている音楽の時間の確認（デバッグ用）
-	DrawFormatString(0, 300, mWhite, "Time:%d", mRandomTime);
+	DrawFormatString(0, 300, mWhite, "Time:%d", mNoteTime[mNoteCount]);
 }
 
 

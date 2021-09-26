@@ -18,6 +18,8 @@ FishBase::FishBase(int _sourceModelHandle)
 	, mTempVelocity(ZERO_VECTOR)
 	, mSetDanceFlag(false)
 	, mDanceStartCount(0)
+	//, mWaveRadius(0.f)//andou
+	, mTempAimlessVelocity(ZERO_VECTOR)
 {
 	// 画像データの読み込み
 	mModelHandle = MV1DuplicateModel(_sourceModelHandle);
@@ -57,7 +59,6 @@ void FishBase::Draw(int _debugColor)
 
 	//------------------------------------------------
 	//デバック用DrawSphere3D
-	//DrawSphere3D(mPos, DEBUG_RADIUS, SPHERE_POLYGON_FINENESS, _debugColor, _debugColor, false);
-
+	DrawSphere3D(mPos, DEBUG_RADIUS, SPHERE_POLYGON_FINENESS, _debugColor, _debugColor, false);
 }
 

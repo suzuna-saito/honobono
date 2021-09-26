@@ -60,6 +60,7 @@ private:            // 長くなってきたので説明を横に置きました。
 	// 今の判定が何だったか
 	judgement mJudge;
 
+	int Count;
 
 	//  フラグ
 	bool mTimingDrawFlag;                 // タイミングゲージを描画するフラグ管理
@@ -111,12 +112,15 @@ private:            // 長くなってきたので説明を横に置きました。
 
 	int mBaseTime;                   // ランダムに格納する値をこれより下回らない
 	int mBaseTimePoint;              // ランダムに格納する値の引数値
-	int mRandomTime;                 // ノーツを出す次のタイミング
-	bool mRandomFlag;                // ランダムな値を格納していいかどうか
+	int mNoteTime[18];               // ノーツを出すタイミング
+	int mNoteCount;                  // ノーツを出した数
 	int mNotesStartTime;             // ノーツを開始させる時間
 	int mNotesEndTime;               // ノーツを終わらせる時間
+	const int NOTE_NUM;              // ノーツの数
 
 	int mDifficultyCount;            // 難易度を上げるカウント    
+	const int END_TIME;              // 曲の終盤に入る時間
+	const int DIFFICULT_TIME;        // 曲のサビに入る時間
 
 	//  カウント
 	int mReactionCount;              // リアクションを描画する時間をカウントする
@@ -141,6 +145,7 @@ private:            // 長くなってきたので説明を横に置きました。
 	//  スコア
 	bool mScoreFlag;        // Score処理フラグ
 	int mScoreRadius;       // スコア
+	float mScorePlus;       // スコアの加算倍率
 
 
 	//  エフェクト

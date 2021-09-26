@@ -31,9 +31,6 @@ public:
 	/// </summary>
 	VECTOR MoveTargetPos(const VECTOR _setPos, VECTOR& _nowPos, VECTOR& _rotate);
 
-	//プール内をさまよう動きをする処理
-	VECTOR MoveAimlessWandering(VECTOR& _nowPos);
-
 	/// <summary>
 	/// 止まっているときにtrue、止まっていないときにはfalseを返す
 	/// </summary>
@@ -48,8 +45,6 @@ private:
 
 	bool mJumpUpdataFlag;    // ジャンプの更新をするかどうか
 	bool mJumpedInFlag;      // ジャンプの更新が終わったかどうかを判定する変数(終わった：true、終わっていない:false)
-
-	//float mDeltaTime;
 };
 
 #endif // !_FISH_H_

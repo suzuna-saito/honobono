@@ -109,9 +109,6 @@
     <ClCompile Include="Effect.cpp">
       <Filter>ソース ファイル\UI\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="Training.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneBase.h">
@@ -177,15 +174,14 @@
     <ClInclude Include="Tutorial.h">
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Promotion.h" />
     <ClInclude Include="Score.h">
       <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
     <ClInclude Include="Effect.h">
       <Filter>ソース ファイル\UI\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="Training.h">
-      <Filter>ソース ファイル\Scene</Filter>
+    <ClInclude Include="Promotion.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
