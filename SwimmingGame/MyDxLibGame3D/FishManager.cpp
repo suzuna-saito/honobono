@@ -149,7 +149,7 @@ void FishManager::DestroyFish()
 /// <summary>
 /// XVŠÖ”
 /// </summary>
-void FishManager::Updata(int _judge, float _delta, bool _startflag)
+void FishManager::Updata(int _judge, float _delta, bool _startflag, int _nowScene)
 {
 	for (int i = 0; i < FISH_NUM; i++)
 	{
@@ -176,7 +176,7 @@ void FishManager::Updata(int _judge, float _delta, bool _startflag)
 				mFish[i]->SetTempAimlessVelocity(MoveGroupAimlessWandering(mFish[5]));
 			}
 
-			mFish[i]->Updata(_judge, _delta, _startflag);
+			mFish[i]->Updata(_judge, _delta, _startflag, _nowScene);
 		}
 	}
 }

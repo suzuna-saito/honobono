@@ -166,24 +166,24 @@ SceneBase* Play::Update()
 	if (startCount >= 30)
 	{
 		// 魚の制御
-		fishManager->Updata(timing->GetJudg(), time->GetDeltaTime(), fishManager->GetStopFlag(),GetScene());
+		fishManager->Updata(timing->GetJudg(), time->GetDeltaTime(), fishManager->GetDanceStartFlag(),GetScene());
 
 		//andou
 		//ダンスを始めてもいいかのフラグがtrueだったとき
-		if (fishManager->GetStopFlag())
+		if (fishManager->GetDanceStartFlag())
 		{
 			//ダンスを始めるまでのカウントを引いていく
-			mWaitDanceCount--;
+			//mWaitDanceCount--;
 
 			//カウントが０以下になったら
-			if (mWaitDanceCount <= 0)
-			{
+			//if (mWaitDanceCount <= 0)
+			//{
 				//飛び込む前に流れていた音楽を止める
 				mPlayBGM1->StopMusic();
 				//ダンス時の音楽を流す
 				mDancePlaySE->PlayBackBGM();
 				mNowSound = mDancePlaySE;
-			}
+			//}
 		}
 
 	}

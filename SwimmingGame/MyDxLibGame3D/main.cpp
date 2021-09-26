@@ -25,7 +25,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	SetGraphMode(SCREEN_W, SCREEN_H, 16);
 	//SetGraphMode(640, 480, 16);
 	/*SetGraphMode( SCREEN_W, SCREEN_H, 32);*/
-	ChangeWindowMode(TRUE);
+	//ChangeWindowMode(TRUE);
 
 	InitializeEffekseer();
 
