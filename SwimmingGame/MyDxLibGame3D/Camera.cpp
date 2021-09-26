@@ -14,11 +14,11 @@ const VECTOR ORIGIN_CAMERA_POS = VGet(0.0f, 0.0f, 0.0f);            // カメラ
 const VECTOR ORIGIN_CAMERA_ANGLE = VGet(0.0f, 0.0f, 0.0f);          // カメラ原点角度
 const VECTOR PLAY_CAMERA_POS[4] = { VGet(20.0f, 32.0f, -65.0f),     // 一つ目のカメラ位置
 									VGet(1.0f, 32.0f, -52.0f),		// 二つ目のカメラ位置
-									VGet(0.0f, 13.0f, 50.0f),		// 三つ目のカメラ位置
+									VGet(7.0f, 13.0f, 60.0f),		// 三つ目のカメラ位置
 									VGet(20.0f, 7.0f, 50.0f) };		// 四つ目のカメラ位置
 const VECTOR PLAY_CAMERA_ANGLE[4] = { VGet(0.50f, -0.60f, 0.0f),    // 一つ目のカメラ角度
 									  VGet(0.50f, 0.0f, 0.0f),		// 二つ目のカメラ角度
-									  VGet(0.0f, 3.210f, 0.0f),		// 三つ目のカメラ角度
+									  VGet(0.0f, 3.150f, 0.0f),		// 三つ目のカメラ角度
 									  VGet(0.0f, -2.30f, 0.0f) };	// 四つ目のカメラ角度
 
 const VECTOR TRAINING_CAMERA_POS = VGet(-0.0f, 6.0f, 18.0f);         // トレーニングシーンのカメラ位置
