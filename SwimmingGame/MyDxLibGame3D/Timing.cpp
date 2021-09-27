@@ -100,7 +100,10 @@ Timing::Timing()
 //-----------------------------------------------------------------------------
 Timing::~Timing()
 {
-	DeleteGraph(*mTimingImg);
+	for (i = 0; i < 2; i++)
+	{
+		DeleteGraph(mTimingImg[i]);
+	}
 	DeleteGraph(mFreamImg);
 	DeleteGraph(mPerfectImg);
 	DeleteGraph(mGoodImg);

@@ -99,7 +99,10 @@ Title::~Title()
 {
 	DeleteGraph(mTextTexture);
 	MV1DeleteModel(mFishModel);
-	MV1DeleteModel(*mTextModel);
+	for (i = 0; i < TEXT_NUM; i++)
+	{
+		MV1DeleteModel(mTextModel[i]);
+	}
 	DeleteGraph(mCursor);
 	DeleteGraph(mBackGroundGraph);
 	DeleteGraph(mRubiGraph);
@@ -132,6 +135,8 @@ SceneBase* Title::Update()
 	{
 		// ゲーム終了を選択したときになる効果音
 		mCancelSE->PlaySE();
+		// タイトルのBGMを止める
+		mTitleBGM->StopMusic();
 		SetScene(gameEnd);
 	}
 	

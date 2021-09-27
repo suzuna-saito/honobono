@@ -66,7 +66,7 @@ Result::Result(int* _Score)
 	, mRunkAngle(VGet(0,0.1,0))
 	, GOLD_SCORE(40000)
 	, SILVER_SCORE(30000)
-	, BRONZE_SCORE(15000)
+	, BRONZE_SCORE(0)
 	, RUNK_NUM(3)
 	, mNowMedal(bronze)
 	, mRunkEnlarged(VGet(ENLARGED, ENLARGED, ENLARGED))
@@ -128,14 +128,18 @@ Result::~Result()
 {
 	// データを消去
 	MV1DeleteModel(mFishModel);
-	MV1DeleteModel(*mTextModel);
-	MV1DeleteModel(*mRunkModel);
 	DeleteGraph(mCursor);
 	DeleteGraph(mBackGroundGraph);
 	DeleteGraph(mTexture);
-	DeleteGraph(*mRunkTexture);
+	for (i = 0; i < RUNK_NUM; i++)
+	{
+		MV1DeleteModel(mTextModel[i]);
+		MV1DeleteModel(mRunkModel[i]);
+		DeleteGraph(mRunkTexture[i]);
+	}
 	delete mResultBGM;
 	delete mResultSE;
+	delete mRestartSE;
 	delete mCancelSE;
 
 	mMedalEffect->StopEffect();
@@ -166,6 +170,8 @@ SceneBase* Result::Update()
 	{
 		// ゲーム終了を選んだ時の効果音
 		mCancelSE->PlaySE();
+		// BGMをとめる
+		mResultBGM->StopMusic();
 		// ゲームを終了させる
 		SetScene(gameEnd);
 	}
@@ -280,7 +286,7 @@ void Result::FishMove()
 void Result::Runk()
 {
 	// ランクごとのモデルを描画
-	if (mRunkScore > BRONZE_SCORE && mRunkScore < SILVER_SCORE || mRunkScore == 0)
+	if (mRunkScore > BRONZE_SCORE && mRunkScore < SILVER_SCORE)
 	{
 		MV1DrawModel(mRunkModel[2]);
 	}
