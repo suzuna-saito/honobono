@@ -5,10 +5,11 @@
 #include "Score.h"
 #include  "Input.h"
 #include "Effect.h"
-
+#include "Common.h"
 
 // 定数
 const float ENLARGED = 0.02f;
+const int TEXT_NUM = 3;
 
 
 /// <summary>
@@ -66,7 +67,7 @@ Result::Result(int* _Score)
 	, mRunkAngle(VGet(0,0.1,0))
 	, GOLD_SCORE(40000)
 	, SILVER_SCORE(30000)
-	, BRONZE_SCORE(15000)
+	, BRONZE_SCORE(0)
 	, RUNK_NUM(3)
 	, mNowMedal(bronze)
 	, mRunkEnlarged(VGet(ENLARGED, ENLARGED, ENLARGED))
@@ -134,6 +135,10 @@ Result::~Result()
 	DeleteGraph(mBackGroundGraph);
 	DeleteGraph(mTexture);
 	DeleteGraph(*mRunkTexture);
+	for (int i = 0; i < TEXT_NUM; i++)
+	{
+		MV1DeleteModel(mTextModel[i]);
+	}
 	delete mResultBGM;
 	delete mResultSE;
 	delete mCancelSE;
@@ -245,7 +250,7 @@ void Result::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mAlpha);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mTextAlpha);
 	SetFontSize(FONT_SIZE);
-	DrawString(750, 750, "Push The SPACE", GetColor(0, 0, 0));
+	DrawString(725, 800, "Press The SPACE", DARK_SLATE_GRAY);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mTextAlpha);
 
 	// スコアを描画
@@ -280,7 +285,7 @@ void Result::FishMove()
 void Result::Runk()
 {
 	// ランクごとのモデルを描画
-	if (mRunkScore > BRONZE_SCORE && mRunkScore < SILVER_SCORE || mRunkScore == 0)
+	if (mRunkScore >= BRONZE_SCORE && mRunkScore < SILVER_SCORE)
 	{
 		MV1DrawModel(mRunkModel[2]);
 	}

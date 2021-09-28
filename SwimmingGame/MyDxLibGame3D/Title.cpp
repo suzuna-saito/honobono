@@ -5,10 +5,11 @@
 #include "Input.h"
 #include "Play.h"
 #include "Training.h"
-
+#include "Common.h"
 
 
 const float RAIT = 0.57;
+const int TEXT_NUM = 3;
 
 /// <summary>
 /// コンストラクタ
@@ -99,7 +100,10 @@ Title::~Title()
 {
 	DeleteGraph(mTextTexture);
 	MV1DeleteModel(mFishModel);
-	MV1DeleteModel(*mTextModel);
+	for (int i = 0; i < TEXT_NUM; i++)
+	{
+		MV1DeleteModel(mTextModel[i]);
+	}
 	DeleteGraph(mCursor);
 	DeleteGraph(mBackGroundGraph);
 	DeleteGraph(mRubiGraph);
@@ -218,7 +222,7 @@ void Title::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mAlpha);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mTextAlpha);
 	SetFontSize(FONT_SIZE);
-	DrawString(750, 750, "Push The SPACE", GetColor(0, 0, 0));
+	DrawString(725, 800, "Press The SPACE", DARK_SLATE_GRAY);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mTextAlpha);
 }
 
