@@ -65,6 +65,13 @@ Score::Score()
 /// </summary>
 Score::~Score()
 {
+	for (i = 0; i < NUMBER_NUM; i++)
+	{
+		DeleteGraph(mNumberHandle[i]);
+	}
+	DeleteGraph(mScoreHandle);
+	DeleteGraph(mScoreBar);
+	DeleteGraph(mPlusHandle);
 }
 
 /// <summary>
