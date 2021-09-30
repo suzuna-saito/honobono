@@ -45,6 +45,7 @@ const int BROWN_COLOR = GetColor(153, 51, 0);
 const int BLUE_COLOR = GetColor(0, 0, 255);
 const int PINK_COLOR = GetColor(255, 153, 204);
 const int BLACK_COLOR = GetColor(0, 0, 0);
+const int DARK_SLATE_GRAY = GetColor(47, 79, 79);
 //-------------------------------------------------
 
 const float DANCE_VELOCITY = 0.5f;         //ˆÚ“®‚µ‚½‚Æ‚«‚ÌˆÚ“®—Ê

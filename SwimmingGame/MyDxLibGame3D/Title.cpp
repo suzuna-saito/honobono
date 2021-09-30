@@ -5,7 +5,11 @@
 #include "Input.h"
 #include "Play.h"
 #include "Training.h"
+#include "Common.h"
 
+
+const float RAIT = 0.57;
+const int TEXT_NUM = 3;
 
 /// <summary>
 /// コンストラクタ
@@ -58,6 +62,11 @@ Title::Title()
 {
 	SetScene(title);
 
+	ChangeLightTypeDir(VGet(RAIT, RAIT, RAIT));
+	SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0));
+	SetLightSpcColor(GetColorF(0.33f, 0.33f, 0.33f, 0));
+	SetLightAmbColor(GetColorF(0.57f, 0.57f, 0.57f, 0));
+
 	// モデルをロード
 	mFishModel = MV1LoadModel("data/model/TitleAsset/Fish.mqo");
 	mTextModel[0] = MV1LoadModel("data/model/TitleAsset/TitleText.mqo");
@@ -91,7 +100,7 @@ Title::~Title()
 {
 	DeleteGraph(mTextTexture);
 	MV1DeleteModel(mFishModel);
-	for (i = 0; i < TEXT_NUM; i++)
+	for (int i = 0; i < TEXT_NUM; i++)
 	{
 		MV1DeleteModel(mTextModel[i]);
 	}
@@ -127,8 +136,6 @@ SceneBase* Title::Update()
 	{
 		// ゲーム終了を選択したときになる効果音
 		mCancelSE->PlaySE();
-		// タイトルのBGMを止める
-		mTitleBGM->StopMusic();
 		SetScene(gameEnd);
 	}
 	
@@ -215,7 +222,7 @@ void Title::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mAlpha);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mTextAlpha);
 	SetFontSize(FONT_SIZE);
-	DrawString(750, 750, "Press The SPACE", GetColor(0, 0, 0));
+	DrawString(725, 800, "Press The SPACE", DARK_SLATE_GRAY);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mTextAlpha);
 }
 

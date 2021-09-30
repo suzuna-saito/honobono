@@ -117,7 +117,7 @@ private:            // 長くなってきたので説明を横に置きました。
 
 	int mBaseTime;                   // ランダムに格納する値をこれより下回らない
 	int mBaseTimePoint;              // ランダムに格納する値の引数値
-	int mNoteTime[18];               // ノーツを出すタイミング
+	int mNoteTime[17];               // ノーツを出すタイミング
 	int mNoteCount;                  // ノーツを出した数
 	int mNotesStartTime;             // ノーツを開始させる時間
 	int mNotesEndTime;               // ノーツを終わらせる時間

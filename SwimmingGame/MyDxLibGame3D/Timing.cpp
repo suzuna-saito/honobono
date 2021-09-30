@@ -64,10 +64,10 @@ Timing::Timing()
 	, mBaseGagePoint(1)
 	, mDifficultyCount()
 	, mNoteCount(0)
-	, mNoteTime{30, 30, 30,250,100,90,80,10,10,10,10,10,10,10,40,60,80,80}
+	, mNoteTime{30, 30, 30,250,100,90,80,10,10,10,10,10,10,10,40,60,80}
 	, END_TIME(1700)
 	, DIFFICULT_TIME(1150)
-	, NOTE_NUM(18)
+	, NOTE_NUM(17)
 {
 	// 画像読み込み
 	mTimingImg[0] = LoadGraph("data/newUI/RightTiming.png");      // 右
