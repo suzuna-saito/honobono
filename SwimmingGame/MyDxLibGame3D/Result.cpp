@@ -6,6 +6,8 @@
 #include  "Input.h"
 #include "Effect.h"
 
+#include "Common.h"
+
 
 // 定数
 const float ENLARGED = 0.02f;
@@ -258,7 +260,7 @@ void Result::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mAlpha);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, mTextAlpha);
 	SetFontSize(FONT_SIZE);
-	DrawString(750, 750, "Press The SPACE", GetColor(0, 0, 0));
+	DrawString(725, 800, "Press The SPACE", DARK_SLATE_GRAY);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, mTextAlpha);
 
 	// スコアを描画
@@ -293,7 +295,7 @@ void Result::FishMove()
 void Result::Runk()
 {
 	// ランクごとのモデルを描画
-	if (mRunkScore > BRONZE_SCORE && mRunkScore < SILVER_SCORE)
+	if (mRunkScore > BRONZE_SCORE && mRunkScore < SILVER_SCORE || mRunkScore == 0)
 	{
 		MV1DrawModel(mRunkModel[2]);
 	}
